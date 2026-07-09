@@ -188,12 +188,21 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
 @media(max-width:1060px){.perfumer-grid,#perfumerGrid{grid-template-columns:1fr 1fr}}
 @media(max-width:760px){.perfumer-grid,#perfumerGrid{grid-template-columns:1fr}.modal-meta-strip span{font-size:.64rem}.related-list{display:grid;grid-template-columns:1fr}.related-list button{text-align:left}.scent-card-meta{font-size:.68rem}}
 
+
+/* V18 Performance: CDN images, lazy media, deferred heavy sections */
+.lazy-img{opacity:0;transition:opacity .35s ease}
+.lazy-img.is-loaded{opacity:1}
+.deferred-placeholder,.load-more-card{border:1px dashed rgba(120,227,196,.25);background:rgba(120,227,196,.055);color:var(--muted);border-radius:28px;padding:22px;text-align:left;min-height:150px;display:grid;align-content:center;gap:8px}
+.deferred-placeholder b,.load-more-card b{color:var(--headline);font-family:'Cormorant Garamond',serif;font-size:2rem;line-height:.9}
+.load-more-card{width:100%;cursor:pointer;text-align:center;justify-items:center}
+.load-more-card:hover{border-color:rgba(120,227,196,.45);background:rgba(120,227,196,.09);transform:translateY(-2px)}
+
 </style>
 </head>
 
 <body>
 <header class="topnav"><div class="topnav-inner"><a class="brand" href="#top"><i></i><span>Scent OS</span></a><nav class="navlinks"><a href="#today">Today</a><a href="#advisor">Mood</a><a href="#layer">Mix</a><a href="#worlds">Rooms</a><a href="#perfumers">Noses</a><a href="#library">Vault</a></nav></div></header>
-<main id="top"><section class="app-hero wrap" id="today"><aside class="phone-shell"><div class="phone-screen"><div class="app-top"><span class="app-chip">Scent OS · Daily Pick</span><span data-weather-source>Open‑Meteo</span></div><div data-today-img></div><div class="eyebrow" data-today-brand></div><h2 data-today-name></h2><p data-today-note></p><div class="today-why"><div class="why-title">Vì sao hôm nay hợp?</div><ul class="why-list" data-today-reasons><li>Đang phân tích thời tiết Saigon và profile mùi.</li></ul><div class="today-meta-pill" data-today-meta></div></div><div class="actions"><button class="btn primary" data-action="today">Hôm nay dùng gì?</button></div><div class="app-stats"><div><b data-stat-count>--</b><span>chai</span></div><div><b data-stat-brands>—</b><span>hãng</span></div><div><b>Mix</b><span>gợi ý</span></div></div></div></aside><div><div class="eyebrow">Personal fragrance wardrobe</div><h1 class="display">Hihie's<br>Scent OS</h1><p class="lead" data-weather-line>Đang đọc thời tiết Saigon</p><div class="app-dashboard"><div class="dashboard-card today-action-card"><div class="eyebrow">Daily Weather Match</div><h3>Gợi ý theo thời tiết</h3><div class="weather-summary"><div class="weather-main"><div><div class="weather-temp" data-weather-temp>--°</div><div class="weather-location" data-weather-location>Saigon · Asia/Saigon</div><div class="weather-status" data-weather-status>Đang đọc thời tiết</div></div><div class="weather-mini-grid"><div><b data-weather-rain>--</b><span>Mưa</span></div><div><b data-weather-humidity>--</b><span>Độ ẩm</span></div></div></div><div class="weather-strategy-card"><b>Chiến lược chọn mùi hôm nay</b><p data-weather-strategy>Đang phân tích nhiệt độ, mưa và độ ẩm để chọn chai phù hợp.</p></div><div class="weather-tags"><span data-weather-tag-1>Fresh</span><span data-weather-tag-2>Kín đáo</span><span data-weather-tag-3>Dễ dùng</span></div></div><div class="command-note"><b>Gợi ý sử dụng:</b> bấm <b>Hôm nay dùng gì?</b> để nhận một lựa chọn phù hợp với thời tiết hiện tại, kèm lý do chọn mùi và số xịt nên dùng.</div></div><div class="dashboard-card quick-drawer-card" id="quickPick"><div class="eyebrow">Scent Discovery</div><h3>Khám phá thêm</h3><p>Khi không cần gợi ý theo thời tiết, khu vực này giúp bạn khám phá một lựa chọn mới theo cảm hứng hoặc theo tình huống cụ thể.</p><div class="pick-mode-stack"><div class="pick-mode"><div><b>Khám phá bất kỳ</b><small>Chọn ngẫu nhiên một mùi từ toàn bộ bộ sưu tập — phù hợp khi bạn muốn đổi mood mà chưa có tiêu chí cụ thể.</small></div><button class="btn primary" data-action="random">Rút ngẫu nhiên · R</button></div><div class="pick-mode"><div><b>Chọn theo tình huống</b><small>Chọn một ngữ cảnh sử dụng, hệ thống sẽ ưu tiên các mùi hợp không gian, thời điểm và mức độ an toàn.</small></div><div class="mini-ritual-picker" data-discover-rituals aria-label="Chọn tình huống để rút mùi"></div><button class="btn" data-action="ritual-random">Gợi ý theo tình huống</button></div></div><div class="discover-result hero-discover-result" id="discoverResult"></div></div></div></div></section>
+<main id="top"><section class="app-hero wrap" id="today"><aside class="phone-shell"><div class="phone-screen"><div class="app-top"><span class="app-chip">Scent OS · Daily Pick</span><span data-weather-source>Open‑Meteo</span></div><div data-today-img></div><div class="eyebrow" data-today-brand></div><h2 data-today-name></h2><p data-today-note></p><div class="today-why"><div class="why-title">Vì sao hôm nay hợp?</div><ul class="why-list" data-today-reasons><li>Đang phân tích thời tiết Saigon và profile mùi.</li></ul><div class="today-meta-pill" data-today-meta></div></div><div class="actions"><button class="btn primary" data-action="today">Hôm nay dùng gì?</button></div><div class="app-stats"><div><b data-stat-count>--</b><span>chai</span></div><div><b data-stat-brands>—</b><span>hãng</span></div><div><b>Mix</b><span>gợi ý</span></div></div></div></aside><div><div class="eyebrow">Personal fragrance wardrobe</div><h1 class="display">Your<br>Scent OS</h1><p class="lead" data-weather-line>Đang đọc thời tiết Saigon</p><div class="app-dashboard"><div class="dashboard-card today-action-card"><div class="eyebrow">Daily Weather Match</div><h3>Gợi ý theo thời tiết</h3><div class="weather-summary"><div class="weather-main"><div><div class="weather-temp" data-weather-temp>--°</div><div class="weather-location" data-weather-location>Saigon · Asia/Saigon</div><div class="weather-status" data-weather-status>Đang đọc thời tiết</div></div><div class="weather-mini-grid"><div><b data-weather-rain>--</b><span>Mưa</span></div><div><b data-weather-humidity>--</b><span>Độ ẩm</span></div></div></div><div class="weather-strategy-card"><b>Chiến lược chọn mùi hôm nay</b><p data-weather-strategy>Đang phân tích nhiệt độ, mưa và độ ẩm để chọn chai phù hợp.</p></div><div class="weather-tags"><span data-weather-tag-1>Fresh</span><span data-weather-tag-2>Kín đáo</span><span data-weather-tag-3>Dễ dùng</span></div></div><div class="command-note"><b>Gợi ý sử dụng:</b> bấm <b>Hôm nay dùng gì?</b> để nhận một lựa chọn phù hợp với thời tiết hiện tại, kèm lý do chọn mùi và số xịt nên dùng.</div></div><div class="dashboard-card quick-drawer-card" id="quickPick"><div class="eyebrow">Scent Discovery</div><h3>Khám phá thêm</h3><p>Khi không cần gợi ý theo thời tiết, khu vực này giúp bạn khám phá một lựa chọn mới theo cảm hứng hoặc theo tình huống cụ thể.</p><div class="pick-mode-stack"><div class="pick-mode"><div><b>Khám phá bất kỳ</b><small>Chọn ngẫu nhiên một mùi từ toàn bộ bộ sưu tập — phù hợp khi bạn muốn đổi mood mà chưa có tiêu chí cụ thể.</small></div><button class="btn primary" data-action="random">Rút ngẫu nhiên · R</button></div><div class="pick-mode"><div><b>Chọn theo tình huống</b><small>Chọn một ngữ cảnh sử dụng, hệ thống sẽ ưu tiên các mùi hợp không gian, thời điểm và mức độ an toàn.</small></div><div class="mini-ritual-picker" data-discover-rituals aria-label="Chọn tình huống để rút mùi"></div><button class="btn" data-action="ritual-random">Gợi ý theo tình huống</button></div></div><div class="discover-result hero-discover-result" id="discoverResult"></div></div></div></div></section>
 <section class="section wrap" id="advisor"><div class="section-head"><h2>Chọn <em>Tình huống</em></h2><p>Chọn ngữ cảnh sử dụng để thu hẹp bộ sưu tập thành các lựa chọn phù hợp: đi làm, gặp khách, ngày mưa, hẹn hò, thời gian một mình hoặc khi muốn tạo dấu ấn.</p></div><div class="rituals"></div><div class="section-head" style="margin-top:24px"><h2 style="font-size:clamp(2.1rem,4vw,3.8rem)" data-advisor-title></h2><p>Các lựa chọn bên dưới được xếp theo độ phù hợp với thời tiết, độ tỏa, độ an toàn và sắc thái mùi.</p></div><div id="advisorResults"></div></section>
 
 <section class="section wrap" id="layer"><div class="section-head"><h2>Layering <em>Formulas</em></h2><p>Các công thức layer được tạo từ vai trò từng mùi: base để giữ chiều sâu, lift để mở sáng và veil để làm mềm tổng thể.</p></div><div class="layer-toolbar"><div class="layer-vibes"></div><div class="count-toggle"></div><button class="btn primary" data-action="shuffle-layer">Đổi công thức · L</button></div><div id="mixGrid"></div></section>
@@ -304,7 +313,7 @@ async function loadSheetData(){
 }
 const $ = (s, root=document) => root.querySelector(s);
 const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-const state = { ritual: 'today', discoverRitual: 'today', layerCount: 2, layerVibe: 'balanced', libFilter: 'all', weather: null, todayPick: null };
+const state = { ritual: 'today', discoverRitual: 'today', layerCount: 2, layerVibe: 'balanced', libFilter: 'all', weather: null, todayPick: null, libraryLimit: 24, renderedSections: { worlds:false, perfumers:false, library:false } };
 const HCMC = { latitude: 10.8231, longitude: 106.6297, label: 'Saigon' };
 const rituals = [
   { id:'today', label:'Hôm nay', icon:'☀︎', hint:'auto theo thời tiết' },
@@ -352,10 +361,50 @@ function colors(p){
   if(p.warmScore>=4) return ['#7b351a','#d49b55'];
   return ['#344052','#d8b56d'];
 }
+let lazyImageObserver = null;
+function normalizeImageUrl(url){
+  const raw = String(url || '').trim();
+  if(!raw) return '';
+  const secure = raw.replace(/^http:\/\//i, 'https://');
+  return secure.replace(
+    /^https:\/\/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.+)$/i,
+    'https://cdn.jsdelivr.net/gh/$1/$2@$3/$4'
+  );
+}
+function loadLazyImage(img){
+  const src = img?.dataset?.src;
+  if(!src || img.src) return;
+  img.src = src;
+  img.removeAttribute('data-src');
+}
+function initLazyImages(root=document){
+  const imgs = [...root.querySelectorAll('img[data-src]:not([src])')];
+  if(!imgs.length) return;
+  if(!('IntersectionObserver' in window)){
+    imgs.forEach(loadLazyImage);
+    return;
+  }
+  if(!lazyImageObserver){
+    lazyImageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if(!entry.isIntersecting) return;
+        loadLazyImage(entry.target);
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin:'700px 0px', threshold:0.01 });
+  }
+  imgs.forEach(img => lazyImageObserver.observe(img));
+}
+function setupLazyImageWatcher(){
+  if(!('MutationObserver' in window)) return;
+  const watcher = new MutationObserver(() => initLazyImages(document));
+  watcher.observe(document.body, { childList:true, subtree:true });
+}
 function imgBox(p, cls='image-box'){
-  const url = esc(p.imageUrl || '');
+  const url = esc(normalizeImageUrl(p.imageUrl || ''));
   const [a,b] = colors(p);
-  return `<div class="${cls}" style="--a:${a};--b:${b}">${url ? `<img loading="lazy" src="${url}" alt="${esc(p.fullName)}" onerror="this.closest('.${cls.split(' ')[0]}').classList.add('missing');this.remove();">` : ''}</div>`;
+  const baseClass = cls.split(' ')[0] || 'image-box';
+  return `<div class="${cls}" style="--a:${a};--b:${b}">${url ? `<img class="lazy-img" loading="lazy" decoding="async" data-src="${url}" alt="${esc(p.fullName)}" onload="this.classList.add('is-loaded')" onerror="this.closest('.${baseClass}').classList.add('missing');this.remove();">` : ''}</div>`;
 }
 function scentMini(p, extra=''){
   const [a,b] = colors(p);
@@ -393,7 +442,9 @@ function modal(p){
     </div></div>`;
   $('#modal').classList.add('show');
   $('#closeModal').onclick = closeModal;
+  initLazyImages($('#modalCard'));
 }
+
 function baseWeather(){
   const m = new Date().getMonth();
   const hot = [3,4,5,6,7,8].includes(m);
@@ -563,6 +614,7 @@ function renderLayer(){
   }).join(''));
 }
 function renderWorlds(){
+  state.renderedSections.worlds = true;
   $$('#worldGrid').forEach(el => el.innerHTML = worlds.map((w,i)=>{
     const samples = DATA.filter(w.test).slice(0,6);
     return `<article class="world-card ${i===0?'big':''}" data-world="${w.id}"><small>${w.tag}</small><h3>${w.title}</h3><p>${w.desc}</p><div class="world-samples">${samples.slice(0,4).map(p=>`<button data-open="${p.id}">${esc(p.name)}</button>`).join('')}</div></article>`;
@@ -576,6 +628,7 @@ function topTerms(list, key, limit=4){
   return [...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,limit).map(x=>x[0]);
 }
 function renderPerfumers(){
+  state.renderedSections.perfumers = true;
   const groups = new Map();
   DATA.filter(p=>p.perfumer).forEach(p=>{
     const key = p.perfumer.trim();
@@ -596,7 +649,7 @@ function renderPerfumers(){
 }
 function renderLibraryControls(){
   $$('.lib-filters').forEach(el => el.innerHTML = libFilters.map(f=>`<button class="pill ${state.libFilter===f.id?'active':''}" data-lib-filter="${f.id}">${f.label}</button>`).join(''));
-  $$('[data-lib-filter]').forEach(b=>b.onclick=()=>{state.libFilter=b.dataset.libFilter; renderLibrary();});
+  $$('[data-lib-filter]').forEach(b=>b.onclick=()=>{state.libFilter=b.dataset.libFilter; state.libraryLimit=24; renderLibrary();});
 }
 function passLib(p, q){
   const t = textOf(p).toLowerCase();
@@ -609,19 +662,24 @@ function passLib(p, q){
   return true;
 }
 function renderLibrary(){
+  state.renderedSections.library = true;
   renderLibraryControls();
   const q = ($('#search')?.value || '').trim().toLowerCase();
   const list = DATA.filter(p=>passLib(p,q));
-  $$('#libraryCount').forEach(el => el.innerHTML = `<b>${list.length}</b>/<span>${DATA.length}</span> chai`);
-  $$('#libraryGrid').forEach(el => el.innerHTML = list.map(p=>scentMini(p,'vault-card')).join(''));
+  const visible = list.slice(0, state.libraryLimit);
+  const hasMore = visible.length < list.length;
+  $$('#libraryCount').forEach(el => el.innerHTML = `<b>${visible.length}</b>/<span>${list.length}</span> đang hiển thị · ${DATA.length} chai`);
+  $$('#libraryGrid').forEach(el => el.innerHTML = visible.map(p=>scentMini(p,'vault-card')).join('') + (hasMore ? `<button type="button" class="load-more-card" data-load-more-library><b>Xem thêm</b><span>Tải thêm ${Math.min(24, list.length-visible.length)} chai trong Vault</span></button>` : ''));
 }
 function bind(){
   document.addEventListener('click', e=>{
     const open = e.target.closest('[data-open]');
     if(open) modal(DATA.find(p=>p.id===open.dataset.open));
+    const more = e.target.closest('[data-load-more-library]');
+    if(more){ state.libraryLimit += 24; renderLibrary(); }
     if(e.target.id==='modal') closeModal();
   });
-  $('#search')?.addEventListener('input', renderLibrary);
+  $('#search')?.addEventListener('input', () => { state.libraryLimit = 24; renderLibrary(); });
   $$('[data-action="today"]').forEach(b=>b.onclick=()=>{ renderTodayPick(true); });
   $$('[data-action="random"]').forEach(b=>b.onclick=()=>discover('all'));
   $$('[data-action="ritual-random"], [data-action="mood-random"]').forEach(b=>b.onclick=()=>discover('ritual'));
@@ -633,6 +691,37 @@ function bind(){
     if(typing || e.metaKey || e.ctrlKey || e.altKey) return;
     if(key==='r') discover('all', true);
     if(key==='l') renderLayer();
+  });
+}
+function renderDeferredPlaceholders(){
+  $$('#worldGrid').forEach(el => el.innerHTML = `<article class="deferred-placeholder"><b>Đang chuẩn bị Scent Worlds</b><span>Khu này sẽ được dựng khi bạn kéo tới để tránh tải quá nhiều nội dung ngay từ đầu.</span></article>`);
+  $$('#perfumerGrid').forEach(el => el.innerHTML = `<article class="deferred-placeholder"><b>Đang chuẩn bị Perfumer Index</b><span>Dữ liệu nhà điều chế sẽ được nhóm khi khu vực này xuất hiện trên màn hình.</span></article>`);
+  renderLibraryControls();
+  $$('#libraryCount').forEach(el => el.innerHTML = `<b>0</b>/<span>${DATA.length}</span> đang hiển thị · ${DATA.length} chai`);
+  $$('#libraryGrid').forEach(el => el.innerHTML = `<article class="deferred-placeholder"><b>Vault sẵn sàng</b><span>Kéo tới khu vực này để tải 24 chai đầu tiên, sau đó có thể xem thêm từng phần.</span></article>`);
+}
+function setupDeferredSections(){
+  renderDeferredPlaceholders();
+  const hydrate = id => {
+    if(id==='worlds' && !state.renderedSections.worlds) renderWorlds();
+    if(id==='perfumers' && !state.renderedSections.perfumers) renderPerfumers();
+    if(id==='library' && !state.renderedSections.library) renderLibrary();
+    initLazyImages(document);
+  };
+  if(!('IntersectionObserver' in window)){
+    ['worlds','perfumers','library'].forEach(hydrate);
+    return;
+  }
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      hydrate(entry.target.id);
+      obs.unobserve(entry.target);
+    });
+  }, { rootMargin:'650px 0px', threshold:0.01 });
+  ['worlds','perfumers','library'].forEach(id => {
+    const section = document.getElementById(id);
+    if(section) observer.observe(section);
   });
 }
 function statInit(){
@@ -652,11 +741,20 @@ function renderNoData(){
 async function init(){
   DATA = await loadSheetData();
   bind();
-  if(!DATA.length){ renderNoData(); initWeather(); return; }
-  statInit(); renderRituals(); renderDiscoverRituals(); renderAdvisor(); renderLayer(); renderWorlds(); renderPerfumers(); renderLibrary(); renderTodayPick(true); initWeather();
+  setupLazyImageWatcher();
+  if(!DATA.length){ renderNoData(); initWeather(); initLazyImages(document); return; }
+  statInit();
+  renderRituals();
+  renderDiscoverRituals();
+  renderAdvisor();
+  renderLayer();
+  setupDeferredSections();
+  renderTodayPick(true);
+  initWeather();
+  initLazyImages(document);
 }
 init();
-  
+
 </script>
 </body>
 </html>
