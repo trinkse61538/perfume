@@ -1,0 +1,40 @@
+{
+  "name": "Hihie's Scent OS",
+  "short_name": "Scent OS",
+  "description": "Tủ nước hoa cá nhân tương tác: gợi ý mùi theo thời tiết, địa điểm, mood và layering formulas.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a1020",
+  "theme_color": "#0a1020",
+  "lang": "vi-VN",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/trinkse61538/CV/072d7749ded870ee41cba4eab2e418dd5e51953b/favico.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/trinkse61538/CV/072d7749ded870ee41cba4eab2e418dd5e51953b/favico.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Gợi ý hôm nay",
+      "url": "/#today",
+      "description": "Chọn nước hoa theo thời tiết hôm nay"
+    },
+    {
+      "name": "Vault Search",
+      "url": "/#library",
+      "description": "Tìm trong bộ sưu tập nước hoa"
+    },
+    {
+      "name": "Liên hệ",
+      "url": "/#contact",
+      "description": "Hỏi mua bán hoặc tư vấn nước hoa"
+    }
+  ]
+}
