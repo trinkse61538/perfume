@@ -1,0 +1,21 @@
+# Hihie's Scent OS
+
+Hihie's Scent OS is a personal fragrance web application created by Nguyen Khai Tri. It recommends perfumes from a personal collection using weather, location, local time, mood, usage context and fragrance-layering logic.
+
+## Primary pages
+- App: https://perfume.khaitringuyen.com/
+- Creator portfolio: https://khaitringuyen.com/
+- Scent OS case study: https://khaitringuyen.com/projects/scent-os.html
+- Creator projects: https://khaitringuyen.com/projects/
+- Creator articles: https://khaitringuyen.com/articles/
+- Contact: https://khaitringuyen.com/contact.html
+
+## Creator
+Nguyen Khai Tri is a Senior Performance Marketing Specialist working across paid media, analytics, CRM, data visualization and AI automation.
+
+## Core capabilities
+- Weather- and location-aware perfume recommendations
+- Mood and occasion selection
+- Layering formulas
+- Personal fragrance collection search
+- Perfumer and fragrance-family exploration

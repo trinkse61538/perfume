@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://perfume.khaitringuyen.com/sitemap.xml
+
+# Creator portfolio: https://khaitringuyen.com/
+# AI summary: https://perfume.khaitringuyen.com/llms.txt

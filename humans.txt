@@ -1,0 +1,12 @@
+/* TEAM */
+Creator & developer: Nguyen Khai Tri
+Portfolio: https://khaitringuyen.com/
+Project: Hihie's Scent OS
+Project URL: https://perfume.khaitringuyen.com/
+Location: Ho Chi Minh City, Vietnam
+
+/* TECHNOLOGY */
+Static HTML, CSS and JavaScript
+Google Sheets as the fragrance data source
+Open-Meteo and geocoding APIs for weather-aware recommendations
+GitHub Pages hosting

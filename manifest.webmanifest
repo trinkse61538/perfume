@@ -10,12 +10,12 @@
   "lang": "vi-VN",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/trinkse61538/CV/072d7749ded870ee41cba4eab2e418dd5e51953b/favico.png",
+      "src": "/favicon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://raw.githubusercontent.com/trinkse61538/CV/072d7749ded870ee41cba4eab2e418dd5e51953b/favico.png",
+      "src": "/favicon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
@@ -36,5 +36,6 @@
       "url": "/#contact",
       "description": "Hỏi mua bán hoặc tư vấn nước hoa"
     }
-  ]
+  ],
+  "id": "https://perfume.khaitringuyen.com/"
 }
