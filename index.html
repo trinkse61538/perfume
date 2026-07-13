@@ -63,6 +63,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
+<!-- PERFUME STEP 6 V26: static SEO fragrance & perfumer pages -->
 <!-- PERFUME STEP 5 V25: guided scent quiz -->
 <!-- PERFUME STEP 4 V24: consultation CTA per fragrance -->
 <!-- PERFUME STEP 3 V23: local JSON sync + Google Sheet fallback -->
@@ -491,6 +492,35 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
 }
 
 
+
+
+/* V26 Static SEO page bridges */
+.seo-detail-link,.perfumer-profile-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:42px;
+  margin-top:12px;
+  padding:9px 13px;
+  border:1px solid rgba(216,181,109,.28);
+  border-radius:999px;
+  background:linear-gradient(135deg,rgba(216,181,109,.10),rgba(120,227,196,.07));
+  color:var(--headline);
+  font-size:.78rem;
+  font-weight:900;
+  line-height:1.2;
+  text-align:center;
+}
+.seo-detail-link:hover,.perfumer-profile-link:hover{
+  transform:translateY(-2px);
+  border-color:rgba(216,181,109,.55);
+  background:linear-gradient(135deg,rgba(216,181,109,.17),rgba(120,227,196,.11));
+}
+.perfumer-profile-link{width:max-content;max-width:100%}
+@media(max-width:760px){
+  .seo-detail-link,.perfumer-profile-link{width:100%}
+}
 
 /* V25 Guided Scent Quiz */
 .quiz-shell{
@@ -991,8 +1021,10 @@ body.modal-open{overflow:hidden}
         <a href="#advisor">Chọn theo tình huống</a>
         <a href="#layer">Layering formulas</a>
         <a href="#worlds">Scent worlds</a>
-        <a href="#perfumers">Perfumer index</a>
+        <a href="#perfumers">Perfumer index tương tác</a>
         <a href="#library">Vault search</a>
+        <a href="/fragrance/">Danh mục nước hoa SEO</a>
+        <a href="/perfumer/">Danh mục perfumer SEO</a>
       </div>
     </section>
     <section class="footer-col" aria-labelledby="footer-contact-title">
@@ -1525,6 +1557,10 @@ function modal(p, trigger=null){
     <p class="modal-mood" id="modalDescription">${esc(p.mood||'Không có mô tả bổ sung.')}</p>
     <div class="note-grid">${notes.map(n=>`<div><b>${n[0]}</b><span>${esc(n[1])}</span></div>`).join('')}</div>
     <div class="detail-grid">${detailItems.map(d=>`<div><b>${esc(d[0])}</b><span>${esc(d[1]||'')}</span></div>`).join('')}</div>
+    <a class="seo-detail-link" href="/fragrance/${esc(p.id)}.html" data-seo-link data-seo-type="fragrance"
+      data-perfume-id="${esc(p.id)}" aria-label="Mở trang chi tiết đầy đủ của ${esc(p.fullName)}">
+      Đọc trang chi tiết đầy đủ ↗
+    </a>
     <section class="consult-card" data-consult-card aria-labelledby="consultTitle-${esc(p.id)}">
       <div class="consult-kicker">Tư vấn · Đặt hàng · Decant</div>
       <h3 id="consultTitle-${esc(p.id)}">Bạn đang quan tâm ${esc(p.name)}?</h3>
@@ -2172,7 +2208,7 @@ function renderPerfumers(){
       const yearText = years.length ? (years[0]===years[years.length-1] ? `${years[0]}` : `${years[0]}–${years[years.length-1]}`) : 'Năm chưa rõ';
       const families = topTerms(list, 'family', 4);
       const samples = list.slice(0,5);
-      return `<article class="perfumer-card"><small>${list.length} chai · ${esc(yearText)}</small><h3>${esc(name)}</h3><p>${esc(families.length ? `Nhóm hương nổi bật trong bộ sưu tập: ${families.join(', ')}.` : 'Các chai cùng nhà điều chế trong bộ sưu tập.')}</p><div class="perfumer-tags">${families.map(f=>`<span>${esc(f)}</span>`).join('')}</div><div class="perfumer-samples">${samples.map(p=>`<button type="button" data-open="${esc(p.id)}" aria-label="Xem ${esc(p.fullName)} của ${esc(name)}">${esc(p.name)}</button>`).join('')}</div></article>`;
+      return `<article class="perfumer-card"><small>${list.length} chai · ${esc(yearText)}</small><h3>${esc(name)}</h3><p>${esc(families.length ? `Nhóm hương nổi bật trong bộ sưu tập: ${families.join(', ')}.` : 'Các chai cùng nhà điều chế trong bộ sưu tập.')}</p><div class="perfumer-tags">${families.map(f=>`<span>${esc(f)}</span>`).join('')}</div><div class="perfumer-samples">${samples.map(p=>`<button type="button" data-open="${esc(p.id)}" aria-label="Xem ${esc(p.fullName)} của ${esc(name)}">${esc(p.name)}</button>`).join('')}</div><a class="perfumer-profile-link" href="/perfumer/${esc(slugify(name))}.html" data-seo-link data-seo-type="perfumer" data-perfumer-name="${esc(name)}">Xem hồ sơ perfumer ↗</a></article>`;
     });
   $$('#perfumerGrid').forEach(el => el.innerHTML = cards.length ? cards.join('') : `<article class="perfumer-card"><small>Perfumer data</small><h3>Chưa có dữ liệu nhà điều chế</h3><p>Khi cột Nhà điều chế có dữ liệu, khu vực này sẽ tự nhóm các mùi theo từng perfumer.</p></article>`);
 }
@@ -2215,6 +2251,19 @@ function bind(){
   bindLocationUI();
   bindQuiz();
   document.addEventListener('click', async e=>{
+    const seoLink = e.target.closest('[data-seo-link]');
+    if(seoLink){
+      const perfume = seoLink.dataset.perfumeId
+        ? DATA.find(p=>p.id===seoLink.dataset.perfumeId)
+        : null;
+      trackEvent('seo_page_opened', {
+        ...perfumeAnalyticsParams(perfume),
+        seo_page_type:seoLink.dataset.seoType,
+        perfumer_name:seoLink.dataset.perfumerName || perfume?.perfumer,
+        interaction_source:analyticsSource(seoLink)
+      });
+    }
+
     const copyButton = e.target.closest('[data-copy-inquiry]');
     if(copyButton){
       e.preventDefault();
