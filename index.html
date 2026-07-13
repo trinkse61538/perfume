@@ -44,7 +44,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://docs.google.com" />
-<link rel="preload" as="fetch" href="https://docs.google.com/spreadsheets/d/1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY/gviz/tq?gid=0&amp;tqx=out:json" crossorigin="anonymous" />
+<link rel="preload" as="fetch" href="/data/fragrances.json" crossorigin="anonymous" />
 
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin />
 <link rel="dns-prefetch" href="//fonts.googleapis.com" />
@@ -63,6 +63,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
+<!-- PERFUME STEP 3 V23: local JSON sync + Google Sheet fallback -->
 <!-- PERFUME STEP 2 V22: Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK6YJ4RVTN"></script>
 <script>
@@ -597,6 +598,7 @@ body.modal-open{overflow:hidden}
 const SHEET_ID = '1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY';
 const SHEET_GID = '0';
 const SHEET_JSON_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${SHEET_GID}&tqx=out:json`;
+const LOCAL_JSON_URL = '/data/fragrances.json';
 const SHEET_CACHE_KEY = 'scent-os-sheet-cache-v1';
 let DATA = [];
 
@@ -761,6 +763,7 @@ function mapSheetRow(values){
   return p;
 }
 const SHEET_CACHE_TIME_KEY = SHEET_CACHE_KEY + '-saved-at';
+const SHEET_CACHE_SOURCE_KEY = SHEET_CACHE_KEY + '-source';
 const SHEET_CACHE_MAX_AGE = 6 * 60 * 60 * 1000;
 
 function readSheetCache(){
@@ -773,7 +776,65 @@ function readSheetCache(){
     return [];
   }
 }
-
+function saveSheetCache(data, source='unknown'){
+  localStorage.setItem(SHEET_CACHE_KEY, JSON.stringify(data));
+  localStorage.setItem(SHEET_CACHE_TIME_KEY, String(Date.now()));
+  localStorage.setItem(SHEET_CACHE_SOURCE_KEY, source);
+}
+function normalizeFragranceRecord(item={}, index=0){
+  const p = {
+    stt: toNumber(item.stt ?? index + 1),
+    brand: String(item.brand || '').trim(),
+    name: String(item.name || '').trim(),
+    originalFamily: String(item.originalFamily || '').trim(),
+    concentration: String(item.concentration || '').trim(),
+    top: splitNotes(item.top),
+    heart: splitNotes(item.heart),
+    base: splitNotes(item.base),
+    perfumer: String(item.perfumer || '').trim(),
+    year: String(item.year || '').trim(),
+    season: String(item.season || '').trim(),
+    dayNight: String(item.dayNight || '').trim(),
+    longevity: String(item.longevity || '').trim(),
+    sillage: String(item.sillage || '').trim(),
+    mood: String(item.mood || '').trim(),
+    family: String(item.family || '').trim(),
+    subFamily: String(item.subFamily || '').trim(),
+    presence: String(item.presence || '').trim(),
+    sweetness: String(item.sweetness || '').trim(),
+    freshScore: toNumber(item.freshScore),
+    warmScore: toNumber(item.warmScore),
+    longevityScore: toNumber(item.longevityScore),
+    sillageScore: toNumber(item.sillageScore),
+    officeSafe: String(item.officeSafe || '').trim(),
+    clientSafe: String(item.clientSafe || '').trim(),
+    hotSafe: String(item.hotSafe || '').trim(),
+    occasions: String(item.occasions || '').trim(),
+    sprays: String(item.sprays || '').trim(),
+    layerRole: String(item.layerRole || '').trim(),
+    layerWith: String(item.layerWith || '').trim(),
+    avoid: String(item.avoid || '').trim(),
+    smartNote: String(item.smartNote || '').trim(),
+    confidence: String(item.confidence || '').trim(),
+    sourceMethod: String(item.sourceMethod || '').trim(),
+    imageUrl: String(item.imageUrl || '').trim()
+  };
+  p.fullName = String(item.fullName || [p.brand, p.name].filter(Boolean).join(' ')).trim();
+  p.id = String(item.id || slugify(p.fullName || `scent-${p.stt}`)).trim();
+  return p;
+}
+async function fetchLocalJsonData(){
+  const response = await fetch(LOCAL_JSON_URL, { cache:'default' });
+  if(!response.ok) throw new Error(`Local JSON HTTP ${response.status}`);
+  const payload = await response.json();
+  const data = (Array.isArray(payload) ? payload : payload?.data || [])
+    .map((item, index) => normalizeFragranceRecord(item, index))
+    .filter(p => p.stt > 0 && p.brand && p.name && !/^(thương hiệu|brand)$/i.test(p.brand));
+  if(!data.length) throw new Error('Local JSON has no valid rows');
+  saveSheetCache(data, 'local-json');
+  console.info(`[Scent OS] Loaded ${data.length} scents from local JSON`);
+  return data;
+}
 async function fetchSheetData(){
   const response = await fetch(SHEET_JSON_URL, { cache:'default' });
   if(!response.ok) throw new Error(`Sheet HTTP ${response.status}`);
@@ -787,12 +848,18 @@ async function fetchSheetData(){
     .map(mapSheetRow)
     .filter(p => p.stt > 0 && p.brand && p.name && !/^(thương hiệu|brand)$/i.test(p.brand));
   if(!data.length) throw new Error('Sheet has no valid rows');
-  localStorage.setItem(SHEET_CACHE_KEY, JSON.stringify(data));
-  localStorage.setItem(SHEET_CACHE_TIME_KEY, String(Date.now()));
+  saveSheetCache(data, 'google-sheet');
   console.info(`[Scent OS] Loaded ${data.length} scents from Google Sheet`);
   return data;
 }
-
+async function refreshFragranceData(){
+  try{
+    return await fetchLocalJsonData();
+  }catch(localError){
+    console.warn('[Scent OS] Local JSON unavailable, falling back to Google Sheet.', localError);
+    return await fetchSheetData();
+  }
+}
 async function loadSheetData(){
   const cached = readSheetCache();
 
@@ -802,9 +869,9 @@ async function loadSheetData(){
     const stale = !savedAt || Date.now() - savedAt > SHEET_CACHE_MAX_AGE;
 
     if(stale){
-      const refresh = () => fetchSheetData()
+      const refresh = () => refreshFragranceData()
         .then(data => console.info(`[Scent OS] Background cache refreshed: ${data.length} scents`))
-        .catch(error => console.warn('[Scent OS] Background Sheet refresh failed.', error));
+        .catch(error => console.warn('[Scent OS] Background fragrance refresh failed.', error));
 
       if('requestIdleCallback' in window){
         requestIdleCallback(refresh, { timeout:2500 });
@@ -816,10 +883,15 @@ async function loadSheetData(){
   }
 
   try{
-    return await fetchSheetData();
-  }catch(error){
-    console.warn('[Scent OS] Cannot load Google Sheet.', error);
-    return [];
+    return await fetchLocalJsonData();
+  }catch(localError){
+    console.warn('[Scent OS] Cannot load local JSON.', localError);
+    try{
+      return await fetchSheetData();
+    }catch(error){
+      console.warn('[Scent OS] Cannot load Google Sheet.', error);
+      return [];
+    }
   }
 }
 const $ = (s, root=document) => root.querySelector(s);
