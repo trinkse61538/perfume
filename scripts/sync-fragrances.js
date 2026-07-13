@@ -5,6 +5,7 @@ const path = require('path');
 const SHEET_ID = process.env.SHEET_ID || '1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY';
 const SHEET_GID = process.env.SHEET_GID || '0';
 const SHEET_JSON_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${SHEET_GID}&tqx=out:json`;
+const OUTPUT_PATH = path.join(process.cwd(), 'data', 'fragrances.json');
 
 function slugify(v){
   return String(v || '')
@@ -25,7 +26,7 @@ function toNumber(v, fallback=0){
   return Number.isFinite(n) ? n : fallback;
 }
 function splitNotes(v){
-  if(Array.isArray(v)) return v;
+  if(Array.isArray(v)) return v.map(String).map(x=>x.trim()).filter(Boolean);
   return String(v || '').split(',').map(x => x.trim()).filter(Boolean);
 }
 function mapSheetRow(values){
@@ -70,6 +71,17 @@ function mapSheetRow(values){
   p.id = slugify(p.fullName || `scent-${p.stt}`);
   return p;
 }
+function readExisting(){
+  try{
+    const parsed = JSON.parse(fs.readFileSync(OUTPUT_PATH, 'utf8'));
+    return parsed && Array.isArray(parsed.data) ? parsed : null;
+  }catch(error){
+    return null;
+  }
+}
+function stableData(data){
+  return JSON.stringify(data);
+}
 
 async function main(){
   console.log(`[sync-fragrances] Fetching ${SHEET_JSON_URL}`);
@@ -89,6 +101,12 @@ async function main(){
 
   if(!data.length) throw new Error('No valid fragrance rows found in sheet');
 
+  const existing = readExisting();
+  if(existing && stableData(existing.data) === stableData(data)){
+    console.log(`[sync-fragrances] No data changes across ${data.length} fragrances.`);
+    return;
+  }
+
   const payload = {
     source: 'github_action_sync',
     sheetId: SHEET_ID,
@@ -98,10 +116,9 @@ async function main(){
     data
   };
 
-  const outputPath = path.join(process.cwd(), 'data', 'fragrances.json');
-  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  fs.writeFileSync(outputPath, JSON.stringify(payload, null, 2), 'utf8');
-  console.log(`[sync-fragrances] Wrote ${data.length} fragrances to ${outputPath}`);
+  fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(payload, null, 2), 'utf8');
+  console.log(`[sync-fragrances] Wrote ${data.length} fragrances to ${OUTPUT_PATH}`);
 }
 
 main().catch(error => {
