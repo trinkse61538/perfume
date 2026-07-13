@@ -66,7 +66,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
-<!-- PERFUME STEP 7 REVISED V27R3: visible performance meters + wording refinement -->
+<!-- PERFUME STEP 7 REVISED V27R4: quiet PWA updates + manual install prompt -->
 <!-- PERFUME STEP 6 V26: static SEO fragrance & perfumer pages -->
 <!-- PERFUME STEP 4 V24: consultation CTA per fragrance -->
 <!-- PERFUME STEP 3 V23: local JSON sync + Google Sheet fallback -->
@@ -1071,41 +1071,6 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
   font-size:.78rem;
   line-height:1.5;
 }
-.pwa-update-toast{
-  position:fixed;
-  left:50%;
-  bottom:22px;
-  z-index:125;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  width:min(520px,calc(100vw - 32px));
-  padding:12px 13px;
-  border:1px solid rgba(216,181,109,.32);
-  border-radius:20px;
-  background:rgba(8,14,27,.96);
-  box-shadow:0 24px 78px rgba(0,0,0,.58);
-  transform:translateX(-50%);
-  backdrop-filter:blur(22px);
-}
-.pwa-update-toast div{min-width:0;flex:1}
-.pwa-update-toast b{display:block;color:var(--headline)}
-.pwa-update-toast span{display:block;color:var(--muted);font-size:.76rem;line-height:1.4}
-.pwa-update-toast button{
-  min-height:40px;
-  padding:8px 12px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:rgba(255,255,255,.07);
-  color:var(--headline);
-  font-weight:900;
-  cursor:pointer;
-}
-.pwa-update-toast [data-pwa-update]{
-  border:0;
-  background:linear-gradient(135deg,#78e3c4,#3ba98a);
-  color:#07110e;
-}
 .pwa-network-pill{
   position:fixed;
   top:18px;
@@ -1144,18 +1109,9 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
     display:grid;
     grid-template-columns:1fr 42px;
   }
-  .pwa-update-toast{
-    bottom:94px;
-    display:grid;
-    grid-template-columns:1fr auto auto;
-  }
   .pwa-network-pill{top:10px}
 }
 @media(max-width:430px){
-  .pwa-update-toast{
-    grid-template-columns:1fr 1fr;
-  }
-  .pwa-update-toast div{grid-column:1/-1}
 }
 
 /* V26 Static SEO page bridges */
@@ -1415,11 +1371,6 @@ body.modal-open{overflow:hidden}
   <div class="pwa-ios-help" data-pwa-ios-help hidden>
     Trên Safari: chạm nút <b>Chia sẻ</b>, chọn <b>Thêm vào Màn hình chính</b>, rồi xác nhận <b>Thêm</b>.
   </div>
-</section>
-<section class="pwa-update-toast" id="pwaUpdateToast" role="status" aria-live="polite" hidden>
-  <div><b>Có phiên bản Scent OS mới</b><span>Cập nhật để nhận nội dung và tính năng mới nhất.</span></div>
-  <button type="button" data-pwa-update>Cập nhật</button>
-  <button type="button" data-pwa-update-dismiss>Để sau</button>
 </section>
 <div class="pwa-network-pill" id="pwaNetworkPill" role="status" aria-live="polite" hidden>Đang dùng chế độ offline</div>
 
@@ -2583,8 +2534,6 @@ function renderLibrary(){
 const PWA_DISMISS_KEY = 'scent-os-pwa-install-dismissed-v27';
 const PWA_DISMISS_DURATION = 7 * 24 * 60 * 60 * 1000;
 let deferredInstallPrompt = null;
-let pwaWaitingWorker = null;
-let pwaControllerReloading = false;
 let pwaAutoPromptTimer = null;
 
 function pwaIsStandalone(){
@@ -2626,11 +2575,6 @@ function hidePwaInstallCard(remember=false){
   if(card) card.hidden = true;
   if(remember) localStorage.setItem(PWA_DISMISS_KEY,String(Date.now()));
 }
-function showPwaUpdate(worker){
-  pwaWaitingWorker = worker || pwaWaitingWorker;
-  const toast = $('#pwaUpdateToast');
-  if(toast) toast.hidden = false;
-}
 function updatePwaNetworkUI(){
   const pill = $('#pwaNetworkPill');
   if(!pill) return;
@@ -2655,9 +2599,6 @@ function bindPwaUI(){
     deferredInstallPrompt = event;
     setPwaInstallTriggers(true);
     clearTimeout(pwaAutoPromptTimer);
-    if(!pwaWasDismissedRecently()){
-      pwaAutoPromptTimer = setTimeout(()=>showPwaInstallCard('browser_eligible'),3200);
-    }
   });
 
   window.addEventListener('appinstalled', ()=>{
@@ -2708,14 +2649,6 @@ function bindPwaUI(){
     trackEvent('pwa_install_dismissed', { dismiss_duration_days:7 });
   });
 
-  $('[data-pwa-update]')?.addEventListener('click',()=>{
-    trackEvent('pwa_update_applied', { update_source:'update_toast' });
-    pwaWaitingWorker?.postMessage({type:'SKIP_WAITING'});
-  });
-  $('[data-pwa-update-dismiss]')?.addEventListener('click',()=>{
-    const toast = $('#pwaUpdateToast');
-    if(toast) toast.hidden = true;
-  });
 
   window.addEventListener('offline',updatePwaNetworkUI);
   window.addEventListener('online',updatePwaNetworkUI);
@@ -2730,9 +2663,6 @@ function bindPwaUI(){
     }
   }else if(pwaIsIOS()){
     setPwaInstallTriggers(true);
-    if(!pwaWasDismissedRecently()){
-      pwaAutoPromptTimer = setTimeout(()=>showPwaInstallCard('ios_hint'),4200);
-    }
   }
 }
 async function registerPwaServiceWorker(){
@@ -2744,7 +2674,7 @@ async function registerPwaServiceWorker(){
     });
 
     if(registration.waiting && navigator.serviceWorker.controller){
-      showPwaUpdate(registration.waiting);
+      registration.waiting.postMessage({type:'SKIP_WAITING'});
     }
 
     registration.addEventListener('updatefound',()=>{
@@ -2752,16 +2682,11 @@ async function registerPwaServiceWorker(){
       if(!newWorker) return;
       newWorker.addEventListener('statechange',()=>{
         if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
-          showPwaUpdate(newWorker);
+          newWorker.postMessage({type:'SKIP_WAITING'});
         }
       });
     });
 
-    navigator.serviceWorker.addEventListener('controllerchange',()=>{
-      if(pwaControllerReloading) return;
-      pwaControllerReloading = true;
-      window.location.reload();
-    });
 
     setTimeout(()=>registration.update().catch(()=>{}),3500);
   }catch(error){
