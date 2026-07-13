@@ -9,6 +9,10 @@ on:
       - ".github/workflows/sync-fragrances.yml"
       - "scripts/sync-fragrances.js"
       - "scripts/generate-seo-pages.js"
+      - "manifest.webmanifest"
+      - "service-worker.js"
+      - "offline.html"
+      - "icons/**"
 
 permissions:
   contents: write
@@ -46,7 +50,14 @@ jobs:
           test -s perfumer/index.html
           test -s sitemap.xml
           test -s seo-pages-manifest.json
-          echo "Generated SEO output is present."
+          test -s manifest.webmanifest
+          test -s service-worker.js
+          test -s offline.html
+          test -s icons/pwa-icon-192.png
+          test -s icons/pwa-icon-512.png
+          test -s icons/pwa-maskable-512.png
+          test -s icons/apple-touch-icon-180.png
+          echo "Generated SEO output and PWA assets are present."
 
       - name: Commit data and generated SEO pages if changed
         run: |
