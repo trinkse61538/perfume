@@ -1,5 +1,5 @@
-/* Hihie's Scent OS — PWA Service Worker V27R2 */
-const VERSION = 'v27r2';
+/* Hihie's Scent OS — PWA Service Worker V27R3 */
+const VERSION = 'v27r3';
 const PRECACHE = `scent-os-precache-${VERSION}`;
 const PAGE_CACHE = `scent-os-pages-${VERSION}`;
 const DATA_CACHE = `scent-os-data-${VERSION}`;

@@ -66,7 +66,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
-<!-- PERFUME STEP 7 REVISED V27R2: PWA + compact personal collection + redesigned modal -->
+<!-- PERFUME STEP 7 REVISED V27R3: visible performance meters + wording refinement -->
 <!-- PERFUME STEP 6 V26: static SEO fragrance & perfumer pages -->
 <!-- PERFUME STEP 4 V24: consultation CTA per fragrance -->
 <!-- PERFUME STEP 3 V23: local JSON sync + Google Sheet fallback -->
@@ -208,7 +208,7 @@ body,button,input{font:inherit} button{border:0;cursor:pointer;color:inherit} a{
 @media(max-width:760px){body{padding-bottom:86px}.wrap{width:min(100% - 24px,var(--max))}.topnav{display:none}.section{padding:46px 0;scroll-margin-top:18px}.section-head{display:block}.section-head h2{font-size:clamp(2.35rem,14vw,4.4rem);margin-bottom:10px}.actions,.hero-actions{display:grid;grid-template-columns:1fr}.btn{width:100%;min-height:48px}.rituals{display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow:visible}.ritual{min-height:92px;border-radius:20px;padding:12px}.ritual small{font-size:.72rem}.scent-grid,#advisorResults,.formula-grid,#mixGrid,.world-grid,#worldGrid,.library-grid,#libraryGrid,.note-grid,.detail-grid{grid-template-columns:1fr}.scent-card{border-radius:24px}.scent-img{height:230px}.hero-rec{border-color:var(--accent)}.weather-card,.panel,.discover-panel,.world-card,.formula-card{border-radius:26px}.today-img{height:300px}.layer-toolbar{display:grid;gap:10px}.layer-vibes,.count-toggle,.lib-filters{display:grid;grid-template-columns:1fr 1fr;width:100%}.pill{width:100%;min-height:42px}.formula-visual{height:180px}.formula-row{grid-template-columns:46px 46px minmax(0,1fr)}.thumb-img{height:46px}.world-card.big,.world-card{min-height:auto}.library-tools{display:grid;grid-template-columns:1fr}.search{width:100%}.vault-card .scent-img{height:210px}.modal{padding:10px}.modal-card{border-radius:26px;padding:18px;max-height:90vh}.modal-layout{grid-template-columns:1fr}.modal-img{height:280px;order:-1}.bottom-app-nav{position:fixed;left:10px;right:10px;bottom:10px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:8px;border:1px solid var(--line);border-radius:24px;background:var(--appNav);backdrop-filter:blur(20px);box-shadow:0 18px 60px rgba(0,0,0,.42);padding-bottom:max(8px,env(safe-area-inset-bottom))}.bottom-app-nav a{display:grid;place-items:center;gap:3px;font-size:.64rem;color:var(--muted);font-weight:900}.bottom-app-nav b{font-size:1.02rem;color:var(--accent)}.footer{padding-bottom:110px}}
 @media(max-width:390px){.rituals,.layer-vibes,.count-toggle,.lib-filters{grid-template-columns:1fr}.display{font-size:3.1rem}.scent-img{height:210px}.today-img{height:260px}.scent-copy h3{font-size:1.72rem}.formula-copy h3{font-size:1.85rem}}
 
-:root{--max:1180px;--bg:#0a1020;--ink:#eef5ff;--headline:#ffffff;--muted:#aab8cf;--accent:#78e3c4;--accentInk:#06120f;--line:rgba(255,255,255,.13);--glass:rgba(12,18,32,.70);--softGlass:rgba(255,255,255,.07);--card:rgba(255,255,255,.075);--cardActive:linear-gradient(135deg,rgba(120,227,196,.22),rgba(120,157,255,.12));--panel:rgba(255,255,255,.08);--chip:rgba(255,255,255,.075);--tag:rgba(120,227,196,.12);--tagInk:#c7ffef;--input:rgba(255,255,255,.08);--modal:#0d1425;--appNav:rgba(12,18,32,.90);--btn:rgba(255,255,255,.08);--shadow:0 24px 80px rgba(0,0,0,.36);--softShadow:0 22px 64px rgba(0,0,0,.28)}
+:root{--max:1180px;--bg:#0a1020;--ink:#eef5ff;--headline:#ffffff;--muted:#aab8cf;--accent:#78e3c4;--gold:#d8b56d;--accentInk:#06120f;--line:rgba(255,255,255,.13);--glass:rgba(12,18,32,.70);--softGlass:rgba(255,255,255,.07);--card:rgba(255,255,255,.075);--cardActive:linear-gradient(135deg,rgba(120,227,196,.22),rgba(120,157,255,.12));--panel:rgba(255,255,255,.08);--chip:rgba(255,255,255,.075);--tag:rgba(120,227,196,.12);--tagInk:#c7ffef;--input:rgba(255,255,255,.08);--modal:#0d1425;--appNav:rgba(12,18,32,.90);--btn:rgba(255,255,255,.08);--shadow:0 24px 80px rgba(0,0,0,.36);--softShadow:0 22px 64px rgba(0,0,0,.28)}
 body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparent 28%),radial-gradient(circle at 88% 15%,rgba(115,137,255,.18),transparent 26%),linear-gradient(180deg,#0a1020,#050913 72%)}.topnav-inner{border-radius:28px}.app-hero{min-height:100svh;padding:112px 0 58px;display:grid;grid-template-columns:420px minmax(0,1fr);gap:26px;align-items:center}.phone-shell{border:1px solid rgba(255,255,255,.18);border-radius:46px;padding:12px;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));box-shadow:0 44px 120px rgba(0,0,0,.46)}.phone-screen{min-height:720px;border-radius:34px;background:#09101e;border:1px solid rgba(255,255,255,.12);padding:18px;overflow:hidden}.app-top{display:flex;justify-content:space-between;align-items:center}.app-chip{padding:8px 10px;border-radius:999px;background:rgba(120,227,196,.14);color:#c7ffef;font-weight:900;font-size:.76rem}.phone-screen .today-img{height:330px;border-radius:28px;margin-top:16px}.phone-screen h2{font-family:'Cormorant Garamond',serif;font-size:3.4rem;line-height:.85;margin:18px 0 10px;color:white}.phone-screen p{color:var(--muted);line-height:1.55}.app-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.app-stats div{border-radius:18px;background:rgba(255,255,255,.07);padding:12px}.app-stats b{display:block;color:#fff;font-size:1.4rem}.display{font-size:clamp(4.5rem,10vw,10rem)}.app-dashboard{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.dashboard-card{border:1px solid var(--line);background:var(--card);border-radius:34px;padding:22px;box-shadow:var(--shadow)}.dashboard-card h3{font-family:'Cormorant Garamond',serif;font-size:3.2rem;line-height:.9;margin:8px 0;color:var(--headline)}.rituals{grid-template-columns:repeat(7,180px);scroll-snap-type:x mandatory}.ritual{scroll-snap-align:start;background:rgba(255,255,255,.07)}.scent-grid,#advisorResults{grid-template-columns:repeat(6,280px);overflow:auto;scroll-snap-type:x mandatory;padding-bottom:8px}.scent-card{scroll-snap-align:start}.hero-rec{min-width:340px}.formula-grid,#mixGrid{grid-template-columns:repeat(3,minmax(280px,1fr))}.world-grid,#worldGrid{grid-template-columns:1fr 1fr 1fr}.world-card.big{grid-row:auto}.library-grid,#libraryGrid{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:1000px){.app-hero,.app-dashboard{grid-template-columns:1fr}.phone-shell{max-width:430px;margin:auto}.phone-screen{min-height:auto}.scent-grid,#advisorResults{grid-template-columns:repeat(6,270px)}}@media(max-width:760px){.app-hero{padding:24px 0 34px;min-height:auto}.phone-shell{border-radius:34px;padding:8px}.phone-screen{border-radius:27px;padding:14px}.phone-screen .today-img{height:285px}.phone-screen h2{font-size:2.8rem}.display{font-size:clamp(3.4rem,18vw,5.8rem)}.app-dashboard{gap:10px}.dashboard-card{border-radius:26px;padding:16px}.dashboard-card h3{font-size:2.35rem}.rituals{grid-template-columns:repeat(2,1fr);overflow:visible}.scent-grid,#advisorResults{grid-template-columns:1fr;overflow:visible}.hero-rec{min-width:0}.formula-grid,#mixGrid,.world-grid,#worldGrid,.library-grid,#libraryGrid{grid-template-columns:1fr}}
 
 
@@ -767,8 +767,10 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
   position:absolute;
   inset:0 auto 0 0;
   width:var(--meter,0%);
+  min-width:var(--meter-min,0);
   border-radius:inherit;
-  background:linear-gradient(90deg,var(--accent),var(--gold));
+  background:linear-gradient(90deg,var(--accent,#78e3c4),var(--gold,#d8b56d));
+  box-shadow:0 0 12px rgba(120,227,196,.24);
 }
 .performance-foot{
   display:flex;
@@ -1885,6 +1887,35 @@ function closeModal(){
 function modalScore(value){
   return Math.max(0,Math.min(5,toNumber(value,0)));
 }
+function inferLongevityScore(text){
+  const value = String(text || '').toLowerCase();
+  const hours = [...value.matchAll(/(\d+(?:[.,]\d+)?)/g)]
+    .map(match=>Number(match[1].replace(',','.')))
+    .filter(Number.isFinite);
+  const maxHours = hours.length ? Math.max(...hours) : 0;
+  if(maxHours >= 10 || /rất tốt|xuất sắc|cả ngày|12h|12\+h/.test(value)) return 5;
+  if(maxHours >= 7 || /tốt|bền|lâu/.test(value)) return 4;
+  if(maxHours >= 5 || /khá/.test(value)) return 3;
+  if(maxHours >= 3 || /trung bình|vừa/.test(value)) return 2;
+  if(maxHours > 0 || /yếu|ngắn/.test(value)) return 1;
+  return 0;
+}
+function inferSillageScore(text){
+  const value = String(text || '').toLowerCase();
+  if(/rất mạnh|beast|khủng|lan xa|rộng/.test(value)) return 5;
+  if(/mạnh|rõ|nổi bật/.test(value)) return 4;
+  if(/vừa|moderate|cân bằng/.test(value)) return 3;
+  if(/kín đáo|nhẹ|gần da/.test(value)) return 2;
+  if(/rất nhẹ|skin scent|sát da/.test(value)) return 1;
+  return 0;
+}
+function modalPerformanceScore(score,text,type){
+  const explicit = modalScore(score);
+  if(explicit > 0) return explicit;
+  if(type === 'longevity') return inferLongevityScore(text);
+  if(type === 'sillage') return inferSillageScore(text);
+  return 0;
+}
 function modalMeter(value){
   return `${Math.round((modalScore(value)/5)*100)}%`;
 }
@@ -1932,10 +1963,26 @@ function modal(p, trigger=null){
   ].filter(item=>String(item.value||'').trim());
 
   const performanceItems = [
-    {label:'Độ bám',value:modalValue(p.longevity),score:p.longevityScore},
-    {label:'Độ tỏa',value:modalValue(p.sillage),score:p.sillageScore},
-    {label:'Độ tươi',value:`${modalScore(p.freshScore)}/5`,score:p.freshScore},
-    {label:'Độ ấm',value:`${modalScore(p.warmScore)}/5`,score:p.warmScore}
+    {
+      label:'Độ bám',
+      value:modalValue(p.longevity),
+      score:modalPerformanceScore(p.longevityScore,p.longevity,'longevity')
+    },
+    {
+      label:'Độ tỏa',
+      value:modalValue(p.sillage),
+      score:modalPerformanceScore(p.sillageScore,p.sillage,'sillage')
+    },
+    {
+      label:'Độ mát mẻ',
+      value:`${modalScore(p.freshScore)}/5`,
+      score:modalScore(p.freshScore)
+    },
+    {
+      label:'Độ ấm',
+      value:`${modalScore(p.warmScore)}/5`,
+      score:modalScore(p.warmScore)
+    }
   ];
 
   const useItems = [
@@ -2004,7 +2051,9 @@ function modal(p, trigger=null){
           <div class="performance-board">
             ${performanceItems.map(item=>`<div class="performance-item">
               <div class="performance-label"><b>${esc(item.label)}</b><span>${esc(item.value)}</span></div>
-              <div class="performance-meter" style="--meter:${modalMeter(item.score)}"></div>
+              <div class="performance-meter" role="meter" aria-label="${esc(item.label)}"
+                aria-valuemin="0" aria-valuemax="5" aria-valuenow="${modalScore(item.score)}"
+                style="--meter:${modalMeter(item.score)};--meter-min:${modalScore(item.score)>0?'8px':'0'}"></div>
             </div>`).join('')}
           </div>
           <div class="performance-foot">
