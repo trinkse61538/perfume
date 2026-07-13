@@ -11,6 +11,9 @@
 <meta name="googlebot" content="index, follow" />
 <meta name="theme-color" content="#0a1020" />
 <meta name="color-scheme" content="dark light" />
+<meta name="application-name" content="Hihie’s Scent OS" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="format-detection" content="telephone=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Scent OS" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -56,15 +59,15 @@
 <!-- PERFUME PERFORMANCE V20: non-render-blocking fonts -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" /></noscript>
-<link rel="icon" type="image/png" href="https://perfume.khaitringuyen.com/favicon.png" />
-<link rel="shortcut icon" href="https://perfume.khaitringuyen.com/favicon.png" />
-<link rel="apple-touch-icon" href="https://perfume.khaitringuyen.com/favicon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/pwa-icon-192.png" />
+<link rel="shortcut icon" href="/favicon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />
 <link rel="manifest" href="/manifest.webmanifest" />
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
+<!-- PERFUME STEP 7 REVISED V27R2: PWA + compact personal collection + redesigned modal -->
 <!-- PERFUME STEP 6 V26: static SEO fragrance & perfumer pages -->
-<!-- PERFUME STEP 5 V25: guided scent quiz -->
 <!-- PERFUME STEP 4 V24: consultation CTA per fragrance -->
 <!-- PERFUME STEP 3 V23: local JSON sync + Google Sheet fallback -->
 <!-- PERFUME STEP 2 V22: Google Analytics 4 -->
@@ -468,7 +471,7 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
   height:100%;
   object-fit:contain;
 }
-#advisor,#quiz,#layer,#worlds,#perfumers,#library,.site-footer{
+#advisor,#layer,#worlds,#perfumers,#library,.site-footer{
   content-visibility:auto;
   contain-intrinsic-size:1px 900px;
 }
@@ -493,6 +496,665 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
 
 
 
+
+
+
+/* V27R2 — Editorial fragrance detail modal */
+.modal-card{
+  width:min(1140px,100%);
+  padding:0;
+  border-radius:38px;
+  overflow:auto;
+}
+.modal-close{
+  position:sticky;
+  top:14px;
+  margin:14px 14px -58px auto;
+  float:none;
+  display:block;
+  z-index:8;
+  background:rgba(7,14,26,.82);
+  backdrop-filter:blur(14px);
+}
+.modal-showcase{
+  display:grid;
+  grid-template-columns:minmax(280px,360px) minmax(0,1fr);
+  align-items:start;
+}
+.modal-visual-column{
+  position:sticky;
+  top:0;
+  min-height:720px;
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  border-right:1px solid var(--line);
+  background:
+    radial-gradient(circle at 50% 24%,rgba(120,227,196,.16),transparent 36%),
+    radial-gradient(circle at 15% 90%,rgba(216,181,109,.12),transparent 34%),
+    rgba(4,10,20,.34);
+}
+.modal-visual-column .modal-img{
+  width:100%;
+  height:430px;
+  border-radius:30px;
+}
+.modal-visual-caption{
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+}
+.modal-visual-caption small{
+  display:block;
+  color:var(--accent);
+  font-family:JetBrains Mono,monospace;
+  font-size:.65rem;
+  font-weight:900;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.modal-visual-caption p{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:.82rem;
+  line-height:1.5;
+}
+.modal-editorial{
+  min-width:0;
+  padding:34px 32px 32px;
+}
+.modal-title-block{
+  padding-right:48px;
+}
+.modal-title-block h2{
+  max-width:760px;
+}
+.modal-subtitle{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:12px;
+}
+.modal-subtitle span{
+  padding:7px 9px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.045);
+  color:var(--muted);
+  font-size:.72rem;
+  font-weight:900;
+}
+.modal-personal-note{
+  position:relative;
+  margin-top:18px;
+  padding:18px 18px 18px 54px;
+  border:1px solid rgba(216,181,109,.24);
+  border-radius:23px;
+  background:
+    linear-gradient(135deg,rgba(216,181,109,.10),rgba(255,255,255,.035));
+}
+.modal-personal-note::before{
+  content:'“';
+  position:absolute;
+  left:17px;
+  top:7px;
+  color:var(--gold);
+  font-family:'Cormorant Garamond',serif;
+  font-size:4rem;
+  line-height:1;
+  opacity:.78;
+}
+.modal-personal-note b{
+  display:block;
+  color:#f5d994;
+  font-size:.68rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.modal-personal-note p{
+  margin:7px 0 0;
+  color:#e3e8eb;
+  line-height:1.65;
+}
+.modal-identity-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;
+  margin-top:18px;
+}
+.modal-identity-item{
+  min-width:0;
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(255,255,255,.042);
+}
+.modal-identity-item i{
+  display:block;
+  color:var(--accent);
+  font-style:normal;
+  font-size:1rem;
+}
+.modal-identity-item b{
+  display:block;
+  margin-top:7px;
+  color:var(--headline);
+  font-size:.68rem;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.modal-identity-item span,.modal-identity-item a{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:.8rem;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+.modal-section{
+  margin-top:24px;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+}
+.modal-section-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:13px;
+}
+.modal-section-head small{
+  color:var(--accent);
+  font-family:JetBrains Mono,monospace;
+  font-size:.63rem;
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.modal-section-head h3{
+  margin:5px 0 0;
+  color:var(--headline);
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,4vw,3.25rem);
+  line-height:.9;
+}
+.modal-section-head p{
+  max-width:310px;
+  margin:0;
+  color:var(--muted);
+  font-size:.76rem;
+  line-height:1.45;
+  text-align:right;
+}
+.fragrance-pyramid{
+  display:grid;
+  gap:8px;
+}
+.pyramid-tier{
+  display:grid;
+  grid-template-columns:48px 110px minmax(0,1fr);
+  gap:12px;
+  align-items:center;
+  min-height:70px;
+  padding:11px 14px;
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+.pyramid-tier .tier-number{
+  color:rgba(255,255,255,.30);
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.1rem;
+  font-weight:700;
+}
+.pyramid-tier b{
+  font-size:.72rem;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+.pyramid-tier span{
+  color:#dce5e9;
+  line-height:1.5;
+}
+.pyramid-tier.top{
+  background:linear-gradient(90deg,rgba(100,181,255,.13),rgba(255,255,255,.025));
+}
+.pyramid-tier.top b{color:#8dd0ff}
+.pyramid-tier.heart{
+  background:linear-gradient(90deg,rgba(230,125,165,.13),rgba(255,255,255,.025));
+}
+.pyramid-tier.heart b{color:#f0a7c3}
+.pyramid-tier.base{
+  background:linear-gradient(90deg,rgba(216,181,109,.15),rgba(255,255,255,.025));
+}
+.pyramid-tier.base b{color:#e4c886}
+.performance-board{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.performance-item{
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:19px;
+  background:rgba(255,255,255,.038);
+}
+.performance-label{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:baseline;
+}
+.performance-label b{
+  color:var(--headline);
+  font-size:.8rem;
+}
+.performance-label span{
+  color:var(--muted);
+  font-size:.72rem;
+  text-align:right;
+}
+.performance-meter{
+  position:relative;
+  height:7px;
+  margin-top:11px;
+  overflow:hidden;
+  border-radius:999px;
+  background:rgba(255,255,255,.09);
+}
+.performance-meter::after{
+  content:'';
+  position:absolute;
+  inset:0 auto 0 0;
+  width:var(--meter,0%);
+  border-radius:inherit;
+  background:linear-gradient(90deg,var(--accent),var(--gold));
+}
+.performance-foot{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.performance-foot span{
+  padding:6px 8px;
+  border-radius:999px;
+  background:rgba(120,227,196,.07);
+  color:var(--muted);
+  font-size:.69rem;
+  font-weight:800;
+}
+.use-map{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+.use-map-item{
+  min-width:0;
+  min-height:94px;
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:19px;
+  background:rgba(255,255,255,.038);
+}
+.use-map-item i{
+  display:block;
+  color:var(--gold);
+  font-style:normal;
+  font-size:1.15rem;
+}
+.use-map-item b{
+  display:block;
+  margin-top:8px;
+  color:var(--headline);
+  font-size:.68rem;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.use-map-item span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:.78rem;
+  line-height:1.4;
+}
+.layering-board{
+  display:grid;
+  grid-template-columns:.8fr 1.2fr 1fr;
+  gap:9px;
+}
+.layering-lane{
+  min-width:0;
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+.layering-lane small{
+  font-family:JetBrains Mono,monospace;
+  font-size:.61rem;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.layering-lane b{
+  display:block;
+  margin-top:8px;
+  color:var(--headline);
+}
+.layering-lane p{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:.79rem;
+  line-height:1.5;
+}
+.layering-lane.role{
+  background:rgba(120,227,196,.075);
+}
+.layering-lane.role small{color:var(--accent)}
+.layering-lane.pair{
+  background:rgba(115,137,255,.075);
+}
+.layering-lane.pair small{color:#9dacff}
+.layering-lane.avoid{
+  background:rgba(235,121,108,.075);
+}
+.layering-lane.avoid small{color:#f2a099}
+.modal-data-details{
+  margin-top:13px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(255,255,255,.025);
+}
+.modal-data-details summary{
+  padding:12px 14px;
+  color:var(--muted);
+  font-size:.76rem;
+  font-weight:900;
+  cursor:pointer;
+}
+.modal-data-details div{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  padding:0 13px 13px;
+}
+.modal-data-details p{
+  margin:0;
+  padding:10px;
+  border-radius:13px;
+  background:rgba(255,255,255,.035);
+  color:var(--muted);
+  font-size:.75rem;
+  line-height:1.45;
+}
+.modal-data-details b{
+  color:var(--accent);
+}
+.modal-actions-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-top:18px;
+}
+.modal-actions-row .seo-detail-link{
+  margin-top:0;
+}
+.modal-consult-compact{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:14px;
+  align-items:center;
+  padding:15px;
+  border-radius:21px;
+}
+.modal-consult-compact::after{display:none}
+.modal-consult-compact h3{
+  margin:4px 0;
+  font-size:1.8rem;
+  line-height:.95;
+}
+.modal-consult-compact>div>p{
+  margin:0;
+  font-size:.8rem;
+}
+.modal-consult-compact .consult-actions{
+  display:flex;
+  margin-top:0;
+}
+.modal-consult-compact .consult-actions .btn{
+  min-height:42px;
+  width:auto;
+  padding:9px 11px;
+}
+.modal-consult-compact .consult-message{
+  grid-column:1/-1;
+  margin-top:0;
+  padding:0;
+  overflow:hidden;
+}
+.modal-consult-compact .consult-message summary{
+  padding:10px 12px;
+  color:var(--muted);
+  font-size:.75rem;
+  font-weight:900;
+  cursor:pointer;
+}
+.modal-consult-compact .consult-message p{
+  padding:0 12px 12px;
+}
+.modal-consult-compact .consult-status{
+  grid-column:1/-1;
+  margin-top:0;
+}
+.modal-related-perfumer{
+  margin-top:18px;
+}
+@media(max-width:920px){
+  .modal-showcase{grid-template-columns:250px minmax(0,1fr)}
+  .modal-visual-column{min-height:640px;padding:20px}
+  .modal-visual-column .modal-img{height:340px}
+  .modal-editorial{padding:28px 22px 26px}
+  .modal-identity-grid{grid-template-columns:1fr 1fr}
+  .use-map{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+  .modal-card{border-radius:26px}
+  .modal-showcase{grid-template-columns:1fr}
+  .modal-visual-column{
+    position:relative;
+    min-height:auto;
+    padding:18px;
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+  .modal-visual-column .modal-img{height:300px}
+  .modal-visual-caption{display:none}
+  .modal-editorial{padding:22px 16px 20px}
+  .modal-title-block{padding-right:38px}
+  .modal-identity-grid,.performance-board,.use-map,.layering-board{grid-template-columns:1fr}
+  .modal-section-head{display:block}
+  .modal-section-head p{margin-top:7px;text-align:left}
+  .pyramid-tier{grid-template-columns:40px 82px minmax(0,1fr);gap:8px;padding:10px}
+  .modal-consult-compact{grid-template-columns:1fr}
+  .modal-consult-compact .consult-actions{display:grid;grid-template-columns:1fr 1fr}
+  .modal-consult-compact .consult-actions .btn{width:100%}
+  .modal-actions-row{display:grid}
+  .modal-actions-row .seo-detail-link{width:100%}
+}
+@media(max-width:390px){
+  .pyramid-tier{grid-template-columns:34px 1fr}
+  .pyramid-tier span{grid-column:1/-1}
+  .modal-consult-compact .consult-actions{grid-template-columns:1fr}
+}
+
+/* V27 Installable PWA, update and network UI */
+.pwa-install-trigger{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.pwa-install-card{
+  position:fixed;
+  left:18px;
+  bottom:18px;
+  z-index:120;
+  width:min(410px,calc(100vw - 36px));
+  padding:14px;
+  border:1px solid rgba(120,227,196,.30);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 100% 0,rgba(120,227,196,.18),transparent 38%),
+    rgba(7,15,28,.94);
+  box-shadow:0 28px 90px rgba(0,0,0,.58);
+  backdrop-filter:blur(22px);
+}
+.pwa-install-main{
+  display:grid;
+  grid-template-columns:58px minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+}
+.pwa-install-icon{
+  width:58px;
+  height:58px;
+  border-radius:17px;
+  box-shadow:0 14px 32px rgba(0,0,0,.32);
+}
+.pwa-install-copy b{
+  display:block;
+  color:var(--headline);
+  font-size:.92rem;
+}
+.pwa-install-copy span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:.76rem;
+  line-height:1.4;
+}
+.pwa-install-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.pwa-install-actions button{
+  min-height:40px;
+  padding:9px 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  color:var(--headline);
+  font-weight:900;
+  cursor:pointer;
+}
+.pwa-install-actions [data-pwa-install-action]{
+  border:0;
+  background:linear-gradient(135deg,#f8df9a,#b98638);
+  color:#171008;
+}
+.pwa-install-actions [data-pwa-dismiss]{
+  width:40px;
+  padding:0;
+  font-size:1rem;
+}
+.pwa-ios-help{
+  margin-top:10px;
+  padding:10px 12px;
+  border:1px solid rgba(216,181,109,.20);
+  border-radius:16px;
+  background:rgba(216,181,109,.08);
+  color:#e9edf2;
+  font-size:.78rem;
+  line-height:1.5;
+}
+.pwa-update-toast{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  z-index:125;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:min(520px,calc(100vw - 32px));
+  padding:12px 13px;
+  border:1px solid rgba(216,181,109,.32);
+  border-radius:20px;
+  background:rgba(8,14,27,.96);
+  box-shadow:0 24px 78px rgba(0,0,0,.58);
+  transform:translateX(-50%);
+  backdrop-filter:blur(22px);
+}
+.pwa-update-toast div{min-width:0;flex:1}
+.pwa-update-toast b{display:block;color:var(--headline)}
+.pwa-update-toast span{display:block;color:var(--muted);font-size:.76rem;line-height:1.4}
+.pwa-update-toast button{
+  min-height:40px;
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  color:var(--headline);
+  font-weight:900;
+  cursor:pointer;
+}
+.pwa-update-toast [data-pwa-update]{
+  border:0;
+  background:linear-gradient(135deg,#78e3c4,#3ba98a);
+  color:#07110e;
+}
+.pwa-network-pill{
+  position:fixed;
+  top:18px;
+  left:50%;
+  z-index:130;
+  min-height:38px;
+  padding:9px 14px;
+  border:1px solid rgba(255,198,112,.34);
+  border-radius:999px;
+  background:rgba(30,21,12,.94);
+  color:#ffe2af;
+  font-size:.78rem;
+  font-weight:900;
+  transform:translateX(-50%);
+  box-shadow:0 16px 46px rgba(0,0,0,.34);
+  backdrop-filter:blur(18px);
+}
+@media(display-mode:standalone){
+  .pwa-install-trigger,.pwa-install-card{display:none!important}
+}
+@media(max-width:760px){
+  .pwa-install-card{
+    left:10px;
+    right:10px;
+    bottom:94px;
+    width:auto;
+    padding:12px;
+    border-radius:21px;
+  }
+  .pwa-install-main{
+    grid-template-columns:50px minmax(0,1fr);
+  }
+  .pwa-install-icon{width:50px;height:50px;border-radius:15px}
+  .pwa-install-actions{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:1fr 42px;
+  }
+  .pwa-update-toast{
+    bottom:94px;
+    display:grid;
+    grid-template-columns:1fr auto auto;
+  }
+  .pwa-network-pill{top:10px}
+}
+@media(max-width:430px){
+  .pwa-update-toast{
+    grid-template-columns:1fr 1fr;
+  }
+  .pwa-update-toast div{grid-column:1/-1}
+}
 
 /* V26 Static SEO page bridges */
 .seo-detail-link,.perfumer-profile-link{
@@ -520,235 +1182,6 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
 .perfumer-profile-link{width:max-content;max-width:100%}
 @media(max-width:760px){
   .seo-detail-link,.perfumer-profile-link{width:100%}
-}
-
-/* V25 Guided Scent Quiz */
-.quiz-shell{
-  display:grid;
-  grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);
-  gap:18px;
-  align-items:start;
-}
-.quiz-panel,.quiz-results-panel{
-  border:1px solid var(--line);
-  border-radius:34px;
-  background:var(--panel);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.quiz-panel{padding:22px}
-.quiz-panel h3,.quiz-results-panel h3{
-  margin:8px 0 10px;
-  color:var(--headline);
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(2.35rem,5vw,4.2rem);
-  line-height:.9;
-}
-.quiz-intro{
-  margin:0 0 18px;
-  color:var(--muted);
-  line-height:1.6;
-}
-.quiz-form{display:grid;gap:14px}
-.quiz-field{
-  min-width:0;
-  margin:0;
-  padding:14px;
-  border:1px solid rgba(255,255,255,.11);
-  border-radius:21px;
-  background:rgba(255,255,255,.045);
-}
-.quiz-field legend{
-  padding:0 7px;
-  color:var(--headline);
-  font-weight:900;
-}
-.quiz-field small{
-  display:block;
-  margin:4px 0 10px;
-  color:var(--muted);
-  line-height:1.4;
-}
-.quiz-options{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:8px;
-}
-.quiz-option{position:relative;min-width:0}
-.quiz-option input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
-}
-.quiz-option span{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:44px;
-  height:100%;
-  padding:9px 10px;
-  border:1px solid var(--line);
-  border-radius:15px;
-  background:rgba(255,255,255,.055);
-  color:var(--muted);
-  font-size:.8rem;
-  font-weight:900;
-  text-align:center;
-  line-height:1.25;
-  cursor:pointer;
-  transition:.18s ease;
-}
-.quiz-option input:checked+span{
-  border-color:rgba(120,227,196,.48);
-  background:rgba(120,227,196,.16);
-  color:#d8fff3;
-  box-shadow:0 0 0 2px rgba(120,227,196,.07);
-}
-.quiz-option input:focus-visible+span{
-  outline:3px solid #f8df9a;
-  outline-offset:3px;
-}
-.quiz-submit-row{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:9px;
-}
-.quiz-submit-row .btn{min-height:50px}
-.quiz-budget-note{
-  margin:0;
-  padding:11px 12px;
-  border-radius:16px;
-  background:rgba(216,181,109,.08);
-  border:1px solid rgba(216,181,109,.16);
-  color:var(--muted);
-  font-size:.8rem;
-  line-height:1.45;
-}
-.quiz-results-panel{
-  min-height:520px;
-  padding:22px;
-  background:
-    radial-gradient(circle at 100% 0,rgba(120,227,196,.12),transparent 34%),
-    var(--panel);
-}
-.quiz-empty{
-  min-height:430px;
-  display:grid;
-  place-content:center;
-  gap:8px;
-  text-align:center;
-  color:var(--muted);
-}
-.quiz-empty b{
-  color:var(--headline);
-  font-family:'Cormorant Garamond',serif;
-  font-size:2.4rem;
-  line-height:.95;
-}
-.quiz-results{
-  display:grid;
-  gap:14px;
-}
-.quiz-result-card{
-  display:grid;
-  grid-template-columns:150px minmax(0,1fr);
-  gap:15px;
-  padding:14px;
-  border:1px solid var(--line);
-  border-radius:25px;
-  background:rgba(255,255,255,.055);
-  min-width:0;
-}
-.quiz-result-card[data-quiz-role="safe"]{border-color:rgba(120,227,196,.33)}
-.quiz-result-card[data-quiz-role="personality"]{border-color:rgba(216,181,109,.34)}
-.quiz-result-card[data-quiz-role="try"]{border-color:rgba(115,137,255,.34)}
-.quiz-result-img{
-  min-height:190px;
-  height:100%;
-  border-radius:20px;
-}
-.quiz-result-copy{min-width:0}
-.quiz-result-label{
-  font-family:JetBrains Mono,monospace;
-  color:var(--accent);
-  font-size:.65rem;
-  font-weight:900;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-}
-.quiz-result-copy h4{
-  margin:7px 0 4px;
-  color:var(--headline);
-  font-family:'Cormorant Garamond',serif;
-  font-size:2.15rem;
-  line-height:.9;
-  overflow-wrap:anywhere;
-}
-.quiz-result-brand{
-  color:var(--muted);
-  font-size:.76rem;
-  font-weight:900;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-}
-.quiz-reasons{
-  display:grid;
-  gap:5px;
-  margin:10px 0 0;
-  padding:0;
-  list-style:none;
-}
-.quiz-reasons li{
-  position:relative;
-  padding-left:15px;
-  color:#d5e0e5;
-  font-size:.82rem;
-  line-height:1.4;
-}
-.quiz-reasons li::before{
-  content:'•';
-  position:absolute;
-  left:2px;
-  color:var(--accent);
-}
-.quiz-result-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:12px;
-}
-.quiz-result-actions .btn{
-  min-height:42px;
-  padding:9px 12px;
-  font-size:.78rem;
-}
-.quiz-summary{
-  margin-bottom:14px;
-  padding:12px 13px;
-  border:1px solid rgba(120,227,196,.18);
-  border-radius:18px;
-  background:rgba(120,227,196,.07);
-  color:var(--muted);
-  font-size:.84rem;
-  line-height:1.5;
-}
-.quiz-summary b{color:var(--headline)}
-@media(max-width:1000px){
-  .quiz-shell{grid-template-columns:1fr}
-  .quiz-results-panel{min-height:auto}
-}
-@media(max-width:760px){
-  .quiz-panel,.quiz-results-panel{padding:15px;border-radius:26px}
-  .quiz-options{grid-template-columns:1fr 1fr}
-  .quiz-submit-row{grid-template-columns:1fr}
-  .quiz-result-card{grid-template-columns:1fr}
-  .quiz-result-img{height:230px}
-  .quiz-result-actions{display:grid;grid-template-columns:1fr 1fr}
-  .quiz-result-actions .btn{width:100%}
-}
-@media(max-width:390px){
-  .quiz-options,.quiz-result-actions{grid-template-columns:1fr}
-  .quiz-result-img{height:210px}
 }
 
 /* V24 Consultation CTA — contextual enquiry for each fragrance */
@@ -903,103 +1336,10 @@ body.modal-open{overflow:hidden}
 
 <body>
 <a class="skip-link" href="#today">Bỏ qua điều hướng, đến nội dung chính</a>
-<header class="topnav"><div class="topnav-inner"><a class="brand" href="#top" aria-label="Về đầu trang Hihie Scent OS"><i aria-hidden="true"></i><span>Scent OS</span></a><nav class="navlinks" aria-label="Điều hướng chính"><a href="#today">Today</a><a href="#advisor">Mood</a><a href="#quiz">Quiz</a><a href="#layer">Mix</a><a href="#worlds">Rooms</a><a href="#perfumers">Noses</a><a href="#library">Vault</a><a href="#contact">Contact</a></nav><a class="portfolio-nav-link" href="https://khaitringuyen.com/" target="_blank" rel="noopener noreferrer" aria-label="Mở portfolio của Nguyen Khai Tri"><span class="portfolio-nav-mark">KT</span><span>Portfolio</span><b>↗</b></a></div></header>
+<header class="topnav"><div class="topnav-inner"><a class="brand" href="#top" aria-label="Về đầu trang Hihie Scent OS"><i aria-hidden="true"></i><span>Scent OS</span></a><nav class="navlinks" aria-label="Điều hướng chính"><a href="#today">Today</a><a href="#advisor">Mood</a><a href="#layer">Mix</a><a href="#worlds">Rooms</a><a href="#perfumers">Noses</a><a href="#library">Vault</a><a href="#contact">Contact</a></nav><a class="portfolio-nav-link" href="https://khaitringuyen.com/" target="_blank" rel="noopener noreferrer" aria-label="Mở portfolio của Nguyen Khai Tri"><span class="portfolio-nav-mark">KT</span><span>Portfolio</span><b>↗</b></a></div></header>
 <main id="top"><section class="app-hero wrap" id="today"><aside class="phone-shell"><div class="phone-screen"><div class="app-top"><span class="app-chip">Scent OS · Daily Pick</span><span data-weather-source>Open‑Meteo</span></div><div data-today-img></div><div class="eyebrow" data-today-brand></div><h2 id="today-pick-title" data-today-name tabindex="-1"></h2><p data-today-note></p><div class="today-why"><div class="why-title">Vì sao hôm nay hợp?</div><ul class="why-list" data-today-reasons><li>Đang phân tích địa điểm, thời tiết và giờ địa phương.</li></ul><div class="today-meta-pill" data-today-meta></div></div><div class="actions"><button class="btn primary" data-action="today">Hôm nay dùng gì?</button></div><div class="app-stats"><div><b data-stat-count>--</b><span>chai</span></div><div><b data-stat-brands>—</b><span>hãng</span></div><div><b>Mix</b><span>gợi ý</span></div></div></div></aside><div><div class="eyebrow">Personal fragrance wardrobe</div><h1 class="display">Hihie's<br>Scent OS</h1><p class="lead" data-weather-line role="status" aria-live="polite" aria-atomic="true">Đang đọc thời tiết theo địa điểm đã chọn</p><a class="creator-bridge" href="https://khaitringuyen.com/" target="_blank" rel="noopener noreferrer" aria-label="Xem portfolio của Nguyen Khai Tri"><span class="creator-monogram">KT</span><span class="creator-copy"><small>A personal project by</small><strong>Nguyen Khai Tri</strong><em>Performance Marketing · Data · AI Automation</em></span><strong>View portfolio ↗</strong></a><div class="app-dashboard"><div class="dashboard-card today-action-card"><div class="eyebrow">Daily Weather Match</div><h3>Gợi ý theo thời tiết</h3><div class="weather-summary"><div class="weather-main"><div><div class="weather-temp" data-weather-temp>--°</div><div class="weather-location" data-weather-location>Ho Chi Minh City · Asia/Ho_Chi_Minh</div><div class="weather-status" data-weather-status role="status" aria-live="polite" aria-atomic="true">Đang đọc thời tiết</div></div><div class="weather-mini-grid"><div><b data-weather-rain>--</b><span>Mưa</span></div><div><b data-weather-humidity>--</b><span>Độ ẩm</span></div></div></div><div class="weather-strategy-card"><b>Chiến lược chọn mùi hôm nay</b><p data-weather-strategy>Đang phân tích nhiệt độ, mưa và độ ẩm để chọn chai phù hợp.</p></div><div class="weather-tags"><span data-weather-tag-1>Fresh</span><span data-weather-tag-2>Kín đáo</span><span data-weather-tag-3>Dễ dùng</span></div><div class="location-picker"><div class="location-picker-title"><b>Travel Mode</b><span data-location-mode>Global city search</span></div><form class="location-search" data-location-form role="search" aria-label="Tìm địa điểm cho Travel Mode"><label class="sr-only" for="locationQuery">Nhập thành phố hoặc quốc gia</label><input id="locationQuery" name="location" class="location-input" data-location-query type="search" placeholder="Nhập thành phố / quốc gia: Đà Lạt, Paris, Tokyo..." autocomplete="off" aria-describedby="locationHelp" aria-controls="locationResults" aria-autocomplete="list" aria-expanded="false"><button class="location-submit" type="submit">Tìm</button></form><div class="location-actions"><button class="location-mini-btn" type="button" data-location-current>Dùng vị trí hiện tại</button><button class="location-mini-btn" type="button" data-location-reset>Về Sài Gòn</button></div><div id="locationResults" class="location-results" data-location-results role="region" aria-label="Kết quả tìm địa điểm" aria-live="polite" aria-atomic="false" aria-busy="false" hidden></div><div id="locationHelp" class="location-note" data-location-note role="status" aria-live="polite" aria-atomic="true">Đang dùng Hồ Chí Minh City làm địa điểm mặc định.</div></div></div><div class="command-note"><b>Gợi ý sử dụng:</b> chọn địa điểm đang ở hoặc nơi sắp du lịch, Scent OS sẽ lấy thời tiết và giờ địa phương để gợi ý mùi phù hợp ngày/đêm.</div></div><div class="dashboard-card quick-drawer-card" id="quickPick"><div class="eyebrow">Scent Discovery</div><h3>Khám phá thêm</h3><p>Khi không cần gợi ý theo thời tiết, khu vực này giúp bạn khám phá một lựa chọn mới theo cảm hứng hoặc theo tình huống cụ thể.</p><div class="pick-mode-stack"><div class="pick-mode"><div><b>Khám phá bất kỳ</b><small>Chọn ngẫu nhiên một mùi từ toàn bộ bộ sưu tập — phù hợp khi bạn muốn đổi mood mà chưa có tiêu chí cụ thể.</small></div><button class="btn primary" data-action="random">Rút ngẫu nhiên · R</button></div><div class="pick-mode"><div><b>Chọn theo tình huống</b><small>Chọn một ngữ cảnh sử dụng, hệ thống sẽ ưu tiên các mùi hợp không gian, thời điểm và mức độ an toàn.</small></div><div class="mini-ritual-picker" data-discover-rituals aria-label="Chọn tình huống để rút mùi"></div><button class="btn" data-action="ritual-random">Gợi ý theo tình huống</button></div></div><div class="discover-result hero-discover-result" id="discoverResult" role="status" aria-live="polite" aria-atomic="false"></div></div></div></div></section>
 <section class="section wrap" id="advisor"><div class="section-head"><h2>Chọn <em>Tình huống</em></h2><p>Chọn ngữ cảnh sử dụng để thu hẹp bộ sưu tập thành các lựa chọn phù hợp: đi làm, gặp khách, ngày mưa, hẹn hò, thời gian một mình hoặc khi muốn tạo dấu ấn.</p></div><div class="rituals"></div><div class="section-head" style="margin-top:24px"><h2 style="font-size:clamp(2.1rem,4vw,3.8rem)" data-advisor-title></h2><p>Các lựa chọn bên dưới được xếp theo độ phù hợp với thời tiết, độ tỏa, độ an toàn và sắc thái mùi.</p></div><div id="advisorResults"></div></section>
 
-<section class="section wrap" id="quiz">
-  <div class="section-head">
-    <h2>Scent <em>Quiz</em></h2>
-    <p>Trả lời sáu câu ngắn để hệ thống chọn ba hướng khác nhau từ chính bộ sưu tập: an toàn nhất, cá tính nhất và đáng thử nhất.</p>
-  </div>
-  <div class="quiz-shell">
-    <div class="quiz-panel">
-      <div class="eyebrow">Guided recommendation</div>
-      <h3>Tìm mùi hợp với bạn</h3>
-      <p class="quiz-intro">Quiz dùng nhóm hương, tình huống, thời tiết, độ tỏa và dữ liệu an toàn trong Scent OS. Không cần nhập thông tin cá nhân.</p>
-      <form class="quiz-form" id="scentQuiz" data-quiz-form>
-        <fieldset class="quiz-field">
-          <legend>1. Dịp sử dụng chính</legend>
-          <div class="quiz-options">
-            <label class="quiz-option"><input type="radio" name="occasion" value="work" required><span>Đi làm</span></label>
-            <label class="quiz-option"><input type="radio" name="occasion" value="client"><span>Gặp khách</span></label>
-            <label class="quiz-option"><input type="radio" name="occasion" value="date"><span>Hẹn hò</span></label>
-            <label class="quiz-option"><input type="radio" name="occasion" value="statement"><span>Tạo dấu ấn</span></label>
-            <label class="quiz-option"><input type="radio" name="occasion" value="solo"><span>Dùng cho mình</span></label>
-            <label class="quiz-option"><input type="radio" name="occasion" value="today"><span>Dùng đa năng</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="quiz-field">
-          <legend>2. Nhóm hương bạn thích</legend>
-          <div class="quiz-options">
-            <label class="quiz-option"><input type="radio" name="liked_family" value="fresh" required><span>Fresh / citrus</span></label>
-            <label class="quiz-option"><input type="radio" name="liked_family" value="floral"><span>Floral / iris</span></label>
-            <label class="quiz-option"><input type="radio" name="liked_family" value="woody"><span>Woody / vetiver</span></label>
-            <label class="quiz-option"><input type="radio" name="liked_family" value="dark"><span>Dark / incense</span></label>
-            <label class="quiz-option"><input type="radio" name="liked_family" value="gourmand"><span>Ngọt / gourmand</span></label>
-            <label class="quiz-option"><input type="radio" name="liked_family" value="skin"><span>Clean / skin musk</span></label>
-            <label class="quiz-option"><input type="radio" name="liked_family" value="artistic"><span>Artistic / lạ</span></label>
-            <label class="quiz-option"><input type="radio" name="liked_family" value="open"><span>Muốn khám phá</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="quiz-field">
-          <legend>3. Nhóm hương muốn tránh</legend>
-          <small>Chọn “Không có” nếu bạn chưa xác định.</small>
-          <div class="quiz-options">
-            <label class="quiz-option"><input type="radio" name="avoid_family" value="none" checked><span>Không có</span></label>
-            <label class="quiz-option"><input type="radio" name="avoid_family" value="sweet"><span>Quá ngọt</span></label>
-            <label class="quiz-option"><input type="radio" name="avoid_family" value="dark"><span>Trầm / khói</span></label>
-            <label class="quiz-option"><input type="radio" name="avoid_family" value="floral"><span>Quá nhiều hoa</span></label>
-            <label class="quiz-option"><input type="radio" name="avoid_family" value="animalic"><span>Animalic</span></label>
-            <label class="quiz-option"><input type="radio" name="avoid_family" value="fresh"><span>Citrus / xanh</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="quiz-field">
-          <legend>4. Độ tỏa mong muốn</legend>
-          <div class="quiz-options">
-            <label class="quiz-option"><input type="radio" name="projection" value="soft" required><span>Gần da, kín đáo</span></label>
-            <label class="quiz-option"><input type="radio" name="projection" value="balanced"><span>Vừa đủ nhận ra</span></label>
-            <label class="quiz-option"><input type="radio" name="projection" value="strong"><span>Rõ và có dấu ấn</span></label>
-            <label class="quiz-option"><input type="radio" name="projection" value="flexible"><span>Linh hoạt</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="quiz-field">
-          <legend>5. Thời tiết thường dùng</legend>
-          <div class="quiz-options">
-            <label class="quiz-option"><input type="radio" name="climate" value="hot" required><span>Nóng ẩm</span></label>
-            <label class="quiz-option"><input type="radio" name="climate" value="rain"><span>Mưa / ẩm</span></label>
-            <label class="quiz-option"><input type="radio" name="climate" value="cool"><span>Mát / lạnh</span></label>
-            <label class="quiz-option"><input type="radio" name="climate" value="aircon"><span>Phòng máy lạnh</span></label>
-            <label class="quiz-option"><input type="radio" name="climate" value="mixed"><span>Nhiều điều kiện</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="quiz-field">
-          <legend>6. Ngân sách dự kiến</legend>
-          <small>Ngân sách được đưa vào lời nhắn để Trí tư vấn chai, dung tích hoặc decant phù hợp.</small>
-          <div class="quiz-options">
-            <label class="quiz-option"><input type="radio" name="budget" value="under_1m" required><span>Dưới 1 triệu</span></label>
-            <label class="quiz-option"><input type="radio" name="budget" value="1_3m"><span>1–3 triệu</span></label>
-            <label class="quiz-option"><input type="radio" name="budget" value="3_6m"><span>3–6 triệu</span></label>
-            <label class="quiz-option"><input type="radio" name="budget" value="flexible"><span>Linh hoạt</span></label>
-            <label class="quiz-option"><input type="radio" name="budget" value="decant"><span>Ưu tiên decant thử</span></label>
-          </div>
-        </fieldset>
-        <p class="quiz-budget-note">Scent OS hiện chưa có cột giá bán theo thời gian thực, vì vậy hệ thống không tự đoán giá. Ngân sách chỉ được dùng để chuẩn bị nội dung tư vấn chính xác hơn.</p>
-        <div class="quiz-submit-row">
-          <button class="btn primary" type="submit">Xem 3 gợi ý phù hợp</button>
-          <button class="btn" type="reset" data-quiz-reset>Làm lại</button>
-        </div>
-      </form>
-    </div>
-    <div class="quiz-results-panel" aria-labelledby="quizResultsTitle">
-      <div class="eyebrow">Your three directions</div>
-      <h3 id="quizResultsTitle">Kết quả dành cho bạn</h3>
-      <div id="quizResults" class="quiz-results" role="status" aria-live="polite" aria-atomic="false">
-        <div class="quiz-empty"><b>Chưa có kết quả</b><span>Hoàn thành sáu lựa chọn bên trái để hệ thống đọc bộ sưu tập và tạo ba hướng mùi.</span></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <section class="section wrap" id="layer"><div class="section-head"><h2>Layering <em>Formulas</em></h2><p>Các công thức layer được tạo từ vai trò từng mùi: base để giữ chiều sâu, lift để mở sáng và veil để làm mềm tổng thể.</p></div><div class="layer-toolbar"><div class="layer-vibes"></div><div class="count-toggle"></div><button class="btn primary" data-action="shuffle-layer">Đổi công thức · L</button></div><div id="mixGrid"></div></section>
 <section class="section wrap" id="worlds"><div class="section-head"><h2>Scent <em>Worlds</em></h2><p>Khám phá bộ sưu tập theo không gian mùi: citrus sáng, musk ngày mưa, trầm khói, floral mềm hoặc các mùi nghệ thuật nhiều cá tính.</p></div><div id="worldGrid"></div></section><section class="section wrap" id="perfumers"><div class="section-head"><h2>Perfumer <em>Index</em></h2><p>Theo dõi các chai cùng nhà điều chế để nhận ra chữ ký sáng tạo, giai đoạn ra mắt và những nhóm hương xuất hiện nhiều trong bộ sưu tập.</p></div><div id="perfumerGrid"></div></section><section class="section wrap" id="library"><div class="section-head"><h2>Vault <em>Search</em></h2><p>Toàn bộ bộ sưu tập được đồng bộ từ Google Sheet. Bạn có thể tìm theo tên, thương hiệu, nhà điều chế, năm ra mắt, nồng độ hoặc nhóm hương.</p></div><div class="library-tools"><label class="sr-only" for="search">Tìm trong bộ sưu tập nước hoa</label><input id="search" name="fragrance-search" class="search" type="search" placeholder="Tìm theo tên, brand, perfumer, năm, nhóm hương..." autocomplete="off" aria-controls="libraryGrid" aria-describedby="libraryCount"/><div class="lib-filters" aria-label="Bộ lọc bộ sưu tập"></div><div class="library-count" id="libraryCount" role="status" aria-live="polite" aria-atomic="true"></div></div><div id="libraryGrid"></div></section></main><footer class="site-footer" id="contact">
@@ -1012,6 +1352,7 @@ body.modal-open{overflow:hidden}
         <a class="btn primary" href="https://m.me/trinkse61538" target="_blank" rel="noopener noreferrer">Nhắn Messenger</a>
         <a class="btn" href="https://zalo.me/0367676119" target="_blank" rel="noopener noreferrer">Chat Zalo</a>
         <a class="btn" href="tel:+84367676119">Gọi 0367 676 119</a>
+<button class="btn pwa-install-trigger" type="button" data-pwa-install-trigger hidden>Cài Scent OS</button>
       </div>
     </section>
     <section class="footer-col" aria-labelledby="footer-nav-title">
@@ -1056,7 +1397,29 @@ body.modal-open{overflow:hidden}
   <a class="messenger" href="https://m.me/trinkse61538" target="_blank" rel="noopener noreferrer" aria-label="Nhắn Messenger"><span class="contact-ico">💬</span><span class="contact-label">Messenger</span></a>
   <a class="call" href="tel:+84367676119" aria-label="Gọi 0367 676 119"><span class="contact-ico">☎</span><span class="contact-label">0367 676 119</span></a>
   <a class="zalo" href="https://zalo.me/0367676119" target="_blank" rel="noopener noreferrer" aria-label="Nhắn Zalo"><span class="contact-ico">Z</span><span class="contact-label">Zalo</span></a>
-</nav><nav class="bottom-app-nav" aria-label="Điều hướng nhanh trên di động"><a href="#today"><b>●</b>Home</a><a href="#advisor"><b>↔</b>Mood</a><a href="#quiz"><b>✦</b>Quiz</a><a href="#layer"><b>⟳</b>Mix</a><a href="#library"><b>⌕</b>Vault</a></nav><div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle" aria-describedby="modalDescription"><div class="modal-card" id="modalCard" tabindex="-1"></div></div>
+</nav><nav class="bottom-app-nav" aria-label="Điều hướng nhanh trên di động"><a href="#today"><b>●</b>Home</a><a href="#advisor"><b>↔</b>Mood</a><a href="#layer"><b>⟳</b>Mix</a><a href="#worlds"><b>✦</b>Rooms</a><a href="#library"><b>⌕</b>Vault</a></nav><div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle" aria-describedby="modalDescription"><div class="modal-card" id="modalCard" tabindex="-1"></div></div>
+<section class="pwa-install-card" id="pwaInstallCard" aria-label="Cài đặt Hihie Scent OS" hidden>
+  <div class="pwa-install-main">
+    <img class="pwa-install-icon" src="/icons/pwa-icon-192.png" width="58" height="58" alt="" aria-hidden="true">
+    <div class="pwa-install-copy">
+      <b>Cài Hihie's Scent OS</b>
+      <span data-pwa-install-copy>Mở nhanh từ màn hình chính và dùng giao diện cơ bản khi mất mạng.</span>
+    </div>
+    <div class="pwa-install-actions">
+      <button type="button" data-pwa-install-action>Cài ứng dụng</button>
+      <button type="button" data-pwa-dismiss aria-label="Đóng gợi ý cài đặt">×</button>
+    </div>
+  </div>
+  <div class="pwa-ios-help" data-pwa-ios-help hidden>
+    Trên Safari: chạm nút <b>Chia sẻ</b>, chọn <b>Thêm vào Màn hình chính</b>, rồi xác nhận <b>Thêm</b>.
+  </div>
+</section>
+<section class="pwa-update-toast" id="pwaUpdateToast" role="status" aria-live="polite" hidden>
+  <div><b>Có phiên bản Scent OS mới</b><span>Cập nhật để nhận nội dung và tính năng mới nhất.</span></div>
+  <button type="button" data-pwa-update>Cập nhật</button>
+  <button type="button" data-pwa-update-dismiss>Để sau</button>
+</section>
+<div class="pwa-network-pill" id="pwaNetworkPill" role="status" aria-live="polite" hidden>Đang dùng chế độ offline</div>
 
 <script>
 
@@ -1113,7 +1476,6 @@ function analyticsSource(element){
   if(element.closest('#modal')) return 'modal_related';
   if(element.closest('#today')) return 'today_pick';
   if(element.closest('#advisor')) return 'advisor';
-  if(element.closest('#quiz')) return 'quiz';
   if(element.closest('#quickPick')) return 'scent_discovery';
   if(element.closest('#layer')) return 'layering';
   if(element.closest('#worlds')) return 'scent_worlds';
@@ -1420,7 +1782,7 @@ function loadSavedLocation(){
     return saved && saved.latitude && saved.longitude ? normalizePlace(saved) : normalizePlace(DEFAULT_LOCATION);
   }catch(e){ return normalizePlace(DEFAULT_LOCATION); }
 }
-const state = { ritual: 'today', discoverRitual: 'today', layerCount: 2, layerVibe: 'balanced', libFilter: 'all', weather: null, todayPick: null, location: loadSavedLocation(), locationResults: [], libraryLimit: 24, quizStarted:false, quizAnswers:null, quizResults:[], renderedSections: { worlds:false, perfumers:false, library:false } };
+const state = { ritual: 'today', discoverRitual: 'today', layerCount: 2, layerVibe: 'balanced', libFilter: 'all', weather: null, todayPick: null, location: loadSavedLocation(), locationResults: [], libraryLimit: 24, renderedSections: { worlds:false, perfumers:false, library:false } };
 const rituals = [
   { id:'today', label:'Hôm nay', icon:'☀︎', hint:'auto theo thời tiết' },
   { id:'work', label:'Đi làm', icon:'◐', hint:'sạch, sáng, không gây mệt' },
@@ -1519,6 +1881,18 @@ function closeModal(){
     requestAnimationFrame(()=>restoreTarget.focus({preventScroll:true}));
   }
 }
+
+function modalScore(value){
+  return Math.max(0,Math.min(5,toNumber(value,0)));
+}
+function modalMeter(value){
+  return `${Math.round((modalScore(value)/5)*100)}%`;
+}
+function modalValue(value,fallback='Đang cập nhật'){
+  const text = String(value || '').trim();
+  return text || fallback;
+}
+
 function modal(p, trigger=null){
   if(!p) return;
   const interactionSource = analyticsSource(trigger);
@@ -1534,56 +1908,188 @@ function modal(p, trigger=null){
       interaction_source:'perfumer_index'
     });
   }
+
   const dialog = $('#modal');
   const openingFromPage = dialog?.getAttribute('aria-hidden') !== 'false';
   if(openingFromPage && trigger instanceof HTMLElement) lastModalTrigger = trigger;
-  const notes = [ ['Top', arr(p.top).join(', ')], ['Heart', arr(p.heart).join(', ')], ['Base', arr(p.base).join(', ')] ];
-  const meta = [p.perfumer ? `Nhà điều chế: ${p.perfumer}` : '', p.year ? `Ra mắt: ${p.year}` : '', p.concentration || '', p.originalFamily || ''].filter(Boolean);
-  const detailItems = [
-    ['Nhà điều chế',p.perfumer],['Năm ra mắt',p.year],['Nồng độ',p.concentration],['Nhóm hương gốc',p.originalFamily],
-    ['Family dùng trong Scent OS',p.family],['Sub-family / DNA',p.subFamily],['Season',p.season],['Day/Night',p.dayNight],
-    ['Longevity',p.longevity],['Sillage',p.sillage],['Presence',p.presence],['Sweetness',p.sweetness],
-    ['Office-safe',p.officeSafe],['Gặp khách',p.clientSafe],['Trời nóng',p.hotSafe],['Sprays',p.sprays],
-    ['Occasions',p.occasions],['Avoid',p.avoid],['Layer role',p.layerRole],['Layer with',p.layerWith],
-    ['Độ tin cậy',p.confidence],['Nguồn / phương pháp',p.sourceMethod]
-  ].filter(d=>String(d[1]||'').trim());
-  const related = p.perfumer ? DATA.filter(x=>x.id!==p.id && x.perfumer && x.perfumer.toLowerCase()===p.perfumer.toLowerCase()).slice(0,8) : [];
+
+  const topNotes = arr(p.top).join(' · ') || 'Đang cập nhật';
+  const heartNotes = arr(p.heart).join(' · ') || 'Đang cập nhật';
+  const baseNotes = arr(p.base).join(' · ') || 'Đang cập nhật';
+  const related = p.perfumer
+    ? DATA.filter(x=>x.id!==p.id && x.perfumer && x.perfumer.toLowerCase()===p.perfumer.toLowerCase()).slice(0,8)
+    : [];
+
   const inquiryMessage = buildInquiryMessage(p);
   const encodedInquiry = encodeURIComponent(inquiryMessage);
-  $('#modalCard').innerHTML = `<button type="button" class="modal-close" id="closeModal" aria-label="Đóng cửa sổ chi tiết">×</button><div class="modal-layout">
-    ${imgBox(p,'image-box modal-img')}
-    <div><div class="eyebrow">${esc(p.brand)}</div><h2 id="modalTitle">${esc(p.name)}</h2>
-    ${meta.length ? `<div class="modal-meta-strip">${meta.map(x=>`<span>${esc(x)}</span>`).join('')}</div>` : ''}
-    <p class="modal-mood" id="modalDescription">${esc(p.mood||'Không có mô tả bổ sung.')}</p>
-    <div class="note-grid">${notes.map(n=>`<div><b>${n[0]}</b><span>${esc(n[1])}</span></div>`).join('')}</div>
-    <div class="detail-grid">${detailItems.map(d=>`<div><b>${esc(d[0])}</b><span>${esc(d[1]||'')}</span></div>`).join('')}</div>
-    <a class="seo-detail-link" href="/fragrance/${esc(p.id)}.html" data-seo-link data-seo-type="fragrance"
-      data-perfume-id="${esc(p.id)}" aria-label="Mở trang chi tiết đầy đủ của ${esc(p.fullName)}">
-      Đọc trang chi tiết đầy đủ ↗
-    </a>
-    <section class="consult-card" data-consult-card aria-labelledby="consultTitle-${esc(p.id)}">
-      <div class="consult-kicker">Tư vấn · Đặt hàng · Decant</div>
-      <h3 id="consultTitle-${esc(p.id)}">Bạn đang quan tâm ${esc(p.name)}?</h3>
-      <p>Nhắn mình để hỏi giá, dung tích hiện có, decant dùng thử, mùi tương tự hoặc cách dùng và layer phù hợp.</p>
-      <div class="consult-message">
-        <b>Lời nhắn đã chuẩn bị</b>
-        <p>${esc(inquiryMessage).replace(/\n/g,'<br>')}</p>
-      </div>
-      <div class="consult-actions">
-        <button type="button" class="btn primary" data-copy-inquiry data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}">Sao chép lời nhắn</button>
-        <a class="btn" href="https://m.me/trinkse61538" target="_blank" rel="noopener noreferrer"
-          data-consult-channel="messenger" data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}"
-          aria-label="Sao chép lời nhắn và hỏi ${esc(p.fullName)} qua Messenger">Messenger</a>
-        <a class="btn" href="https://zalo.me/0367676119" target="_blank" rel="noopener noreferrer"
-          data-consult-channel="zalo" data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}"
-          aria-label="Sao chép lời nhắn và hỏi ${esc(p.fullName)} qua Zalo">Zalo</a>
-      </div>
-      <a class="consult-phone" href="tel:+84367676119" data-consult-channel="phone" data-perfume-id="${esc(p.id)}"
-        aria-label="Gọi tư vấn về ${esc(p.fullName)}">☎ Gọi tư vấn: 0367 676 119</a>
-      <div class="consult-status" data-consult-status role="status" aria-live="polite" aria-atomic="true"></div>
-    </section>
-    ${related.length ? `<div class="related-block"><b>Cùng nhà điều chế</b><div class="related-list">${related.map(x=>`<button type="button" data-open="${esc(x.id)}" aria-label="Xem ${esc(x.fullName)}">${esc(x.name)} · ${esc(x.brand)}</button>`).join('')}</div></div>` : ''}
-    </div></div>`;
+  const perfumerUrl = p.perfumer ? `/perfumer/${slugify(p.perfumer)}.html` : '';
+
+  const identityItems = [
+    {icon:'✦',label:'Nồng độ',value:p.concentration},
+    {icon:'◷',label:'Năm ra mắt',value:p.year},
+    {icon:'⌁',label:'Nhà điều chế',value:p.perfumer,link:perfumerUrl},
+    {icon:'◇',label:'DNA gốc',value:p.originalFamily || p.family}
+  ].filter(item=>String(item.value||'').trim());
+
+  const performanceItems = [
+    {label:'Độ bám',value:modalValue(p.longevity),score:p.longevityScore},
+    {label:'Độ tỏa',value:modalValue(p.sillage),score:p.sillageScore},
+    {label:'Độ tươi',value:`${modalScore(p.freshScore)}/5`,score:p.freshScore},
+    {label:'Độ ấm',value:`${modalScore(p.warmScore)}/5`,score:p.warmScore}
+  ];
+
+  const useItems = [
+    {icon:'❋',label:'Mùa',value:p.season},
+    {icon:'◐',label:'Thời điểm',value:p.dayNight},
+    {icon:'▦',label:'Văn phòng',value:p.officeSafe},
+    {icon:'◇',label:'Gặp khách',value:p.clientSafe},
+    {icon:'☀',label:'Trời nóng',value:p.hotSafe},
+    {icon:'✦',label:'Tình huống',value:p.occasions},
+    {icon:'↟',label:'Số xịt',value:p.sprays}
+  ].filter(item=>String(item.value||'').trim());
+
+  const personalNote = p.smartNote || p.mood || 'Chưa có ghi chú cá nhân cho chai này.';
+  const subtitle = [p.family,p.subFamily,p.season,p.dayNight].filter(Boolean);
+
+  $('#modalCard').innerHTML = `
+    <button type="button" class="modal-close" id="closeModal" aria-label="Đóng cửa sổ chi tiết">×</button>
+    <div class="modal-showcase">
+      <aside class="modal-visual-column">
+        ${imgBox(p,'image-box modal-img')}
+        <div class="modal-visual-caption">
+          <small>Personal collection record</small>
+          <p>${esc(p.fullName)} · mục số ${esc(p.stt || '—')} trong Scent OS.</p>
+        </div>
+      </aside>
+
+      <article class="modal-editorial">
+        <header class="modal-title-block">
+          <div class="eyebrow">${esc(p.brand)}</div>
+          <h2 id="modalTitle">${esc(p.name)}</h2>
+          ${subtitle.length ? `<div class="modal-subtitle">${subtitle.map(x=>`<span>${esc(x)}</span>`).join('')}</div>` : ''}
+        </header>
+
+        <section class="modal-personal-note" id="modalDescription">
+          <b>Personal note</b>
+          <p>${esc(personalNote)}</p>
+        </section>
+
+        ${identityItems.length ? `<section class="modal-identity-grid" aria-label="Nhận diện nước hoa">
+          ${identityItems.map(item=>`<div class="modal-identity-item">
+            <i aria-hidden="true">${item.icon}</i>
+            <b>${esc(item.label)}</b>
+            ${item.link
+              ? `<a href="${esc(item.link)}" data-seo-link data-seo-type="perfumer" data-perfumer-name="${esc(p.perfumer)}">${esc(item.value)} ↗</a>`
+              : `<span>${esc(item.value)}</span>`}
+          </div>`).join('')}
+        </section>` : ''}
+
+        <section class="modal-section">
+          <div class="modal-section-head">
+            <div><small>01 · Fragrance pyramid</small><h3>Ba tầng phát triển</h3></div>
+            <p>Không còn là ba block giống nhau: mỗi tầng có vai trò và màu nhận diện riêng.</p>
+          </div>
+          <div class="fragrance-pyramid">
+            <div class="pyramid-tier top"><span class="tier-number">01</span><b>Top · Mở đầu</b><span>${esc(topNotes)}</span></div>
+            <div class="pyramid-tier heart"><span class="tier-number">02</span><b>Heart · Trái tim</b><span>${esc(heartNotes)}</span></div>
+            <div class="pyramid-tier base"><span class="tier-number">03</span><b>Base · Dư âm</b><span>${esc(baseNotes)}</span></div>
+          </div>
+        </section>
+
+        <section class="modal-section">
+          <div class="modal-section-head">
+            <div><small>02 · Performance profile</small><h3>Độ hiện diện</h3></div>
+            <p>Meter dùng điểm trong Google Sheet; phần chữ giữ nguyên mô tả gốc của bạn.</p>
+          </div>
+          <div class="performance-board">
+            ${performanceItems.map(item=>`<div class="performance-item">
+              <div class="performance-label"><b>${esc(item.label)}</b><span>${esc(item.value)}</span></div>
+              <div class="performance-meter" style="--meter:${modalMeter(item.score)}"></div>
+            </div>`).join('')}
+          </div>
+          <div class="performance-foot">
+            ${p.presence ? `<span>Presence · ${esc(p.presence)}</span>` : ''}
+            ${p.sweetness ? `<span>Sweetness · ${esc(p.sweetness)}</span>` : ''}
+            ${p.concentration ? `<span>${esc(p.concentration)}</span>` : ''}
+          </div>
+        </section>
+
+        ${useItems.length ? `<section class="modal-section">
+          <div class="modal-section-head">
+            <div><small>03 · Use map</small><h3>Dùng khi nào?</h3></div>
+            <p>Mỗi ô trả lời một câu hỏi thực tế thay vì trộn tất cả thành danh sách metadata.</p>
+          </div>
+          <div class="use-map">
+            ${useItems.map(item=>`<div class="use-map-item">
+              <i aria-hidden="true">${item.icon}</i>
+              <b>${esc(item.label)}</b>
+              <span>${esc(item.value)}</span>
+            </div>`).join('')}
+          </div>
+        </section>` : ''}
+
+        <section class="modal-section">
+          <div class="modal-section-head">
+            <div><small>04 · Layering notes</small><h3>Vai trò khi phối</h3></div>
+            <p>Tách rõ vai trò, đối tác phù hợp và điều nên tránh.</p>
+          </div>
+          <div class="layering-board">
+            <div class="layering-lane role"><small>Role</small><b>Vai trò</b><p>${esc(modalValue(p.layerRole,'Chưa xác định vai trò chính.'))}</p></div>
+            <div class="layering-lane pair"><small>Pair with</small><b>Nên phối cùng</b><p>${esc(modalValue(p.layerWith,'Chưa có gợi ý phối mùi.'))}</p></div>
+            <div class="layering-lane avoid"><small>Avoid</small><b>Nên tránh</b><p>${esc(modalValue(p.avoid,'Không có lưu ý đặc biệt.'))}</p></div>
+          </div>
+        </section>
+
+        <details class="modal-data-details">
+          <summary>Dữ liệu kỹ thuật và nguồn biên soạn</summary>
+          <div>
+            <p><b>Family dùng trong Scent OS</b><br>${esc(modalValue(p.family))}</p>
+            <p><b>Sub-family / DNA</b><br>${esc(modalValue(p.subFamily))}</p>
+            <p><b>Độ tin cậy</b><br>${esc(modalValue(p.confidence))}</p>
+            <p><b>Nguồn / phương pháp</b><br>${esc(modalValue(p.sourceMethod))}</p>
+          </div>
+        </details>
+
+        <div class="modal-actions-row">
+          <a class="seo-detail-link" href="/fragrance/${esc(p.id)}.html" data-seo-link data-seo-type="fragrance"
+            data-perfume-id="${esc(p.id)}" aria-label="Mở trang chi tiết đầy đủ của ${esc(p.fullName)}">
+            Đọc trang SEO đầy đủ ↗
+          </a>
+        </div>
+
+        <section class="consult-card modal-consult-compact" data-consult-card aria-labelledby="consultTitle-${esc(p.id)}">
+          <div>
+            <div class="consult-kicker">Optional enquiry</div>
+            <h3 id="consultTitle-${esc(p.id)}">Hỏi thêm về chai này</h3>
+            <p>Giá, dung tích hiện có hoặc decant dùng thử — phần mua bán được giữ gọn như một chức năng phụ.</p>
+          </div>
+          <div class="consult-actions">
+            <button type="button" class="btn primary" data-copy-inquiry data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}">Sao chép</button>
+            <a class="btn" href="https://m.me/trinkse61538" target="_blank" rel="noopener noreferrer"
+              data-consult-channel="messenger" data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}"
+              aria-label="Sao chép lời nhắn và hỏi ${esc(p.fullName)} qua Messenger">Messenger</a>
+            <a class="btn" href="https://zalo.me/0367676119" target="_blank" rel="noopener noreferrer"
+              data-consult-channel="zalo" data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}"
+              aria-label="Sao chép lời nhắn và hỏi ${esc(p.fullName)} qua Zalo">Zalo</a>
+            <a class="btn" href="tel:+84367676119" data-consult-channel="phone" data-perfume-id="${esc(p.id)}"
+              aria-label="Gọi tư vấn về ${esc(p.fullName)}">Gọi</a>
+          </div>
+          <details class="consult-message">
+            <summary>Xem lời nhắn chuẩn bị sẵn</summary>
+            <p>${esc(inquiryMessage).replace(/\n/g,'<br>')}</p>
+          </details>
+          <div class="consult-status" data-consult-status role="status" aria-live="polite" aria-atomic="true"></div>
+        </section>
+
+        ${related.length ? `<div class="related-block modal-related-perfumer">
+          <b>Cùng nhà điều chế</b>
+          <div class="related-list">
+            ${related.map(x=>`<button type="button" data-open="${esc(x.id)}" aria-label="Xem ${esc(x.fullName)}">${esc(x.name)} · ${esc(x.brand)}</button>`).join('')}
+          </div>
+        </div>` : ''}
+      </article>
+    </div>`;
+
   dialog?.classList.add('show');
   dialog?.setAttribute('aria-hidden','false');
   document.body.classList.add('modal-open');
@@ -1864,229 +2370,6 @@ function renderDiscoverRituals(){
   });
 }
 
-const QUIZ_LABELS = {
-  occasion:{work:'Đi làm',client:'Gặp khách',date:'Hẹn hò',statement:'Tạo dấu ấn',solo:'Dùng cho mình',today:'Dùng đa năng'},
-  liked_family:{fresh:'Fresh / citrus',floral:'Floral / iris',woody:'Woody / vetiver',dark:'Dark / incense',gourmand:'Ngọt / gourmand',skin:'Clean / skin musk',artistic:'Artistic / lạ',open:'Muốn khám phá'},
-  avoid_family:{none:'Không có',sweet:'Quá ngọt',dark:'Trầm / khói',floral:'Quá nhiều hoa',animalic:'Animalic',fresh:'Citrus / xanh'},
-  projection:{soft:'Gần da, kín đáo',balanced:'Vừa đủ nhận ra',strong:'Rõ và có dấu ấn',flexible:'Linh hoạt'},
-  climate:{hot:'Nóng ẩm',rain:'Mưa / ẩm',cool:'Mát / lạnh',aircon:'Phòng máy lạnh',mixed:'Nhiều điều kiện'},
-  budget:{under_1m:'Dưới 1 triệu','1_3m':'1–3 triệu','3_6m':'3–6 triệu',flexible:'Linh hoạt',decant:'Ưu tiên decant thử'}
-};
-const QUIZ_FAMILY_PATTERNS = {
-  fresh:/citrus|bergamot|cam|quýt|neroli|green|xanh|aquatic|marine|biển|fresh|mint|bạc hà|grapefruit|bưởi|lemon|chanh/i,
-  floral:/floral|hoa|rose|hoa hồng|iris|diên vĩ|jasmine|nhài|tuberose|huệ|violet|lily/i,
-  woody:/wood|woods|gỗ|vetiver|cedar|tuyết tùng|sandalwood|đàn hương|patchouli|hoắc hương/i,
-  dark:/oud|trầm|incense|hương khói|smoke|khói|leather|da thuộc|amber|hổ phách|resin|nhựa thơm/i,
-  gourmand:/gourmand|vanilla|vani|chocolate|sô cô la|coffee|cà phê|honey|mật ong|caramel|rum|rượu|sweet|ngọt/i,
-  skin:/musk|xạ|ambrette|skin|clean|sạch|powder|phấn|iris|diên vĩ|gaiac|tea|trà/i,
-  artistic:/zoologist|animal|squid|camel|bee|rhino|toskovat|incense|trầm|leather|da thuộc|oud|khói|artistic|avant/i,
-  animalic:/animal|animalic|civet|castoreum|musk deer|hải ly|cầy hương|rhino|camel/i,
-  sweet:/gourmand|vanilla|vani|chocolate|coffee|honey|mật ong|caramel|rum|sweet|ngọt/i
-};
-function quizValueLabel(group,value){
-  return QUIZ_LABELS[group]?.[value] || value || '';
-}
-function readQuizAnswers(form){
-  const data = new FormData(form);
-  return {
-    occasion:String(data.get('occasion') || ''),
-    liked_family:String(data.get('liked_family') || ''),
-    avoid_family:String(data.get('avoid_family') || 'none'),
-    projection:String(data.get('projection') || ''),
-    climate:String(data.get('climate') || ''),
-    budget:String(data.get('budget') || '')
-  };
-}
-function quizFamilyMatch(p,family){
-  if(!family || family==='open' || family==='none') return false;
-  const pattern = QUIZ_FAMILY_PATTERNS[family];
-  return pattern ? pattern.test(textOf(p)) : false;
-}
-function quizPreferenceScore(p,answers){
-  let score = 0;
-  const t = textOf(p).toLowerCase();
-  if(answers.liked_family==='fresh') score += p.freshScore*7 + (quizFamilyMatch(p,'fresh')?24:0);
-  if(answers.liked_family==='floral') score += quizFamilyMatch(p,'floral')?30:0;
-  if(answers.liked_family==='woody') score += quizFamilyMatch(p,'woody')?28:0;
-  if(answers.liked_family==='dark') score += p.warmScore*5 + (quizFamilyMatch(p,'dark')?28:0);
-  if(answers.liked_family==='gourmand') score += quizFamilyMatch(p,'gourmand')?32:0;
-  if(answers.liked_family==='skin') score += (p.sillageScore<=3?10:0) + (quizFamilyMatch(p,'skin')?28:0);
-  if(answers.liked_family==='artistic') score += (quizFamilyMatch(p,'artistic')?34:0) + p.longevityScore*2;
-  if(answers.liked_family==='open') score += 10 + Math.min(10,p.longevityScore+p.sillageScore);
-
-  if(answers.avoid_family!=='none' && quizFamilyMatch(p,answers.avoid_family)) score -= 48;
-
-  if(answers.projection==='soft') score += p.sillageScore<=2 ? 26 : p.sillageScore===3 ? 10 : -24;
-  if(answers.projection==='balanced') score += p.sillageScore===3 ? 25 : Math.abs(p.sillageScore-3)<=1 ? 12 : -8;
-  if(answers.projection==='strong') score += p.sillageScore>=4 ? 26 : -12;
-  if(answers.projection==='flexible') score += p.sillageScore>=2 && p.sillageScore<=4 ? 14 : 4;
-
-  if(answers.climate==='hot'){
-    score += p.freshScore*7 - p.warmScore*2 - Math.max(0,p.sillageScore-3)*8;
-    if(/rất hợp|hợp/i.test(p.hotSafe||'')) score += 18;
-  }
-  if(answers.climate==='rain'){
-    score += p.sillageScore<=3 ? 15 : -10;
-    score += /musk|xạ|tea|trà|iris|diên vĩ|woods|gỗ|vetiver|ambrette/i.test(t) ? 18 : 0;
-  }
-  if(answers.climate==='cool') score += p.warmScore*6 + p.longevityScore*3;
-  if(answers.climate==='aircon'){
-    score += p.sillageScore<=3 ? 16 : -12;
-    score += /rất hợp|hợp/i.test((p.officeSafe||'')+(p.clientSafe||'')) ? 18 : 0;
-  }
-  if(answers.climate==='mixed'){
-    score += p.freshScore>=2 && p.freshScore<=4 ? 8 : 0;
-    score += p.warmScore>=2 && p.warmScore<=4 ? 8 : 0;
-    score += p.sillageScore>=2 && p.sillageScore<=4 ? 8 : 0;
-  }
-
-  const occasion = answers.occasion;
-  if(occasion==='work') score += /rất hợp/i.test(p.officeSafe||'') ? 36 : /hợp/i.test(p.officeSafe||'') ? 24 : /cân nhắc/i.test(p.officeSafe||'') ? 4 : -28;
-  if(occasion==='client') score += /rất hợp/i.test(p.clientSafe||'') ? 38 : /hợp/i.test(p.clientSafe||'') ? 25 : /cân nhắc/i.test(p.clientSafe||'') ? 4 : -30;
-  if(occasion==='date') score += quizFamilyMatch(p,'floral') || quizFamilyMatch(p,'skin') ? 20 : 0;
-  if(occasion==='date') score += p.sillageScore<=3 ? 10 : -8;
-  if(occasion==='statement') score += p.sillageScore*6 + p.longevityScore*6 + p.warmScore*4;
-  if(occasion==='solo') score += quizFamilyMatch(p,'artistic') ? 26 : 0;
-  if(occasion==='today') score += p.sillageScore>=2 && p.sillageScore<=4 ? 10 : 0;
-
-  return score;
-}
-function quizRoleScore(p,answers,role){
-  let score = quizPreferenceScore(p,answers);
-  if(role==='safe'){
-    score += /rất hợp|hợp/i.test((p.officeSafe||'')+(p.clientSafe||'')) ? 30 : 0;
-    score += p.sillageScore<=3 ? 20 : -18;
-    score += p.freshScore>=2 && p.warmScore>=1 ? 6 : 0;
-  }
-  if(role==='personality'){
-    score += quizFamilyMatch(p,'artistic') ? 32 : 0;
-    score += quizFamilyMatch(p,'dark') ? 15 : 0;
-    score += p.longevityScore*5 + p.sillageScore*3;
-    score += /statement|artistic|dark|existential|lạ|cá tính/i.test(textOf(p)) ? 14 : 0;
-  }
-  if(role==='try'){
-    score += p.longevityScore*3;
-    score += p.sillageScore>=2 && p.sillageScore<=4 ? 12 : 0;
-    score += answers.liked_family==='open' ? (quizFamilyMatch(p,'artistic')?14:6) : 8;
-  }
-  return score;
-}
-function chooseQuizResults(answers){
-  const roles = [
-    {id:'safe',label:'An toàn nhất'},
-    {id:'personality',label:'Cá tính nhất'},
-    {id:'try',label:'Đáng thử nhất'}
-  ];
-  const used = new Set();
-  return roles.map(role=>{
-    const sorted = [...DATA]
-      .filter(p=>!used.has(p.id))
-      .sort((a,b)=>{
-        const diff = quizRoleScore(b,answers,role.id)-quizRoleScore(a,answers,role.id);
-        return diff || Number(a.stt||0)-Number(b.stt||0);
-      });
-    const perfume = sorted[0] || DATA.find(p=>!used.has(p.id)) || DATA[0];
-    if(perfume) used.add(perfume.id);
-    return {...role,p:perfume};
-  }).filter(item=>item.p);
-}
-function quizReasons(p,answers,role){
-  const reasons = [];
-  if(quizFamilyMatch(p,answers.liked_family)) reasons.push(`Khớp hướng ${quizValueLabel('liked_family',answers.liked_family).toLowerCase()} bạn đã chọn.`);
-  else if(answers.liked_family==='open') reasons.push('Có cá tính đủ rõ để mở rộng trải nghiệm ngoài vùng quen thuộc.');
-  else reasons.push(`Cấu trúc cân bằng với lựa chọn ${quizValueLabel('liked_family',answers.liked_family).toLowerCase()}.`);
-
-  if(answers.projection==='soft') reasons.push(`Độ tỏa ${p.sillage||'vừa'} phù hợp hướng kín đáo, gần da.`);
-  if(answers.projection==='balanced') reasons.push(`Độ hiện diện ${p.presence||'vừa đủ'} phù hợp mức tỏa cân bằng.`);
-  if(answers.projection==='strong') reasons.push(`Longevity ${p.longevity||'tốt'} và sillage ${p.sillage||'rõ'} hợp nhu cầu tạo dấu ấn.`);
-  if(answers.projection==='flexible') reasons.push(`Profile ${p.presence||'linh hoạt'} dễ điều chỉnh bằng số xịt.`);
-
-  if(answers.climate==='hot') reasons.push(`Fresh score ${p.freshScore}/5 và hot-safe ${p.hotSafe||'cần điều chỉnh số xịt'} cho thời tiết nóng ẩm.`);
-  if(answers.climate==='rain') reasons.push('Sắc thái musk, tea, woods hoặc độ tỏa vừa giúp dùng dễ hơn khi trời mưa ẩm.');
-  if(answers.climate==='cool') reasons.push(`Warm score ${p.warmScore}/5 và độ bám ${p.longevity||'tốt'} hợp khí hậu mát.`);
-  if(answers.climate==='aircon') reasons.push(`Office-safe ${p.officeSafe||'cân nhắc'} và sillage ${p.sillage||'vừa'} phù hợp phòng kín.`);
-  if(answers.climate==='mixed') reasons.push('Có độ cân bằng tương đối giữa độ sáng, độ ấm và độ tỏa.');
-
-  if(role==='safe') reasons.push(`Được ưu tiên vì mức an toàn: office ${p.officeSafe||'—'} · gặp khách ${p.clientSafe||'—'}.`);
-  if(role==='personality') reasons.push('Được ưu tiên vì chiều sâu, độ bám và dấu ấn nghệ thuật rõ hơn.');
-  if(role==='try') reasons.push('Là hướng trung gian: vẫn bám tiêu chí nhưng mở thêm một trải nghiệm đáng thử.');
-  return reasons.slice(0,3);
-}
-function buildQuizInquiryMessage(p,answers,roleLabel){
-  const fullName = p?.fullName || [p?.brand,p?.name].filter(Boolean).join(' ') || 'chai được gợi ý';
-  return `Chào Trí, mình vừa hoàn thành Scent Quiz trên Hihie's Scent OS.\\nKết quả ${roleLabel}: ${fullName}.\\nNhu cầu: ${quizValueLabel('occasion',answers.occasion)}; thích ${quizValueLabel('liked_family',answers.liked_family)}; muốn tránh ${quizValueLabel('avoid_family',answers.avoid_family)}; độ tỏa ${quizValueLabel('projection',answers.projection)}; thời tiết ${quizValueLabel('climate',answers.climate)}; ngân sách ${quizValueLabel('budget',answers.budget)}.\\nMình muốn được tư vấn giá, dung tích/decant hiện có và lựa chọn tương tự.`;
-}
-function renderQuizResults(results,answers){
-  const box = $('#quizResults');
-  if(!box) return;
-  const summary = `<div class="quiz-summary"><b>Hồ sơ:</b> ${esc(quizValueLabel('occasion',answers.occasion))} · ${esc(quizValueLabel('liked_family',answers.liked_family))} · ${esc(quizValueLabel('projection',answers.projection))} · ${esc(quizValueLabel('climate',answers.climate))} · ${esc(quizValueLabel('budget',answers.budget))}</div>`;
-  const cards = results.map(item=>{
-    const p = item.p;
-    const reasons = quizReasons(p,answers,item.id);
-    const inquiry = buildQuizInquiryMessage(p,answers,item.label);
-    const encodedInquiry = encodeURIComponent(inquiry);
-    return `<article class="quiz-result-card" data-quiz-role="${esc(item.id)}">
-      ${imgBox(p,'image-box quiz-result-img')}
-      <div class="quiz-result-copy">
-        <div class="quiz-result-label">${esc(item.label)}</div>
-        <div class="quiz-result-brand">${esc(p.brand)}</div>
-        <h4>${esc(p.name)}</h4>
-        <ul class="quiz-reasons">${reasons.map(reason=>`<li>${esc(reason)}</li>`).join('')}</ul>
-        <div class="quiz-result-actions">
-          <button type="button" class="btn" data-open="${esc(p.id)}" data-quiz-result-open="${esc(item.id)}" aria-label="Xem chi tiết ${esc(p.fullName)}">Xem chi tiết</button>
-          <a class="btn primary" href="https://m.me/trinkse61538" target="_blank" rel="noopener noreferrer"
-            data-consult-channel="messenger" data-quiz-contact data-quiz-role="${esc(item.id)}"
-            data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}"
-            aria-label="Sao chép nhu cầu và hỏi ${esc(p.fullName)} qua Messenger">Hỏi chai này</a>
-        </div>
-      </div>
-    </article>`;
-  }).join('');
-  box.innerHTML = summary + cards;
-  initLazyImages(box);
-}
-function startQuizOnce(){
-  if(state.quizStarted) return;
-  state.quizStarted = true;
-  trackEvent('quiz_started', { interaction_source:'quiz_form' });
-}
-function bindQuiz(){
-  const form = $('[data-quiz-form]');
-  if(!form) return;
-  form.addEventListener('focusin', startQuizOnce, {once:true});
-  form.addEventListener('change', startQuizOnce, {once:true});
-  form.addEventListener('submit', event=>{
-    event.preventDefault();
-    startQuizOnce();
-    if(!form.reportValidity()) return;
-    const answers = readQuizAnswers(form);
-    const results = chooseQuizResults(answers);
-    state.quizAnswers = answers;
-    state.quizResults = results;
-    renderQuizResults(results,answers);
-    trackEvent('quiz_completed', {
-      occasion:answers.occasion,
-      liked_family:answers.liked_family,
-      avoid_family:answers.avoid_family,
-      projection:answers.projection,
-      climate:answers.climate,
-      budget:answers.budget,
-      safe_result:results.find(x=>x.id==='safe')?.p?.name,
-      personality_result:results.find(x=>x.id==='personality')?.p?.name,
-      try_result:results.find(x=>x.id==='try')?.p?.name
-    });
-    $('#quizResultsTitle')?.scrollIntoView({behavior:'smooth',block:'start'});
-  });
-  form.addEventListener('reset', ()=>{
-    setTimeout(()=>{
-      state.quizAnswers = null;
-      state.quizResults = [];
-      const box = $('#quizResults');
-      if(box) box.innerHTML = `<div class="quiz-empty"><b>Chưa có kết quả</b><span>Hoàn thành sáu lựa chọn bên trái để hệ thống đọc bộ sưu tập và tạo ba hướng mùi.</span></div>`;
-    },0);
-  });
-}
-
 function renderAdvisor(){
   renderRituals();
   const list = ranked(state.ritual, 6);
@@ -2247,9 +2530,202 @@ function renderLibrary(){
   $$('#libraryCount').forEach(el => el.innerHTML = `<b>${visible.length}</b>/<span>${list.length}</span> đang hiển thị · ${DATA.length} chai`);
   $$('#libraryGrid').forEach(el => el.innerHTML = visible.map(p=>scentMini(p,'vault-card')).join('') + (hasMore ? `<button type="button" class="load-more-card" data-load-more-library><b>Xem thêm</b><span>Tải thêm ${Math.min(24, list.length-visible.length)} chai trong Vault</span></button>` : ''));
 }
+
+const PWA_DISMISS_KEY = 'scent-os-pwa-install-dismissed-v27';
+const PWA_DISMISS_DURATION = 7 * 24 * 60 * 60 * 1000;
+let deferredInstallPrompt = null;
+let pwaWaitingWorker = null;
+let pwaControllerReloading = false;
+let pwaAutoPromptTimer = null;
+
+function pwaIsStandalone(){
+  return window.matchMedia?.('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+}
+function pwaIsIOS(){
+  return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+function pwaWasDismissedRecently(){
+  const dismissedAt = Number(localStorage.getItem(PWA_DISMISS_KEY) || 0);
+  return dismissedAt && Date.now() - dismissedAt < PWA_DISMISS_DURATION;
+}
+function setPwaInstallTriggers(show){
+  $$('[data-pwa-install-trigger]').forEach(button=>{
+    button.hidden = !show || pwaIsStandalone();
+  });
+}
+function showPwaInstallCard(source='manual'){
+  if(pwaIsStandalone()) return;
+  const card = $('#pwaInstallCard');
+  if(!card) return;
+  card.hidden = false;
+  if(pwaIsIOS()){
+    $('[data-pwa-install-copy]',card).textContent = 'Cài từ Safari để mở nhanh như ứng dụng trên iPhone hoặc iPad.';
+    $('[data-pwa-install-action]',card).textContent = 'Xem cách cài';
+  }else{
+    $('[data-pwa-install-copy]',card).textContent = 'Mở nhanh từ màn hình chính và dùng giao diện cơ bản khi mất mạng.';
+    $('[data-pwa-install-action]',card).textContent = 'Cài ứng dụng';
+  }
+  trackEvent('pwa_install_prompt_shown', {
+    prompt_source:source,
+    platform:pwaIsIOS() ? 'ios' : 'install_prompt'
+  });
+}
+function hidePwaInstallCard(remember=false){
+  const card = $('#pwaInstallCard');
+  if(card) card.hidden = true;
+  if(remember) localStorage.setItem(PWA_DISMISS_KEY,String(Date.now()));
+}
+function showPwaUpdate(worker){
+  pwaWaitingWorker = worker || pwaWaitingWorker;
+  const toast = $('#pwaUpdateToast');
+  if(toast) toast.hidden = false;
+}
+function updatePwaNetworkUI(){
+  const pill = $('#pwaNetworkPill');
+  if(!pill) return;
+  if(navigator.onLine){
+    if(!pill.hidden){
+      pill.textContent = 'Đã kết nối lại';
+      setTimeout(()=>{ pill.hidden = true; },1800);
+    }
+  }else{
+    pill.textContent = 'Đang dùng chế độ offline';
+    pill.hidden = false;
+    trackEvent('pwa_offline_mode', { interaction_source:'network_status' });
+  }
+}
+function bindPwaUI(){
+  const installCard = $('#pwaInstallCard');
+  const installAction = $('[data-pwa-install-action]');
+  const iosHelp = $('[data-pwa-ios-help]');
+
+  window.addEventListener('beforeinstallprompt', event=>{
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    setPwaInstallTriggers(true);
+    clearTimeout(pwaAutoPromptTimer);
+    if(!pwaWasDismissedRecently()){
+      pwaAutoPromptTimer = setTimeout(()=>showPwaInstallCard('browser_eligible'),3200);
+    }
+  });
+
+  window.addEventListener('appinstalled', ()=>{
+    deferredInstallPrompt = null;
+    setPwaInstallTriggers(false);
+    hidePwaInstallCard(false);
+    trackEvent('pwa_installed', { install_status:'installed' });
+  });
+
+  $$('[data-pwa-install-trigger]').forEach(button=>{
+    button.addEventListener('click',()=>showPwaInstallCard('footer_button'));
+  });
+
+  installAction?.addEventListener('click',async()=>{
+    if(pwaIsIOS()){
+      if(iosHelp) iosHelp.hidden = false;
+      trackEvent('pwa_install_clicked', {
+        install_method:'ios_manual_instructions'
+      });
+      return;
+    }
+
+    if(!deferredInstallPrompt){
+      const copy = $('[data-pwa-install-copy]',installCard);
+      if(copy) copy.textContent = 'Trình duyệt chưa hiển thị quyền cài đặt. Hãy mở menu trình duyệt và chọn “Cài đặt ứng dụng”.';
+      trackEvent('pwa_install_clicked', {
+        install_method:'prompt_unavailable'
+      });
+      return;
+    }
+
+    const promptEvent = deferredInstallPrompt;
+    deferredInstallPrompt = null;
+    await promptEvent.prompt();
+    const choice = await promptEvent.userChoice;
+    trackEvent('pwa_install_clicked', {
+      install_method:'browser_prompt',
+      install_outcome:choice?.outcome || 'unknown'
+    });
+    if(choice?.outcome === 'accepted'){
+      hidePwaInstallCard(false);
+      setPwaInstallTriggers(false);
+    }
+  });
+
+  $('[data-pwa-dismiss]')?.addEventListener('click',()=>{
+    hidePwaInstallCard(true);
+    trackEvent('pwa_install_dismissed', { dismiss_duration_days:7 });
+  });
+
+  $('[data-pwa-update]')?.addEventListener('click',()=>{
+    trackEvent('pwa_update_applied', { update_source:'update_toast' });
+    pwaWaitingWorker?.postMessage({type:'SKIP_WAITING'});
+  });
+  $('[data-pwa-update-dismiss]')?.addEventListener('click',()=>{
+    const toast = $('#pwaUpdateToast');
+    if(toast) toast.hidden = true;
+  });
+
+  window.addEventListener('offline',updatePwaNetworkUI);
+  window.addEventListener('online',updatePwaNetworkUI);
+  updatePwaNetworkUI();
+
+  if(pwaIsStandalone()){
+    setPwaInstallTriggers(false);
+    hidePwaInstallCard(false);
+    if(!sessionStorage.getItem('pwa-standalone-session')){
+      sessionStorage.setItem('pwa-standalone-session','1');
+      trackEvent('pwa_launched_standalone', { launch_source:'installed_app' });
+    }
+  }else if(pwaIsIOS()){
+    setPwaInstallTriggers(true);
+    if(!pwaWasDismissedRecently()){
+      pwaAutoPromptTimer = setTimeout(()=>showPwaInstallCard('ios_hint'),4200);
+    }
+  }
+}
+async function registerPwaServiceWorker(){
+  if(!('serviceWorker' in navigator)) return;
+  try{
+    const registration = await navigator.serviceWorker.register('/service-worker.js',{
+      scope:'/',
+      updateViaCache:'none'
+    });
+
+    if(registration.waiting && navigator.serviceWorker.controller){
+      showPwaUpdate(registration.waiting);
+    }
+
+    registration.addEventListener('updatefound',()=>{
+      const newWorker = registration.installing;
+      if(!newWorker) return;
+      newWorker.addEventListener('statechange',()=>{
+        if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
+          showPwaUpdate(newWorker);
+        }
+      });
+    });
+
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      if(pwaControllerReloading) return;
+      pwaControllerReloading = true;
+      window.location.reload();
+    });
+
+    setTimeout(()=>registration.update().catch(()=>{}),3500);
+  }catch(error){
+    console.warn('[Scent OS] Service Worker registration failed.',error);
+  }
+}
+function initPWA(){
+  bindPwaUI();
+  registerPwaServiceWorker();
+}
+
 function bind(){
   bindLocationUI();
-  bindQuiz();
   document.addEventListener('click', async e=>{
     const seoLink = e.target.closest('[data-seo-link]');
     if(seoLink){
@@ -2283,19 +2759,6 @@ function bind(){
     const contactAnchor = e.target.closest('a[href]');
     const channel = contactChannel(contactAnchor);
     if(channel){
-      if(contactAnchor?.matches('[data-quiz-contact]')){
-        const quizPerfume = DATA.find(p=>p.id===contactAnchor.dataset.perfumeId);
-        trackEvent('quiz_contact_clicked', {
-          ...perfumeAnalyticsParams(quizPerfume),
-          quiz_role:contactAnchor.dataset.quizRole,
-          contact_channel:channel,
-          occasion:state.quizAnswers?.occasion,
-          liked_family:state.quizAnswers?.liked_family,
-          projection:state.quizAnswers?.projection,
-          climate:state.quizAnswers?.climate,
-          budget:state.quizAnswers?.budget
-        });
-      }
       const perfume = contactAnchor.dataset.perfumeId
         ? DATA.find(p=>p.id===contactAnchor.dataset.perfumeId)
         : null;
@@ -2321,16 +2784,6 @@ function bind(){
     if(open){
       e.preventDefault();
       const perfume = DATA.find(p=>p.id===open.dataset.open);
-      if(open.matches('[data-quiz-result-open]')){
-        trackEvent('quiz_result_opened', {
-          ...perfumeAnalyticsParams(perfume),
-          quiz_role:open.dataset.quizResultOpen,
-          occasion:state.quizAnswers?.occasion,
-          liked_family:state.quizAnswers?.liked_family,
-          projection:state.quizAnswers?.projection,
-          climate:state.quizAnswers?.climate
-        });
-      }
       modal(perfume, open);
     }
     const more = e.target.closest('[data-load-more-library]');
@@ -2444,13 +2897,14 @@ function statInit(){
 function renderNoData(){
   const message = 'Không đọc được dữ liệu từ Google Sheet. Hãy kiểm tra quyền chia sẻ Sheet hoặc Publish to web.';
   $$('#libraryCount').forEach(el => el.innerHTML = '<b>0</b>/<span>0</span> chai');
-  $$('#libraryGrid, #advisorResults, #mixGrid, #worldGrid, #perfumerGrid, #quizResults').forEach(el => el.innerHTML = `<article class="scent-card"><div class="scent-copy"><h3>Chưa có dữ liệu</h3><p>${message}</p></div></article>`);
+  $$('#libraryGrid, #advisorResults, #mixGrid, #worldGrid, #perfumerGrid').forEach(el => el.innerHTML = `<article class="scent-card"><div class="scent-copy"><h3>Chưa có dữ liệu</h3><p>${message}</p></div></article>`);
   $$('[data-stat-count]').forEach(el=>el.textContent='0');
   $$('[data-stat-brands]').forEach(el=>el.textContent='0');
   $('[data-today-name]') && ($('[data-today-name]').textContent = 'Sheet chưa load được');
   $('[data-today-note]') && ($('[data-today-note]').textContent = message);
 }
 async function init(){
+  initPWA();
   DATA = await loadSheetData();
   bind();
   setupLazyImageWatcher();
