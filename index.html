@@ -63,6 +63,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
+<!-- PERFUME STEP 4 V24: consultation CTA per fragrance -->
 <!-- PERFUME STEP 3 V23: local JSON sync + Google Sheet fallback -->
 <!-- PERFUME STEP 2 V22: Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK6YJ4RVTN"></script>
@@ -488,6 +489,113 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
   .lazy-img,.scent-card,.btn,.pill{transition:none!important}
 }
 
+
+/* V24 Consultation CTA — contextual enquiry for each fragrance */
+.consult-card{
+  position:relative;
+  overflow:hidden;
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(120,227,196,.26);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 100% 0,rgba(120,227,196,.16),transparent 34%),
+    linear-gradient(145deg,rgba(120,227,196,.09),rgba(255,255,255,.045));
+}
+.consult-card::after{
+  content:'';
+  position:absolute;
+  width:180px;
+  height:180px;
+  right:-82px;
+  bottom:-112px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(216,181,109,.18),transparent 68%);
+  pointer-events:none;
+}
+.consult-card>*{position:relative;z-index:1}
+.consult-kicker{
+  font-family:JetBrains Mono,monospace;
+  color:var(--accent);
+  font-size:.66rem;
+  font-weight:900;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.consult-card h3{
+  margin:7px 0 8px;
+  color:var(--headline);
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,4vw,3rem);
+  line-height:.92;
+}
+.consult-card>p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.55;
+}
+.consult-message{
+  margin-top:13px;
+  padding:12px 13px;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:17px;
+  background:rgba(3,8,16,.34);
+}
+.consult-message b{
+  display:block;
+  margin-bottom:5px;
+  color:#c7ffef;
+  font-size:.72rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.consult-message p{
+  margin:0;
+  color:#d9e4e8;
+  font-size:.84rem;
+  line-height:1.5;
+}
+.consult-actions{
+  display:grid;
+  grid-template-columns:1.25fr 1fr 1fr;
+  gap:8px;
+  margin-top:13px;
+}
+.consult-actions .btn{
+  width:100%;
+  min-width:0;
+  min-height:46px;
+  padding:11px 12px;
+  text-align:center;
+  line-height:1.2;
+  white-space:normal;
+}
+.consult-phone{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:11px;
+  color:var(--muted);
+  font-size:.8rem;
+  font-weight:800;
+}
+.consult-status{
+  min-height:1.35rem;
+  margin-top:8px;
+  color:#c7ffef;
+  font-size:.78rem;
+  line-height:1.35;
+}
+@media(max-width:760px){
+  .consult-card{padding:15px;border-radius:21px}
+  .consult-actions{grid-template-columns:1fr 1fr}
+  .consult-actions [data-copy-inquiry]{grid-column:1/-1}
+}
+@media(max-width:390px){
+  .consult-actions{grid-template-columns:1fr}
+  .consult-actions [data-copy-inquiry]{grid-column:auto}
+}
+
 /* V21 Accessibility & Agent Readiness
    Keyboard focus, screen-reader labels, stable modal focus and semantic status regions. */
 .sr-only{
@@ -665,6 +773,43 @@ function contactChannel(anchor){
   if(href.includes('zalo.me/')) return 'zalo';
   if(href.startsWith('tel:')) return 'phone';
   return '';
+}
+function buildInquiryMessage(p){
+  const fullName = String(p?.fullName || [p?.brand,p?.name].filter(Boolean).join(' ') || 'chai nước hoa này').trim();
+  return `Chào Trí, mình vừa xem ${fullName} trên Hihie's Scent OS.\nMình muốn được tư vấn thêm về mùi hương, giá, dung tích/decant hiện có và cách sử dụng phù hợp.`;
+}
+function inquiryFromElement(element){
+  const encoded = element?.dataset?.inquiry || '';
+  try{ return decodeURIComponent(encoded); }catch(error){ return encoded; }
+}
+async function copyTextSafely(text){
+  const value = String(text || '').trim();
+  if(!value) return false;
+  try{
+    if(navigator.clipboard?.writeText && window.isSecureContext){
+      await navigator.clipboard.writeText(value);
+      return true;
+    }
+  }catch(error){
+    console.warn('[Scent OS] Clipboard API unavailable.', error);
+  }
+  const textarea = document.createElement('textarea');
+  textarea.value = value;
+  textarea.setAttribute('readonly','');
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  textarea.style.pointerEvents = 'none';
+  document.body.appendChild(textarea);
+  textarea.select();
+  let copied = false;
+  try{ copied = document.execCommand('copy'); }catch(error){}
+  textarea.remove();
+  return copied;
+}
+function setConsultStatus(element, message){
+  const card = element?.closest?.('[data-consult-card]');
+  const status = card?.querySelector?.('[data-consult-status]');
+  if(status) status.textContent = message;
 }
 function weatherAnalyticsParams(){
   const w = state?.weather;
@@ -1045,6 +1190,8 @@ function modal(p, trigger=null){
     ['Độ tin cậy',p.confidence],['Nguồn / phương pháp',p.sourceMethod]
   ].filter(d=>String(d[1]||'').trim());
   const related = p.perfumer ? DATA.filter(x=>x.id!==p.id && x.perfumer && x.perfumer.toLowerCase()===p.perfumer.toLowerCase()).slice(0,8) : [];
+  const inquiryMessage = buildInquiryMessage(p);
+  const encodedInquiry = encodeURIComponent(inquiryMessage);
   $('#modalCard').innerHTML = `<button type="button" class="modal-close" id="closeModal" aria-label="Đóng cửa sổ chi tiết">×</button><div class="modal-layout">
     ${imgBox(p,'image-box modal-img')}
     <div><div class="eyebrow">${esc(p.brand)}</div><h2 id="modalTitle">${esc(p.name)}</h2>
@@ -1052,6 +1199,27 @@ function modal(p, trigger=null){
     <p class="modal-mood" id="modalDescription">${esc(p.mood||'Không có mô tả bổ sung.')}</p>
     <div class="note-grid">${notes.map(n=>`<div><b>${n[0]}</b><span>${esc(n[1])}</span></div>`).join('')}</div>
     <div class="detail-grid">${detailItems.map(d=>`<div><b>${esc(d[0])}</b><span>${esc(d[1]||'')}</span></div>`).join('')}</div>
+    <section class="consult-card" data-consult-card aria-labelledby="consultTitle-${esc(p.id)}">
+      <div class="consult-kicker">Tư vấn · Đặt hàng · Decant</div>
+      <h3 id="consultTitle-${esc(p.id)}">Bạn đang quan tâm ${esc(p.name)}?</h3>
+      <p>Nhắn mình để hỏi giá, dung tích hiện có, decant dùng thử, mùi tương tự hoặc cách dùng và layer phù hợp.</p>
+      <div class="consult-message">
+        <b>Lời nhắn đã chuẩn bị</b>
+        <p>${esc(inquiryMessage).replace(/\n/g,'<br>')}</p>
+      </div>
+      <div class="consult-actions">
+        <button type="button" class="btn primary" data-copy-inquiry data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}">Sao chép lời nhắn</button>
+        <a class="btn" href="https://m.me/trinkse61538" target="_blank" rel="noopener noreferrer"
+          data-consult-channel="messenger" data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}"
+          aria-label="Sao chép lời nhắn và hỏi ${esc(p.fullName)} qua Messenger">Messenger</a>
+        <a class="btn" href="https://zalo.me/0367676119" target="_blank" rel="noopener noreferrer"
+          data-consult-channel="zalo" data-inquiry="${esc(encodedInquiry)}" data-perfume-id="${esc(p.id)}"
+          aria-label="Sao chép lời nhắn và hỏi ${esc(p.fullName)} qua Zalo">Zalo</a>
+      </div>
+      <a class="consult-phone" href="tel:+84367676119" data-consult-channel="phone" data-perfume-id="${esc(p.id)}"
+        aria-label="Gọi tư vấn về ${esc(p.fullName)}">☎ Gọi tư vấn: 0367 676 119</a>
+      <div class="consult-status" data-consult-status role="status" aria-live="polite" aria-atomic="true"></div>
+    </section>
     ${related.length ? `<div class="related-block"><b>Cùng nhà điều chế</b><div class="related-list">${related.map(x=>`<button type="button" data-open="${esc(x.id)}" aria-label="Xem ${esc(x.fullName)}">${esc(x.name)} · ${esc(x.brand)}</button>`).join('')}</div></div>` : ''}
     </div></div>`;
   dialog?.classList.add('show');
@@ -1495,13 +1663,44 @@ function renderLibrary(){
 }
 function bind(){
   bindLocationUI();
-  document.addEventListener('click', e=>{
+  document.addEventListener('click', async e=>{
+    const copyButton = e.target.closest('[data-copy-inquiry]');
+    if(copyButton){
+      e.preventDefault();
+      const message = inquiryFromElement(copyButton);
+      const copied = await copyTextSafely(message);
+      const perfume = DATA.find(p=>p.id===copyButton.dataset.perfumeId);
+      setConsultStatus(copyButton, copied
+        ? 'Đã sao chép lời nhắn. Bạn có thể mở Messenger hoặc Zalo và dán để gửi.'
+        : 'Không thể tự sao chép. Hãy chọn và sao chép lời nhắn phía trên.');
+      trackEvent('inquiry_message_copied', {
+        ...perfumeAnalyticsParams(perfume),
+        copy_status:copied ? 'success' : 'failed',
+        interaction_source:'perfume_modal'
+      });
+    }
+
     const contactAnchor = e.target.closest('a[href]');
     const channel = contactChannel(contactAnchor);
     if(channel){
+      const perfume = contactAnchor.dataset.perfumeId
+        ? DATA.find(p=>p.id===contactAnchor.dataset.perfumeId)
+        : null;
+      const hasPreparedMessage = Boolean(contactAnchor.dataset.inquiry);
+
+      if(hasPreparedMessage && (channel==='messenger' || channel==='zalo')){
+        copyTextSafely(inquiryFromElement(contactAnchor)).then(copied=>{
+          setConsultStatus(contactAnchor, copied
+            ? `Đã sao chép lời nhắn và mở ${channel==='messenger'?'Messenger':'Zalo'}. Hãy dán vào ô chat để gửi.`
+            : `Đã mở ${channel==='messenger'?'Messenger':'Zalo'}. Bạn có thể sao chép lời nhắn thủ công phía trên.`);
+        });
+      }
+
       trackEvent(`contact_${channel}`, {
+        ...perfumeAnalyticsParams(perfume),
         contact_context:analyticsSource(contactAnchor),
-        link_target:contactAnchor.target === '_blank' ? 'new_tab' : 'same_context'
+        link_target:contactAnchor.target === '_blank' ? 'new_tab' : 'same_context',
+        prepared_message:hasPreparedMessage
       });
     }
 
