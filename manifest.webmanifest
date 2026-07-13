@@ -1,41 +1,84 @@
 {
   "name": "Hihie's Scent OS",
   "short_name": "Scent OS",
-  "description": "Tủ nước hoa cá nhân tương tác: gợi ý mùi theo thời tiết, địa điểm, mood và layering formulas.",
-  "start_url": "/",
+  "description": "Tủ nước hoa cá nhân tương tác: gợi ý mùi theo thời tiết, địa điểm, tình huống, khám phá bộ sưu tập và công thức layer.",
+  "id": "/",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0a1020",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#050913",
   "theme_color": "#0a1020",
   "lang": "vi-VN",
+  "dir": "ltr",
+  "categories": [
+    "lifestyle",
+    "utilities"
+  ],
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/favicon.png",
+      "src": "/icons/pwa-icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/favicon.png",
+      "src": "/icons/pwa-icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
     {
-      "name": "Gợi ý hôm nay",
-      "url": "/#today",
-      "description": "Chọn nước hoa theo thời tiết hôm nay"
+      "name": "Hôm nay dùng gì?",
+      "short_name": "Daily Pick",
+      "description": "Mở gợi ý nước hoa theo thời tiết.",
+      "url": "/#today?source=pwa-shortcut",
+      "icons": [
+        {
+          "src": "/icons/pwa-icon-96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Layering Formulas",
+      "short_name": "Mix",
+      "description": "Mở công thức phối hai hoặc ba mùi trong bộ sưu tập.",
+      "url": "/?source=pwa-shortcut#layer",
+      "icons": [
+        {
+          "src": "/icons/pwa-icon-96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "Vault Search",
-      "url": "/#library",
-      "description": "Tìm trong bộ sưu tập nước hoa"
-    },
-    {
-      "name": "Liên hệ",
-      "url": "/#contact",
-      "description": "Hỏi mua bán hoặc tư vấn nước hoa"
+      "short_name": "Vault",
+      "description": "Tìm trong bộ sưu tập nước hoa.",
+      "url": "/#library?source=pwa-shortcut",
+      "icons": [
+        {
+          "src": "/icons/pwa-icon-96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     }
-  ],
-  "id": "https://perfume.khaitringuyen.com/"
+  ]
 }
