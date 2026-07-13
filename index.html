@@ -44,13 +44,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://docs.google.com" />
+<link rel="preload" as="fetch" href="https://docs.google.com/spreadsheets/d/1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY/gviz/tq?gid=0&amp;tqx=out:json" crossorigin="anonymous" />
+
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin />
 <link rel="dns-prefetch" href="//fonts.googleapis.com" />
 <link rel="dns-prefetch" href="//fonts.gstatic.com" />
 <link rel="dns-prefetch" href="//docs.google.com" />
 <link rel="dns-prefetch" href="//api.open-meteo.com" />
 <link rel="dns-prefetch" href="//raw.githubusercontent.com" />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+<!-- PERFUME PERFORMANCE V20: non-render-blocking fonts -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" /></noscript>
 <link rel="icon" type="image/png" href="https://perfume.khaitringuyen.com/favicon.png" />
 <link rel="shortcut icon" href="https://perfume.khaitringuyen.com/favicon.png" />
 <link rel="apple-touch-icon" href="https://perfume.khaitringuyen.com/favicon.png" />
@@ -408,6 +412,65 @@ body{background:radial-gradient(circle at 20% 0,rgba(120,227,196,.20),transparen
 @media(max-width:760px){.creator-bridge{grid-template-columns:auto minmax(0,1fr);margin:14px 0 18px;padding:11px 12px;border-radius:19px}.creator-bridge>strong{grid-column:2;margin-top:2px}.creator-copy em{white-space:normal}.portfolio-ecosystem{padding:18px;border-radius:26px}.portfolio-ecosystem-links{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.portfolio-ecosystem-links{grid-template-columns:1fr}.portfolio-ecosystem-links a{min-height:76px}.portfolio-ecosystem-copy h3{font-size:2.25rem}}
 
+
+/* PERFUME PERFORMANCE V20
+   Reserve the dynamic hero layout, skip off-screen rendering and reduce mobile paint cost. */
+[data-today-img]{
+  display:block;
+  width:100%;
+  height:330px;
+  min-height:330px;
+  contain:layout paint;
+}
+[data-today-img]>.today-img{
+  width:100%;
+  height:330px;
+  min-height:330px;
+}
+.phone-screen [data-today-brand]{
+  display:block;
+  min-height:1.1rem;
+}
+.phone-screen [data-today-name]{
+  min-height:5.8rem;
+}
+.phone-screen [data-today-note]{
+  min-height:4.7rem;
+}
+.phone-screen .today-why{
+  min-height:248px;
+}
+.phone-screen [data-today-meta]{
+  min-height:2.2rem;
+}
+.image-box img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+#advisor,#layer,#worlds,#perfumers,#library,.site-footer{
+  content-visibility:auto;
+  contain-intrinsic-size:1px 900px;
+}
+@media(max-width:760px){
+  [data-today-img],
+  [data-today-img]>.today-img{
+    height:285px;
+    min-height:285px;
+  }
+  .phone-screen [data-today-name]{min-height:4.9rem}
+  .phone-screen [data-today-note]{min-height:4.7rem}
+  .phone-screen .today-why{min-height:258px}
+  .topnav-inner,.weather-card,.panel,.discover-panel,.bottom-app-nav{
+    -webkit-backdrop-filter:blur(9px);
+    backdrop-filter:blur(9px);
+  }
+  .image-box img{filter:drop-shadow(0 14px 16px rgba(0,0,0,.30))}
+}
+@media(prefers-reduced-motion:reduce){
+  .lazy-img,.scent-card,.btn,.pill{transition:none!important}
+}
+
 </style>
 </head>
 
@@ -543,34 +606,65 @@ function mapSheetRow(values){
   p.id = slugify(p.fullName || `scent-${p.stt}`);
   return p;
 }
-async function loadSheetData(){
+const SHEET_CACHE_TIME_KEY = SHEET_CACHE_KEY + '-saved-at';
+const SHEET_CACHE_MAX_AGE = 6 * 60 * 60 * 1000;
+
+function readSheetCache(){
   try{
-    const response = await fetch(SHEET_JSON_URL, { cache: 'no-store' });
-    if(!response.ok) throw new Error(`Sheet HTTP ${response.status}`);
-    const raw = await response.text();
-    const match = raw.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/s);
-    if(!match) throw new Error('Cannot parse Google Sheet response');
-    const json = JSON.parse(match[1]);
-    const rows = json.table.rows || [];
-    const data = rows
-      .map(row => (row.c || []).map(cellValue))
-      .map(mapSheetRow)
-      .filter(p => p.stt > 0 && p.brand && p.name && !/^(thương hiệu|brand)$/i.test(p.brand));
-    if(!data.length) throw new Error('Sheet has no valid rows');
-    localStorage.setItem(SHEET_CACHE_KEY, JSON.stringify(data));
-    console.info(`[Scent OS] Loaded ${data.length} scents from Google Sheet`);
-    return data;
+    const parsed = JSON.parse(localStorage.getItem(SHEET_CACHE_KEY) || '[]');
+    const data = Array.isArray(parsed) ? parsed : parsed?.data;
+    return Array.isArray(data) ? data : [];
+  }catch(error){
+    console.warn('[Scent OS] Cannot read cached sheet data.', error);
+    return [];
+  }
+}
+
+async function fetchSheetData(){
+  const response = await fetch(SHEET_JSON_URL, { cache:'default' });
+  if(!response.ok) throw new Error(`Sheet HTTP ${response.status}`);
+  const raw = await response.text();
+  const match = raw.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/s);
+  if(!match) throw new Error('Cannot parse Google Sheet response');
+  const json = JSON.parse(match[1]);
+  const rows = json.table.rows || [];
+  const data = rows
+    .map(row => (row.c || []).map(cellValue))
+    .map(mapSheetRow)
+    .filter(p => p.stt > 0 && p.brand && p.name && !/^(thương hiệu|brand)$/i.test(p.brand));
+  if(!data.length) throw new Error('Sheet has no valid rows');
+  localStorage.setItem(SHEET_CACHE_KEY, JSON.stringify(data));
+  localStorage.setItem(SHEET_CACHE_TIME_KEY, String(Date.now()));
+  console.info(`[Scent OS] Loaded ${data.length} scents from Google Sheet`);
+  return data;
+}
+
+async function loadSheetData(){
+  const cached = readSheetCache();
+
+  if(cached.length){
+    console.info(`[Scent OS] Rendered immediately from cache: ${cached.length} scents`);
+    const savedAt = Number(localStorage.getItem(SHEET_CACHE_TIME_KEY) || 0);
+    const stale = !savedAt || Date.now() - savedAt > SHEET_CACHE_MAX_AGE;
+
+    if(stale){
+      const refresh = () => fetchSheetData()
+        .then(data => console.info(`[Scent OS] Background cache refreshed: ${data.length} scents`))
+        .catch(error => console.warn('[Scent OS] Background Sheet refresh failed.', error));
+
+      if('requestIdleCallback' in window){
+        requestIdleCallback(refresh, { timeout:2500 });
+      }else{
+        setTimeout(refresh, 1200);
+      }
+    }
+    return cached;
+  }
+
+  try{
+    return await fetchSheetData();
   }catch(error){
     console.warn('[Scent OS] Cannot load Google Sheet.', error);
-    try{
-      const cached = JSON.parse(localStorage.getItem(SHEET_CACHE_KEY) || '[]');
-      if(Array.isArray(cached) && cached.length){
-        console.info(`[Scent OS] Using cached sheet data: ${cached.length} scents`);
-        return cached;
-      }
-    }catch(cacheError){
-      console.warn('[Scent OS] Cannot read cached sheet data.', cacheError);
-    }
     return [];
   }
 }
@@ -644,7 +738,6 @@ function colors(p){
   if(p.warmScore>=4) return ['#7b351a','#d49b55'];
   return ['#344052','#d8b56d'];
 }
-let lazyImageObserver = null;
 function normalizeImageUrl(url){
   const raw = String(url || '').trim();
   if(!raw) return '';
@@ -654,41 +747,25 @@ function normalizeImageUrl(url){
     'https://cdn.jsdelivr.net/gh/$1/$2@$3/$4'
   );
 }
-function loadLazyImage(img){
-  const src = img?.dataset?.src;
-  if(!src || img.src) return;
-  img.src = src;
-  img.removeAttribute('data-src');
-}
-function initLazyImages(root=document){
-  const imgs = [...root.querySelectorAll('img[data-src]:not([src])')];
-  if(!imgs.length) return;
-  if(!('IntersectionObserver' in window)){
-    imgs.forEach(loadLazyImage);
-    return;
-  }
-  if(!lazyImageObserver){
-    lazyImageObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if(!entry.isIntersecting) return;
-        loadLazyImage(entry.target);
-        observer.unobserve(entry.target);
-      });
-    }, { rootMargin:'700px 0px', threshold:0.01 });
-  }
-  imgs.forEach(img => lazyImageObserver.observe(img));
-}
-function setupLazyImageWatcher(){
-  if(!('MutationObserver' in window)) return;
-  const watcher = new MutationObserver(() => initLazyImages(document));
-  watcher.observe(document.body, { childList:true, subtree:true });
-}
-function imgBox(p, cls='image-box'){
+
+/* Native loading replaces IntersectionObserver + MutationObserver.
+   These no-op functions remain so existing calls stay compatible. */
+function initLazyImages(){ }
+function setupLazyImageWatcher(){ }
+
+function imgBox(p, cls='image-box', eager=false){
   const url = esc(normalizeImageUrl(p.imageUrl || ''));
   const [a,b] = colors(p);
   const baseClass = cls.split(' ')[0] || 'image-box';
-  return `<div class="${cls}" style="--a:${a};--b:${b}">${url ? `<img class="lazy-img" loading="lazy" decoding="async" data-src="${url}" alt="${esc(p.fullName)}" onload="this.classList.add('is-loaded')" onerror="this.closest('.${baseClass}').classList.add('missing');this.remove();">` : ''}</div>`;
+  const isHero = eager || cls.includes('today-img');
+  const loading = isHero ? 'eager' : 'lazy';
+  const priority = isHero ? 'high' : 'low';
+  const image = url
+    ? `<img class="lazy-img is-loaded" src="${url}" loading="${loading}" fetchpriority="${priority}" decoding="async" width="480" height="480" alt="${esc(p.fullName)}" onerror="this.closest('.${baseClass}')?.classList.add('missing');this.remove();">`
+    : '';
+  return `<div class="${cls}" style="--a:${a};--b:${b}">${image}</div>`;
 }
+
 function scentMini(p, extra=''){
   const [a,b] = colors(p);
   const meta = [p.perfumer, p.year, p.concentration].filter(Boolean).slice(0,3).map(x=>`<span>${esc(x)}</span>`).join('');
@@ -772,7 +849,7 @@ function weatherLabel(w){
   if(w.isHot) return `${p} · ${time} · ${Math.round(w.temp)}°C, nóng — gợi ý fresh mát`;
   return `${p} · ${time} · ${Math.round(w.temp)}°C — gợi ý cân bằng dễ dùng`;
 }
-async function initWeather(){
+async function initWeather(forcePick=false){
   const place = normalizePlace(state.location || DEFAULT_LOCATION);
   state.weather = baseWeather(place);
   renderWeather();
@@ -791,7 +868,7 @@ async function initWeather(){
   }catch(e){ state.weather = { ...state.weather, place, local:localContext(place), live:false }; }
   renderWeather();
   renderLocationUI();
-  renderTodayPick(true);
+  renderTodayPick(forcePick || !state.todayPick);
   renderAdvisor();
 }
 function weatherProfile(w){
@@ -857,7 +934,7 @@ function setLocation(place){
   renderLocationResults([]);
   const input = $('[data-location-query]');
   if(input) input.value = '';
-  initWeather();
+  initWeather(true);
 }
 function useCurrentLocation(){
   if(!navigator.geolocation){ renderLocationResults([], 'Trình duyệt không hỗ trợ lấy vị trí hiện tại.'); return; }
@@ -938,7 +1015,7 @@ function todayReasons(p){
 function renderTodayPick(force=false){
   if(force || !state.todayPick) state.todayPick = rand(ranked('today',8));
   const p = state.todayPick;
-  $$('[data-today-img]').forEach(el => el.innerHTML = imgBox(p,'image-box today-img'));
+  $$('[data-today-img]').forEach(el => el.innerHTML = imgBox(p,'image-box today-img', true));
   $$('[data-today-brand]').forEach(el => el.textContent = p.brand);
   $$('[data-today-name]').forEach(el => el.textContent = p.name);
   $$('[data-today-note]').forEach(el => el.textContent = p.smartNote || p.mood || '');
@@ -1153,12 +1230,13 @@ async function init(){
   setupLazyImageWatcher();
   if(!DATA.length){ renderNoData(); initWeather(); initLazyImages(document); return; }
   statInit();
+  /* Request the LCP image before rendering below-the-fold sections. */
+  renderTodayPick(true);
   renderRituals();
   renderDiscoverRituals();
   renderAdvisor();
   renderLayer();
   setupDeferredSections();
-  renderTodayPick(true);
   initWeather();
   initLazyImages(document);
 }
