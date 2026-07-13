@@ -1,4 +1,4 @@
-name: Sync fragrance data from Google Sheet
+name: Sync fragrance data and build SEO pages
 
 on:
   workflow_dispatch:
@@ -8,16 +8,17 @@ on:
     paths:
       - ".github/workflows/sync-fragrances.yml"
       - "scripts/sync-fragrances.js"
+      - "scripts/generate-seo-pages.js"
 
 permissions:
   contents: write
 
 concurrency:
-  group: fragrance-data-sync
+  group: fragrance-data-and-seo-sync
   cancel-in-progress: false
 
 jobs:
-  sync:
+  sync-and-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,21 +30,33 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Generate data/fragrances.json from Google Sheet
+      - name: Sync data from Google Sheet
         env:
           SHEET_ID: "1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY"
           SHEET_GID: "0"
         run: node scripts/sync-fragrances.js
 
-      - name: Commit updated JSON if changed
+      - name: Generate static fragrance and perfumer pages
+        run: node scripts/generate-seo-pages.js
+
+      - name: Validate generated output
         run: |
-          if git diff --quiet -- data/fragrances.json; then
-            echo "No fragrance data changes detected."
+          test -s data/fragrances.json
+          test -s fragrance/index.html
+          test -s perfumer/index.html
+          test -s sitemap.xml
+          test -s seo-pages-manifest.json
+          echo "Generated SEO output is present."
+
+      - name: Commit data and generated SEO pages if changed
+        run: |
+          if git diff --quiet -- data/fragrances.json fragrance perfumer seo-assets sitemap.xml seo-pages-manifest.json; then
+            echo "No data or SEO page changes detected."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/fragrances.json
-          git commit -m "chore: sync fragrances data from Google Sheet"
+          git add data/fragrances.json fragrance perfumer seo-assets sitemap.xml seo-pages-manifest.json
+          git commit -m "chore: sync fragrance data and rebuild SEO pages"
           git push
