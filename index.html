@@ -60,6 +60,21 @@
 <link rel="shortcut icon" href="https://perfume.khaitringuyen.com/favicon.png" />
 <link rel="apple-touch-icon" href="https://perfume.khaitringuyen.com/favicon.png" />
 <link rel="manifest" href="/manifest.webmanifest" />
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+<link rel="dns-prefetch" href="//www.googletagmanager.com" />
+
+<!-- PERFUME STEP 2 V22: Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK6YJ4RVTN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+window.gtag('js', new Date());
+window.gtag('config', 'G-ZK6YJ4RVTN', {
+  send_page_view: true,
+  debug_mode: new URLSearchParams(window.location.search).get('debug_ga4') === '1'
+});
+</script>
+
 
 <script type="application/ld+json">
 {
@@ -585,6 +600,102 @@ const SHEET_JSON_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/
 const SHEET_CACHE_KEY = 'scent-os-sheet-cache-v1';
 let DATA = [];
 
+const GA4_MEASUREMENT_ID = 'G-ZK6YJ4RVTN';
+const GA4_DEBUG = new URLSearchParams(window.location.search).get('debug_ga4') === '1';
+let vaultSearchAnalyticsTimer = null;
+
+function cleanAnalyticsParams(params={}){
+  const safe = {};
+  Object.entries(params).forEach(([key,value])=>{
+    if(value === undefined || value === null || value === '') return;
+    if(typeof value === 'number' && Number.isFinite(value)){
+      safe[key] = value;
+      return;
+    }
+    if(typeof value === 'boolean'){
+      safe[key] = value;
+      return;
+    }
+    safe[key] = String(value).replace(/\s+/g,' ').trim().slice(0,100);
+  });
+  return safe;
+}
+function trackEvent(eventName, params={}){
+  if(typeof window.gtag !== 'function') return;
+  const payload = cleanAnalyticsParams({
+    ...params,
+    page_type:'scent_os',
+    app_version:'step_2_v22',
+    send_to:GA4_MEASUREMENT_ID
+  });
+  window.gtag('event', eventName, payload);
+  if(GA4_DEBUG) console.info('[Scent OS GA4]', eventName, payload);
+}
+function perfumeAnalyticsParams(p){
+  if(!p) return {};
+  return {
+    perfume_id:p.id,
+    perfume_name:p.name,
+    perfume_brand:p.brand,
+    perfume_family:p.family || p.originalFamily,
+    perfumer_name:p.perfumer
+  };
+}
+function analyticsSource(element){
+  if(!element?.closest) return 'unknown';
+  if(element.closest('#modal')) return 'modal_related';
+  if(element.closest('#today')) return 'today_pick';
+  if(element.closest('#advisor')) return 'advisor';
+  if(element.closest('#quickPick')) return 'scent_discovery';
+  if(element.closest('#layer')) return 'layering';
+  if(element.closest('#worlds')) return 'scent_worlds';
+  if(element.closest('#perfumers')) return 'perfumer_index';
+  if(element.closest('#library')) return 'vault';
+  if(element.closest('.contact-float')) return 'floating_contact';
+  if(element.closest('.site-footer')) return 'footer';
+  if(element.closest('.topnav')) return 'top_navigation';
+  if(element.closest('.bottom-app-nav')) return 'mobile_navigation';
+  return 'page';
+}
+function contactChannel(anchor){
+  const href = String(anchor?.getAttribute('href') || '').toLowerCase();
+  if(href.includes('m.me/') || href.includes('messenger')) return 'messenger';
+  if(href.includes('zalo.me/')) return 'zalo';
+  if(href.startsWith('tel:')) return 'phone';
+  return '';
+}
+function weatherAnalyticsParams(){
+  const w = state?.weather;
+  const local = w?.local || (typeof localContext === 'function' ? localContext(state?.location) : null);
+  return {
+    weather_live:Boolean(w?.live),
+    weather_hot:Boolean(w?.isHot),
+    weather_rain:Boolean(w?.isRain),
+    local_daypart:local?.timeOfDay,
+    location_mode:state?.location?.source === 'gps' ? 'current_gps' : 'global_city_search'
+  };
+}
+function trackTodayPick(source='button'){
+  trackEvent('today_pick', {
+    ...perfumeAnalyticsParams(state.todayPick),
+    ...weatherAnalyticsParams(),
+    interaction_source:source
+  });
+}
+function trackLayerGenerated(source='button', cards=[]){
+  const firstFormula = Array.isArray(cards?.[0])
+    ? cards[0].map(item=>item?.p?.name).filter(Boolean).join(' + ')
+    : '';
+  trackEvent('layer_generated', {
+    interaction_source:source,
+    layer_vibe:state.layerVibe,
+    scent_count:state.layerCount,
+    formula_count:Array.isArray(cards) ? cards.length : 3,
+    first_formula:firstFormula
+  });
+}
+
+
 function slugify(v){
   return String(v || '')
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -835,6 +946,19 @@ function closeModal(){
 }
 function modal(p, trigger=null){
   if(!p) return;
+  const interactionSource = analyticsSource(trigger);
+  trackEvent('perfume_detail_opened', {
+    ...perfumeAnalyticsParams(p),
+    interaction_source:interactionSource
+  });
+  if(interactionSource === 'perfumer_index'){
+    trackEvent('perfumer_opened', {
+      perfumer_name:p.perfumer || 'unknown',
+      perfume_name:p.name,
+      perfume_brand:p.brand,
+      interaction_source:'perfumer_index'
+    });
+  }
   const dialog = $('#modal');
   const openingFromPage = dialog?.getAttribute('aria-hidden') !== 'false';
   if(openingFromPage && trigger instanceof HTMLElement) lastModalTrigger = trigger;
@@ -995,12 +1119,26 @@ function renderLocationResults(results, message='', busy=false){
   input?.setAttribute('aria-expanded','true');
   box.innerHTML = state.locationResults.map((p,i)=>`<button class="location-result" type="button" data-location-select="${i}" aria-label="Chọn ${esc(formatPlaceLabel(p))}"><b>${esc(p.name)}</b><small>${esc([p.admin1,p.country].filter(Boolean).join(' · '))} · ${esc(p.timezone || 'timezone auto')}</small></button>`).join('');
 }
-async function runLocationSearch(query){
+async function runLocationSearch(query, searchMethod='autocomplete'){
+  const cleanQuery = String(query || '').trim();
   renderLocationResults([], 'Đang tìm địa điểm...', true);
   try{
-    const results = await searchLocations(query);
+    const results = await searchLocations(cleanQuery);
     renderLocationResults(results, results.length ? '' : 'Không tìm thấy địa điểm phù hợp. Hãy thử nhập tên thành phố/quốc gia bằng tiếng Anh hoặc tiếng Việt.');
-  }catch(e){ renderLocationResults([], 'Không đọc được Geocoding API. Hãy thử lại sau.'); }
+    trackEvent('city_searched', {
+      search_method:searchMethod,
+      query_length:cleanQuery.length,
+      result_count:results.length
+    });
+  }catch(e){
+    renderLocationResults([], 'Không đọc được Geocoding API. Hãy thử lại sau.');
+    trackEvent('city_searched', {
+      search_method:searchMethod,
+      query_length:cleanQuery.length,
+      result_count:0,
+      search_status:'api_error'
+    });
+  }
 }
 function setLocation(place){
   state.location = normalizePlace(place);
@@ -1011,23 +1149,31 @@ function setLocation(place){
   initWeather(true);
 }
 function useCurrentLocation(){
-  if(!navigator.geolocation){ renderLocationResults([], 'Trình duyệt không hỗ trợ lấy vị trí hiện tại.'); return; }
+  if(!navigator.geolocation){
+    renderLocationResults([], 'Trình duyệt không hỗ trợ lấy vị trí hiện tại.');
+    trackEvent('current_location_used', { permission_status:'unsupported' });
+    return;
+  }
   renderLocationResults([], 'Đang xin quyền vị trí từ trình duyệt...');
   navigator.geolocation.getCurrentPosition(pos => {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || DEFAULT_LOCATION.timezone;
+    trackEvent('current_location_used', { permission_status:'granted', timezone_available:Boolean(tz) });
     setLocation({ name:'Vị trí hiện tại', country:'', latitude:pos.coords.latitude, longitude:pos.coords.longitude, timezone:tz, source:'gps' });
-  }, () => renderLocationResults([], 'Không lấy được vị trí. Bạn có thể nhập tên thành phố thủ công.'), { enableHighAccuracy:false, timeout:9000, maximumAge:600000 });
+  }, () => {
+    renderLocationResults([], 'Không lấy được vị trí. Bạn có thể nhập tên thành phố thủ công.');
+    trackEvent('current_location_used', { permission_status:'denied_or_unavailable' });
+  }, { enableHighAccuracy:false, timeout:9000, maximumAge:600000 });
 }
 function bindLocationUI(){
   const form = $('[data-location-form]');
   const input = $('[data-location-query]');
   let timer = null;
-  form?.addEventListener('submit', e => { e.preventDefault(); runLocationSearch(input?.value || ''); });
+  form?.addEventListener('submit', e => { e.preventDefault(); runLocationSearch(input?.value || '', 'submit'); });
   input?.addEventListener('input', () => {
     clearTimeout(timer);
     const q = input.value.trim();
     if(q.length < 2){ renderLocationResults([]); return; }
-    timer = setTimeout(()=>runLocationSearch(q), 420);
+    timer = setTimeout(()=>runLocationSearch(q, 'autocomplete'), 420);
   });
   $('[data-location-current]')?.addEventListener('click', useCurrentLocation);
   $('[data-location-reset]')?.addEventListener('click', () => setLocation(DEFAULT_LOCATION));
@@ -1104,7 +1250,16 @@ function renderRituals(){
 function renderDiscoverRituals(){
   const html = rituals.map(r => `<button class="mini-ritual ${state.discoverRitual===r.id?'active':''}" data-discover-ritual="${r.id}"><span>${r.icon}</span>${r.label}</button>`).join('');
   $$('[data-discover-rituals]').forEach(el => el.innerHTML = html);
-  $$('[data-discover-ritual]').forEach(btn => btn.onclick = () => { state.discoverRitual = btn.dataset.discoverRitual; renderDiscoverRituals(); });
+  $$('[data-discover-ritual]').forEach(btn => btn.onclick = () => {
+    state.discoverRitual = btn.dataset.discoverRitual;
+    renderDiscoverRituals();
+    const ritual = rituals.find(r=>r.id===state.discoverRitual);
+    trackEvent('occasion_selected', {
+      ritual_id:state.discoverRitual,
+      ritual_name:ritual?.label,
+      interaction_source:'scent_discovery'
+    });
+  });
 }
 function renderAdvisor(){
   renderRituals();
@@ -1112,7 +1267,16 @@ function renderAdvisor(){
   $$('#advisorResults').forEach(el => el.innerHTML = list.map((p,i)=>scentMini(p, i===0?'hero-rec':'')).join(''));
   const title = rituals.find(r=>r.id===state.ritual)?.label || 'Hôm nay';
   $$('[data-advisor-title]').forEach(el => el.textContent = title);
-  $$('.ritual[data-ritual]').forEach(btn => btn.onclick = () => { state.ritual = btn.dataset.ritual; renderAdvisor(); });
+  $$('.ritual[data-ritual]').forEach(btn => btn.onclick = () => {
+    state.ritual = btn.dataset.ritual;
+    renderAdvisor();
+    const ritual = rituals.find(r=>r.id===state.ritual);
+    trackEvent('occasion_selected', {
+      ritual_id:state.ritual,
+      ritual_name:ritual?.label,
+      interaction_source:'advisor'
+    });
+  });
 }
 function discover(mode='all', jump=false){
   const ritualMode = mode==='ritual' || mode==='mood';
@@ -1122,6 +1286,13 @@ function discover(mode='all', jump=false){
   const ritualLabel = rituals.find(r=>r.id===ritual)?.label || 'Ritual';
   const label = ritualMode ? `Gợi ý theo tình huống: ${ritualLabel}` : `Khám phá tự do từ ${DATA.length} chai`;
   const helper = ritualMode ? 'Lựa chọn được ưu tiên theo ngữ cảnh, độ an toàn và sắc thái mùi.' : 'Một lựa chọn ngẫu nhiên để mở rộng cảm hứng trong bộ sưu tập.';
+  trackEvent('random_pick', {
+    ...perfumeAnalyticsParams(p),
+    selection_mode:ritualMode ? 'occasion' : 'all_collection',
+    ritual_id:ritualMode ? ritual : '',
+    ritual_name:ritualMode ? ritualLabel : '',
+    interaction_source:jump ? 'keyboard_shortcut' : 'button'
+  });
   const html = `<div class="discover-context"><b>${esc(label)}</b><span>${esc(helper)}</span></div>${scentMini(p,'discover-card')}`;
   $$('#discoverResult').forEach(el => { el.style.display='block'; el.innerHTML = html; });
   if(jump) $('#quickPick')?.scrollIntoView({ behavior:'smooth', block:'center' });
@@ -1129,8 +1300,16 @@ function discover(mode='all', jump=false){
 function renderLayerControls(){
   $$('.layer-vibes').forEach(el => el.innerHTML = layerVibes.map(v=>`<button class="pill ${state.layerVibe===v.id?'active':''}" data-layer-vibe="${v.id}">${v.label}</button>`).join(''));
   $$('.count-toggle').forEach(el => el.innerHTML = [2,3].map(n=>`<button class="pill ${state.layerCount===n?'active':''}" data-layer-count="${n}">${n} mùi</button>`).join(''));
-  $$('[data-layer-vibe]').forEach(b=>b.onclick=()=>{state.layerVibe=b.dataset.layerVibe; renderLayer();});
-  $$('[data-layer-count]').forEach(b=>b.onclick=()=>{state.layerCount=Number(b.dataset.layerCount); renderLayer();});
+  $$('[data-layer-vibe]').forEach(b=>b.onclick=()=>{
+    state.layerVibe=b.dataset.layerVibe;
+    const cards = renderLayer();
+    trackLayerGenerated('vibe_change', cards);
+  });
+  $$('[data-layer-count]').forEach(b=>b.onclick=()=>{
+    state.layerCount=Number(b.dataset.layerCount);
+    const cards = renderLayer();
+    trackLayerGenerated('scent_count_change', cards);
+  });
 }
 function layerPool(type){
   let list = DATA;
@@ -1171,6 +1350,7 @@ function renderLayer(){
     const rows = items.map(x=>`<button type="button" class="formula-row" data-open="${esc(x.p.id)}" aria-label="Xem ${esc(x.p.fullName)}"><span>${x.role}</span>${imgBox(x.p,'image-box thumb-img')}<div><b>${esc(x.p.name)}</b><small>${esc(x.p.brand)}</small></div></button>`).join('');
     return `<article class="formula-card"><div class="formula-visual">${imgs}</div><div class="formula-copy"><small>FORMULA ${String(idx+1).padStart(2,'0')}</small><h3>${formulaTitle(items)}</h3>${rows}<p class="spray-map">Cách xịt: base 1 xịt dưới áo hoặc sau gáy, lift 1–2 xịt ở tay/cổ áo, veil 1 xịt gần da nếu dùng 3 mùi.</p></div></article>`;
   }).join(''));
+  return cards;
 }
 function renderWorlds(){
   state.renderedSections.worlds = true;
@@ -1202,13 +1382,24 @@ function renderPerfumers(){
       const yearText = years.length ? (years[0]===years[years.length-1] ? `${years[0]}` : `${years[0]}–${years[years.length-1]}`) : 'Năm chưa rõ';
       const families = topTerms(list, 'family', 4);
       const samples = list.slice(0,5);
-      return `<article class="perfumer-card"><small>${list.length} chai · ${esc(yearText)}</small><h3>${esc(name)}</h3><p>${esc(families.length ? `Nhóm hương nổi bật trong bộ sưu tập: ${families.join(', ')}.` : 'Các chai cùng nhà điều chế trong bộ sưu tập.')}</p><div class="perfumer-tags">${families.map(f=>`<span>${esc(f)}</span>`).join('')}</div><div class="perfumer-samples">${samples.map(p=>`<button data-open="${esc(p.id)}">${esc(p.name)}</button>`).join('')}</div></article>`;
+      return `<article class="perfumer-card"><small>${list.length} chai · ${esc(yearText)}</small><h3>${esc(name)}</h3><p>${esc(families.length ? `Nhóm hương nổi bật trong bộ sưu tập: ${families.join(', ')}.` : 'Các chai cùng nhà điều chế trong bộ sưu tập.')}</p><div class="perfumer-tags">${families.map(f=>`<span>${esc(f)}</span>`).join('')}</div><div class="perfumer-samples">${samples.map(p=>`<button type="button" data-open="${esc(p.id)}" aria-label="Xem ${esc(p.fullName)} của ${esc(name)}">${esc(p.name)}</button>`).join('')}</div></article>`;
     });
   $$('#perfumerGrid').forEach(el => el.innerHTML = cards.length ? cards.join('') : `<article class="perfumer-card"><small>Perfumer data</small><h3>Chưa có dữ liệu nhà điều chế</h3><p>Khi cột Nhà điều chế có dữ liệu, khu vực này sẽ tự nhóm các mùi theo từng perfumer.</p></article>`);
 }
 function renderLibraryControls(){
   $$('.lib-filters').forEach(el => el.innerHTML = libFilters.map(f=>`<button class="pill ${state.libFilter===f.id?'active':''}" data-lib-filter="${f.id}">${f.label}</button>`).join(''));
-  $$('[data-lib-filter]').forEach(b=>b.onclick=()=>{state.libFilter=b.dataset.libFilter; state.libraryLimit=24; renderLibrary();});
+  $$('[data-lib-filter]').forEach(b=>b.onclick=()=>{
+    state.libFilter=b.dataset.libFilter;
+    state.libraryLimit=24;
+    renderLibrary();
+    const resultCount = DATA.filter(p=>passLib(p, ($('#search')?.value || '').trim().toLowerCase())).length;
+    trackEvent('vault_searched', {
+      search_mode:'filter',
+      filter_name:state.libFilter,
+      query_length:($('#search')?.value || '').trim().length,
+      result_count:resultCount
+    });
+  });
 }
 function passLib(p, q){
   const t = textOf(p).toLowerCase();
@@ -1233,6 +1424,15 @@ function renderLibrary(){
 function bind(){
   bindLocationUI();
   document.addEventListener('click', e=>{
+    const contactAnchor = e.target.closest('a[href]');
+    const channel = contactChannel(contactAnchor);
+    if(channel){
+      trackEvent(`contact_${channel}`, {
+        contact_context:analyticsSource(contactAnchor),
+        link_target:contactAnchor.target === '_blank' ? 'new_tab' : 'same_context'
+      });
+    }
+
     const open = e.target.closest('[data-open]');
     if(open){
       e.preventDefault();
@@ -1242,11 +1442,34 @@ function bind(){
     if(more){ state.libraryLimit += 24; renderLibrary(); }
     if(e.target.id==='modal') closeModal();
   });
-  $('#search')?.addEventListener('input', () => { state.libraryLimit = 24; renderLibrary(); });
-  $$('[data-action="today"]').forEach(b=>b.onclick=()=>{ renderTodayPick(true); });
+  $('#search')?.addEventListener('input', () => {
+    state.libraryLimit = 24;
+    renderLibrary();
+    clearTimeout(vaultSearchAnalyticsTimer);
+    vaultSearchAnalyticsTimer = setTimeout(()=>{
+      const query = ($('#search')?.value || '').trim().toLowerCase();
+      if(query.length < 2) return;
+      const resultCount = DATA.filter(p=>passLib(p,query)).length;
+      trackEvent('vault_searched', {
+        search_mode:'text',
+        filter_name:state.libFilter,
+        query_length:query.length,
+        result_count:resultCount
+      });
+    }, 700);
+  });
+  $$('[data-action="today"]').forEach(b=>b.onclick=()=>{
+    renderTodayPick(true);
+    trackTodayPick('today_button');
+  });
   $$('[data-action="random"]').forEach(b=>b.onclick=()=>discover('all'));
   $$('[data-action="ritual-random"], [data-action="mood-random"]').forEach(b=>b.onclick=()=>discover('ritual'));
-  $$('[data-action="shuffle-layer"]').forEach(b=>b.onclick=()=>{b.classList.add('pulse'); setTimeout(()=>b.classList.remove('pulse'),500); renderLayer();});
+  $$('[data-action="shuffle-layer"]').forEach(b=>b.onclick=()=>{
+    b.classList.add('pulse');
+    setTimeout(()=>b.classList.remove('pulse'),500);
+    const cards = renderLayer();
+    trackLayerGenerated('shuffle_button', cards);
+  });
   document.addEventListener('keydown', e=>{
     const dialog = $('#modal');
     const modalOpen = dialog?.getAttribute('aria-hidden') === 'false';
@@ -1281,7 +1504,10 @@ function bind(){
     const typing = ['input','textarea','select'].includes((document.activeElement?.tagName || '').toLowerCase());
     if(typing || e.metaKey || e.ctrlKey || e.altKey) return;
     if(key==='r') discover('all', true);
-    if(key==='l') renderLayer();
+    if(key==='l'){
+      const cards = renderLayer();
+      trackLayerGenerated('keyboard_l', cards);
+    }
   });
 }
 function renderDeferredPlaceholders(){
