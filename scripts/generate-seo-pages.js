@@ -134,7 +134,14 @@ function head({title,description,canonical,image,type='website',schema}){
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap"></noscript>
 <link rel="stylesheet" href="${asset('seo-pages.css')}">
-<link rel="icon" href="${BASE_URL}/favicon.png">
+<link rel="manifest" href="${BASE_URL}/manifest.webmanifest">
+<link rel="icon" sizes="192x192" href="${BASE_URL}/icons/pwa-icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="${BASE_URL}/icons/apple-touch-icon-180.png">
+<meta name="application-name" content="Hihie’s Scent OS">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Scent OS">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}');</script>
 <script type="application/ld+json">${jsonScript(schema)}</script>
@@ -288,7 +295,7 @@ ${siteHeader()}
         ${chips([p.concentration,p.year,p.family || p.originalFamily,p.season,p.dayNight])}
         <p class="lead">${esc(p.mood || description)}</p>
         <div class="hero-actions">
-          <a class="primary" href="/#quiz">Tìm mùi phù hợp bằng Quiz</a>
+          <a class="primary" href="/#today">Mở gợi ý theo thời tiết</a>
           <a href="/">Mở Scent OS</a>
         </div>
       </div>
@@ -539,6 +546,7 @@ function stylesheet(){
 }
 function clientScript(){
   return `(()=>{const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/service-worker.js',{scope:'/',updateViaCache:'none'}).catch(()=>{}))}
 async function copyText(text){try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return true}}catch(e){}const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}t.remove();return ok}
 document.addEventListener('click',async e=>{const b=e.target.closest('[data-copy-message]');if(b){const msg=decodeURIComponent(b.dataset.copyMessage||'');const ok=await copyText(msg);const status=b.closest('.cta')?.querySelector('.copy-status');if(status)status.textContent=ok?'Đã sao chép lời nhắn. Hãy mở Messenger hoặc Zalo và dán để gửi.':'Không thể tự sao chép. Hãy chọn lời nhắn phía trên để sao chép.';if(typeof gtag==='function')gtag('event','seo_inquiry_message_copied',{perfume_name:b.dataset.perfume||'',copy_status:ok?'success':'failed'})}const a=e.target.closest('[data-contact]');if(a&&typeof gtag==='function')gtag('event','seo_contact_clicked',{contact_channel:a.dataset.contact,perfume_name:a.dataset.perfume||'',page_location:location.href})});
 const input=$('[data-card-search]');const list=$('[data-card-list]');const count=$('[data-result-count]');if(input&&list){const items=[...list.children];input.addEventListener('input',()=>{const q=input.value.trim().toLowerCase();let visible=0;items.forEach(item=>{const show=!q||(item.dataset.searchText||'').includes(q);item.hidden=!show;if(show)visible++});if(count)count.textContent=visible+' kết quả'})}})();`;
