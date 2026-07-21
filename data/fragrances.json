@@ -2,8 +2,8 @@
   "source": "github_action_sync",
   "sheetId": "1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY",
   "gid": "0",
-  "generatedAt": "2026-07-13T09:41:09.899Z",
-  "count": 97,
+  "generatedAt": "2026-07-21T03:45:08.286Z",
+  "count": 98,
   "data": [
     {
       "stt": 1,
@@ -4976,6 +4976,61 @@
       "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/f646dbff6a7bfb1d512dbd485710c61fddb38669/perfume_image/John%20Varvatos_Oud.avif",
       "fullName": "John Varvatos Oud",
       "id": "john-varvatos-oud"
+    },
+    {
+      "stt": 98,
+      "brand": "Francesca Bianchi",
+      "name": "Sex And The Sea",
+      "originalFamily": "Hương gỗ phương Đông",
+      "concentration": "Extrait",
+      "top": [
+        "Mimosa",
+        "Dứa",
+        "Dừa"
+      ],
+      "heart": [
+        "Cúc bất tử",
+        "Hoa hồng",
+        "Iris"
+      ],
+      "base": [
+        "Gỗ đàn hương",
+        "Myrrh",
+        "Labdanum",
+        "Benzoin",
+        "Long diên hương",
+        "Cầy hương",
+        "Vanilla"
+      ],
+      "perfumer": "Francesca Bianchi",
+      "year": "2016",
+      "season": "Thu/Hè",
+      "dayNight": "Đêm/Cả hai",
+      "longevity": "10h+ (Rất tốt)",
+      "sillage": "Rõ đến mạnh",
+      "mood": "Gợi cảm, nóng, da biển, hơi dirty; hợp đi biển, resort, hẹn hò tối hoặc khi muốn một mùi solar animalic có cá tính",
+      "family": "Hương mặt trời / biển",
+      "subFamily": "Coconut - ambergris - civet - labdanum",
+      "presence": "Nổi bật",
+      "sweetness": "Vừa",
+      "freshScore": 3,
+      "warmScore": 4,
+      "longevityScore": 5,
+      "sillageScore": 4,
+      "officeSafe": "Không khuyến nghị",
+      "clientSafe": "Không hợp",
+      "hotSafe": "Cân nhắc",
+      "occasions": "Đi biển, resort, hẹn hò tối, mùa hè, solo/artistic",
+      "sprays": "1-2 xịt",
+      "layerRole": "Base / Anchor",
+      "layerWith": "Neroli, citrus, musk sạch, aquatic nhẹ, woods sáng",
+      "avoid": "Văn phòng, gặp khách, không gian kín, xịt nhiều; tránh layer với oud/leather/tobacco/incense quá nặng",
+      "smartNote": "Ứng viên tối/lạnh/statement: ưu tiên đêm, giảm số xịt, không chọn cho fresh sạch.",
+      "confidence": "Cao",
+      "sourceMethod": "Dữ liệu notes trong file + phân loại thực dụng; hiệu năng là ước tính thực tế phổ biến, cần test trên da. Có override thủ công cho chai dễ bị hiểu sai.",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/1042fddd0da5275ba7b4d0fd5aa254647921b0df/perfume_image/SexAndTheSea.avif",
+      "fullName": "Francesca Bianchi Sex And The Sea",
+      "id": "francesca-bianchi-sex-and-the-sea"
     }
   ]
 }
