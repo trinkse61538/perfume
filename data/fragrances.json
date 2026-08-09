@@ -2,7 +2,7 @@
   "source": "github_action_sync",
   "sheetId": "1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY",
   "gid": "0",
-  "generatedAt": "2026-08-09T10:52:07.127Z",
+  "generatedAt": "2026-08-09T13:15:35.965Z",
   "count": 103,
   "data": [
     {
@@ -4230,7 +4230,7 @@
     },
     {
       "stt": 81,
-      "brand": "Boadicea the Victorious",
+      "brand": "Filippo Sorcinelli",
       "name": "Explorer",
       "originalFamily": "Gỗ khám phá",
       "concentration": "EDP",
@@ -4275,12 +4275,12 @@
       "confidence": "Cao",
       "sourceMethod": "Usage Audit v2 27/07/2026: notes/accords đúng phiên bản + đồng thuận hiệu năng công khai; chuẩn hóa theo Scoring Rules.",
       "imageUrl": "https://raw.githubusercontent.com/trinkse61538/CV/main/perfume-image/Explorer%20Boadicea%20the%20Victorious.avif",
-      "fullName": "Boadicea the Victorious Explorer",
-      "id": "boadicea-the-victorious-explorer"
+      "fullName": "Filippo Sorcinelli Explorer",
+      "id": "filippo-sorcinelli-explorer"
     },
     {
       "stt": 82,
-      "brand": "UNUM",
+      "brand": "Filippo Sorcinelli",
       "name": "Rosa Nigra",
       "originalFamily": "Floral trái cây / Gỗ xạ hương",
       "concentration": "Extrait de Parfum",
@@ -4326,8 +4326,8 @@
       "confidence": "Khá",
       "sourceMethod": "Usage Audit v2 27/07/2026: profile đúng phiên bản; longevity/sillage dùng khoảng cộng đồng nên có thể lệch theo da và batch.",
       "imageUrl": "https://raw.githubusercontent.com/trinkse61538/CV/main/perfume-image/Rosa%20Nigra%20Filippo%20Sorcinelli.avif",
-      "fullName": "UNUM Rosa Nigra",
-      "id": "unum-rosa-nigra"
+      "fullName": "Filippo Sorcinelli Rosa Nigra",
+      "id": "filippo-sorcinelli-rosa-nigra"
     },
     {
       "stt": 83,
@@ -5375,7 +5375,7 @@
         "vetiver",
         "vanilla"
       ],
-      "perfumer": "Không công bố/xác nhận",
+      "perfumer": "Filippo Sorcinelli",
       "year": "2016",
       "season": "Xuân mát/Thu/Đông",
       "dayNight": "Đêm/Cả hai",
@@ -5430,7 +5430,7 @@
         "ambergris",
         "leather"
       ],
-      "perfumer": "Không công bố/xác nhận",
+      "perfumer": "Filippo Sorcinelli",
       "year": "2015",
       "season": "Xuân mát/Thu/Đông",
       "dayNight": "Đêm/Cả hai",
