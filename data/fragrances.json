@@ -2,8 +2,8 @@
   "source": "github_action_sync",
   "sheetId": "1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY",
   "gid": "0",
-  "generatedAt": "2026-08-18T05:08:42.418Z",
-  "count": 105,
+  "generatedAt": "2026-09-07T12:32:31.473Z",
+  "count": 106,
   "data": [
     {
       "stt": 1,
@@ -5617,6 +5617,58 @@
       "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/b0a87c000cef658ce02d03bff747a7011cb6ab48/perfume_image/Noir%20Extreme%20Tom%20Ford.avif",
       "fullName": "Tom Ford Noir Extreme",
       "id": "tom-ford-noir-extreme"
+    },
+    {
+      "stt": 1056,
+      "brand": "Francesca Bianchi",
+      "name": "Libertine Neroli",
+      "originalFamily": "Floral Chypre / Neroli",
+      "concentration": "Extrait de Parfum",
+      "top": [
+        "Bergamot",
+        "petitgrain"
+      ],
+      "heart": [
+        "Neroli",
+        "geranium",
+        "iris"
+      ],
+      "base": [
+        "Animalic accord",
+        "leather",
+        "labdanum",
+        "benzoin",
+        "oakmoss"
+      ],
+      "perfumer": "Francesca Bianchi",
+      "year": "2022",
+      "season": "Xuân/Thu/Hè mát",
+      "dayNight": "Ngày/Cả hai",
+      "longevity": "8–12h+ (Rất tốt)",
+      "sillage": "Rõ",
+      "mood": "Neroli sáng, xanh đắng và hoa trắng trên nền rêu, da mềm và animalic. Sang, vintage, gợi Dolce Vita; tươi nhưng có chiều sâu và nét gợi cảm.",
+      "family": "Chypre / Neroli",
+      "subFamily": "Bergamot - petitgrain - neroli - geranium - iris - oakmoss - leather - labdanum - benzoin - animalic",
+      "presence": "Nổi bật",
+      "sweetness": "Thấp-vừa",
+      "freshScore": 3,
+      "warmScore": 3,
+      "longevityScore": 4,
+      "sillageScore": 3,
+      "officeSafe": "Cân nhắc — 1–2 xịt",
+      "clientSafe": "Cân nhắc",
+      "hotSafe": "Chỉ tối/điều hòa",
+      "occasions": "Hẹn hò, ăn tối, café, sự kiện sáng tạo, ban ngày trời mát hoặc tối mùa hè",
+      "sprays": "2–3 xịt",
+      "layerRole": "Heart / Texture",
+      "layerWith": "Citrus khô, petitgrain, vetiver sạch hoặc musk nhẹ",
+      "avoid": "Không chồng thêm leather, animalic, oakmoss hoặc amber/resin dày; tránh gourmand quá ngọt",
+      "smartNote": "Libertine Neroli: chọn khi muốn neroli có chiều sâu chypre, rêu và da; không phải freshie citrus đơn giản. Bắt đầu 1–2 xịt trong phòng kín hoặc trời nóng; hiệu năng tùy da.",
+      "confidence": "Cao",
+      "sourceMethod": "Usage Audit v2 07/09/2026: Extrait, notes và perfumer từ website chính thức; ra mắt 10/06/2022. Longevity/sillage là ước lượng cộng đồng, không phải thông số đo lường. Mood, scores, số xịt và layering là đánh giá theo Scoring Rules. https://francescabianchiperfumes.com/product/libertine-neroli/ | https://francescabianchiperfumes.com/journal/libertine-neroli-my-new-creation/ | https://www.parfumo.com/Perfumes/Francesca_Bianchi/libertine-neroli",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/c664753317f5aef58a2800e225b43ffd441adba4/perfume_image/Libertine%20Neroli%20Francesca%20Bianchi.avif",
+      "fullName": "Francesca Bianchi Libertine Neroli",
+      "id": "francesca-bianchi-libertine-neroli"
     }
   ]
 }
