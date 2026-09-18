@@ -2,8 +2,8 @@
   "source": "github_action_sync",
   "sheetId": "1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY",
   "gid": "0",
-  "generatedAt": "2026-09-07T12:32:31.473Z",
-  "count": 106,
+  "generatedAt": "2026-09-18T07:24:13.916Z",
+  "count": 108,
   "data": [
     {
       "stt": 1,
@@ -5619,7 +5619,7 @@
       "id": "tom-ford-noir-extreme"
     },
     {
-      "stt": 1056,
+      "stt": 106,
       "brand": "Francesca Bianchi",
       "name": "Libertine Neroli",
       "originalFamily": "Floral Chypre / Neroli",
@@ -5669,6 +5669,107 @@
       "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/c664753317f5aef58a2800e225b43ffd441adba4/perfume_image/Libertine%20Neroli%20Francesca%20Bianchi.avif",
       "fullName": "Francesca Bianchi Libertine Neroli",
       "id": "francesca-bianchi-libertine-neroli"
+    },
+    {
+      "stt": 107,
+      "brand": "Dior",
+      "name": "Dior Homme Cologne",
+      "originalFamily": "Citrus tươi / Xạ hương",
+      "concentration": "Eau de Cologne",
+      "top": [
+        "Calabrian bergamot"
+      ],
+      "heart": [
+        "Moroccan grapefruit blossom"
+      ],
+      "base": [
+        "White musk"
+      ],
+      "perfumer": "François Demachy",
+      "year": "2013",
+      "season": "Xuân/Hè",
+      "dayNight": "Ngày",
+      "longevity": "4–6h (Vừa)",
+      "sillage": "Vừa",
+      "mood": "Sáng, lạnh, sạch và tối giản; cảm giác như áo sơ mi trắng trong ngày nóng, hiện diện nhẹ nhàng.",
+      "family": "Citrus / Fresh",
+      "subFamily": "Bergamot - grapefruit blossom - white musk",
+      "presence": "Vừa đủ",
+      "sweetness": "Thấp",
+      "freshScore": 5,
+      "warmScore": 1,
+      "longevityScore": 2,
+      "sillageScore": 2,
+      "officeSafe": "Rất hợp",
+      "clientSafe": "Rất hợp",
+      "hotSafe": "Rất hợp",
+      "occasions": "Văn phòng, gặp khách, ban ngày, thể thao nhẹ, di chuyển và thời tiết nóng",
+      "sprays": "4–6 xịt",
+      "layerRole": "Lift / Top sparkle",
+      "layerWith": "Musk sạch, vetiver, neroli hoặc gỗ sáng",
+      "avoid": "Oud, leather, tobacco hoặc gourmand/amber quá dày",
+      "smartNote": "Dior Homme Cologne: citrus–musk rất sạch và dễ dùng khi trời nóng; đơn giản có chủ đích, phù hợp công việc và nên xịt lại nếu dùng cả ngày.",
+      "confidence": "Cao",
+      "sourceMethod": "Usage Audit v2 18/09/2026: notes/concentration từ Dior; năm, perfumer và hiệu năng đối chiếu Parfumo. Longevity/sillage là ước lượng cộng đồng và có thể lệch theo da/batch. https://www.dior.com/en_vn/beauty/products/dior-homme-cologne-Y9190300.html | https://www.parfumo.com/Perfumes/Dior/Dior_Homme_Cologne_2013",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/3a74665bd4a3c545b6a18a6b6a10a8b4230aceb6/perfume_image/Dior%20Homme%20Cologne.avif",
+      "fullName": "Dior Dior Homme Cologne",
+      "id": "dior-dior-homme-cologne"
+    },
+    {
+      "stt": 108,
+      "brand": "Nishane",
+      "name": "Ani",
+      "originalFamily": "Gia vị / Gỗ / Vanilla",
+      "concentration": "EDP",
+      "top": [
+        "Bergamot",
+        "green notes",
+        "blue ginger",
+        "pink pepper"
+      ],
+      "heart": [
+        "Blackcurrant",
+        "Turkish rose",
+        "cardamom"
+      ],
+      "base": [
+        "Patchouli",
+        "cedarwood",
+        "vanilla",
+        "benzoin",
+        "ambergris",
+        "musk",
+        "sandalwood"
+      ],
+      "perfumer": "Cécile Zarokian",
+      "year": "2019",
+      "season": "Xuân mát/Thu/Đông",
+      "dayNight": "Đêm/Cả hai",
+      "longevity": "10–12h+ (Rất tốt)",
+      "sillage": "Mạnh",
+      "mood": "Vanilla kem, cay gừng và nhựa thơm; ấm, dày nhưng mở đầu có độ xanh-citrus, hiện diện rất mạnh.",
+      "family": "Vanilla / Gia vị ngọt",
+      "subFamily": "Bergamot - ginger - cardamom - blackcurrant - rose - vanilla - benzoin - woods - ambergris",
+      "presence": "Rất nổi bật",
+      "sweetness": "Cao",
+      "freshScore": 2,
+      "warmScore": 4,
+      "longevityScore": 4,
+      "sillageScore": 4,
+      "officeSafe": "Cân nhắc — 1–2 xịt",
+      "clientSafe": "Cân nhắc",
+      "hotSafe": "Không hợp",
+      "occasions": "Hẹn hò, ăn tối, tiệc/sự kiện và thời tiết mát/lạnh",
+      "sprays": "1–2 xịt",
+      "layerRole": "Base / Sweet anchor",
+      "layerWith": "Citrus khô, ginger, vetiver hoặc gỗ sáng",
+      "avoid": "Vanilla/gourmand, amber-resin hoặc sweet spice dày khác",
+      "smartNote": "Ani: vanilla cay-kem có mở đầu xanh và citrus, hiệu năng rất mạnh; hợp trời mát/lạnh và nên bắt đầu 1–2 xịt trong phòng kín.",
+      "confidence": "Cao",
+      "sourceMethod": "Usage Audit v2 18/09/2026: nồng độ và notes từ Nishane; năm, perfumer và hiệu năng đối chiếu Parfumo. Longevity/sillage là ước lượng cộng đồng và có thể lệch theo da/batch. https://nishane.com/product/ani-15ml/ | https://www.parfumo.com/Perfumes/Nishane/Ani",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/3a74665bd4a3c545b6a18a6b6a10a8b4230aceb6/perfume_image/Nishane%20Ani.avif",
+      "fullName": "Nishane Ani",
+      "id": "nishane-ani"
     }
   ]
 }
