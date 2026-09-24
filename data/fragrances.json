@@ -2,7 +2,7 @@
   "source": "github_action_sync",
   "sheetId": "1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY",
   "gid": "0",
-  "generatedAt": "2026-09-24T09:13:15.567Z",
+  "generatedAt": "2026-09-24T09:37:43.119Z",
   "count": 111,
   "data": [
     {
@@ -1040,7 +1040,7 @@
       "smartNote": "Squid: statement tối và đậm; ưu tiên buổi tối/trời mát, bắt đầu ở mức xịt thấp nhất.",
       "confidence": "Cao",
       "sourceMethod": "Usage Audit v2 27/07/2026: notes/accords đúng phiên bản + đồng thuận hiệu năng công khai; chuẩn hóa theo Scoring Rules.",
-      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/CV/de1e20e807ed6159fa86deedbd73f3157245a17a/perfume-image/new-image/Zoologist_Squid-removebg-preview.png",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/17b09fb70590e86afba28424c8d918f2451ffa9c/perfume_image/squid.avif",
       "fullName": "Zoologist Squid",
       "id": "zoologist-squid"
     },
@@ -1328,7 +1328,7 @@
       "smartNote": "Snowy Owl: linh hoạt nhưng vẫn có bản sắc; giảm 1 xịt khi gặp khách hoặc ngồi phòng kín.",
       "confidence": "Cao",
       "sourceMethod": "Usage Audit v2 27/07/2026: notes/accords đúng phiên bản + đồng thuận hiệu năng công khai; chuẩn hóa theo Scoring Rules.",
-      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/38bca9a86f2879d1a9a16b7398fe98351a2fb5d9/perfume_image/Zoologist_Snowy_Owl-removebg-preview.png",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/17b09fb70590e86afba28424c8d918f2451ffa9c/perfume_image/snowy-owl.avif",
       "fullName": "Zoologist Snowy Owl",
       "id": "zoologist-snowy-owl"
     },
@@ -1502,7 +1502,7 @@
       "smartNote": "Chipmunk: linh hoạt nhưng vẫn có bản sắc; giảm 1 xịt khi gặp khách hoặc ngồi phòng kín.",
       "confidence": "Cao",
       "sourceMethod": "Usage Audit v2 27/07/2026: notes/accords đúng phiên bản + đồng thuận hiệu năng công khai; chuẩn hóa theo Scoring Rules.",
-      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/CV/de1e20e807ed6159fa86deedbd73f3157245a17a/perfume-image/new-image/Zoologist_Chipmunk-removebg-preview.png",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/17b09fb70590e86afba28424c8d918f2451ffa9c/perfume_image/chipmunk.avif",
       "fullName": "Zoologist Chipmunk",
       "id": "zoologist-chipmunk"
     },
@@ -1610,7 +1610,7 @@
       "smartNote": "Rabbit: hợp mood cá nhân/hẹn hò hơn công việc; kiểm soát số xịt theo nhiệt độ và không gian.",
       "confidence": "Cao",
       "sourceMethod": "Usage Audit v2 27/07/2026: notes/accords đúng phiên bản + đồng thuận hiệu năng công khai; chuẩn hóa theo Scoring Rules.",
-      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/38bca9a86f2879d1a9a16b7398fe98351a2fb5d9/perfume_image/zoologist_rabbit_limited_edition-removebg-preview.png",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/17b09fb70590e86afba28424c8d918f2451ffa9c/perfume_image/rabbit.avif",
       "fullName": "Zoologist Rabbit",
       "id": "zoologist-rabbit"
     },
@@ -2052,7 +2052,7 @@
       "smartNote": "Macaque Yuzu Edition: linh hoạt nhưng vẫn có bản sắc; giảm 1 xịt khi gặp khách hoặc ngồi phòng kín.",
       "confidence": "Cao",
       "sourceMethod": "Usage Audit v2 27/07/2026: notes/accords đúng phiên bản + đồng thuận hiệu năng công khai; chuẩn hóa theo Scoring Rules.",
-      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/CV/de1e20e807ed6159fa86deedbd73f3157245a17a/perfume-image/new-image/Zoologist-Macaque-Yuzu-Edition-removebg-preview.png",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/17b09fb70590e86afba28424c8d918f2451ffa9c/perfume_image/macaque-yuzu-edition.avif",
       "fullName": "Zoologist Macaque Yuzu Edition",
       "id": "zoologist-macaque-yuzu-edition"
     },
