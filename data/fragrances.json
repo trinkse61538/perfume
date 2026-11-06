@@ -2,7 +2,7 @@
   "source": "github_action_sync",
   "sheetId": "1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY",
   "gid": "0",
-  "generatedAt": "2026-11-06T04:09:27.025Z",
+  "generatedAt": "2026-11-06T06:45:51.040Z",
   "count": 114,
   "data": [
     {
@@ -6099,7 +6099,7 @@
       "smartNote": "Patchouli (EDP 2013): patchouli đất–gỗ được làm ấm bằng amber, tonka và nhựa thơm; độ bám tốt, tỏa rõ, hợp thời tiết mát/lạnh. Không nhầm với Patchouli Extrait de Parfum mới của hãng.",
       "confidence": "Khá",
       "sourceMethod": "Usage Audit v2 06/11/2026: note và mô tả mùi từ Franck Boclet; EDP từ Fragrance Collection của hãng; năm 2013, perfumer và hiệu năng đối chiếu Parfumo (longevity 8.1/10, sillage 7.1/10; số đánh giá hiệu năng còn ít). Hãng hiện có thêm Patchouli Extrait de Parfum, là phiên bản/nồng độ khác; dòng này áp dụng EDP gốc 2013. Thời gian bám/tỏa là ước lượng, không phải đo chuẩn. Scores, số xịt và layering theo Scoring Rules. https://franckboclet.com/en/boutique/parfum/fragrance-collection/patchouli/ | https://franckboclet.com/en/fragrance-collection/ | https://www.parfumo.com/Perfumes/Franck_Boclet/Patchouli | https://franckboclet.com/en/",
-      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/96696186b940bb6ae249391d226afa4c3f8c6961/perfume_image/Franck-Boclet-Patchouli.avif",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/a007756636b9e687de45e50a83ab369f6820ce78/perfume_image/Franck%20Boclet%20-%20Patchouli%20EDP.avif",
       "fullName": "Franck Boclet Patchouli",
       "id": "franck-boclet-patchouli"
     }
