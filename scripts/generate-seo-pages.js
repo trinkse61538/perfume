@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// Library First patch 2026-11-20
 const fs = require('fs');
 const path = require('path');
 
@@ -134,6 +135,7 @@ function head({title,description,canonical,image,type='website',schema}){
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap"></noscript>
 <link rel="stylesheet" href="${asset('seo-pages.css')}">
+<link rel="stylesheet" href="/upgrade-assets/library-first.css">
 <link rel="manifest" href="${BASE_URL}/manifest.webmanifest">
 <link rel="icon" sizes="192x192" href="${BASE_URL}/icons/pwa-icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="${BASE_URL}/icons/apple-touch-icon-180.png">
@@ -152,9 +154,11 @@ function siteHeader(){
 <a class="skip" href="#main">Đến nội dung chính</a>
 <header class="site-head">
   <a class="logo" href="/"><span></span>${esc(SITE_NAME)}</a>
-  <nav aria-label="Điều hướng SEO">
-    <a href="/">Scent OS</a>
-    <a href="/fragrance/">Nước hoa</a>
+  <nav class="lf-site-nav" aria-label="Điều hướng chính">
+    <a href="/">Home</a>
+    <a href="/fragrance/">Bộ sưu tập</a>
+    <a href="/#today">Today</a>
+    <a href="/#layer">Layering</a>
     <a href="/perfumer/">Perfumer</a>
   </nav>
 </header>`;
@@ -181,6 +185,7 @@ function siteFooter(){
   </div>
 </footer>
 <script src="${asset('seo-pages.js')}" defer></script>
+<script src="/upgrade-assets/catalog.js" defer></script>
 </body></html>`;
 }
 function chips(values){
@@ -196,7 +201,7 @@ function detailRows(entries){
     `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`
   ).join('')}</dl>`;
 }
-function card(p){
+function card(p, includeCompare=false){
   return `<article class="card">
     <a class="card-img" href="/fragrance/${esc(p.id)}.html">
       <img src="${esc(safeImage(p))}" loading="lazy" decoding="async" width="420" height="420" alt="${esc(p.fullName)}">
@@ -206,6 +211,7 @@ function card(p){
       <h2><a href="/fragrance/${esc(p.id)}.html">${esc(p.name)}</a></h2>
       <p>${esc(truncate(p.mood || p.smartNote || p.family,120))}</p>
       ${chips([p.family,p.year,p.concentration])}
+      <div class="lf-card-utility"><a href="/fragrance/${esc(p.id)}.html" aria-label="Xem chi tiết ${esc(p.fullName)}">Chi tiết ↗</a>${includeCompare ? `<button type="button" data-compare-id="${esc(p.id)}" aria-pressed="false" aria-label="Chọn so sánh ${esc(p.fullName)}">+ So sánh</button>` : ''}</div>
     </div>
   </article>`;
 }
@@ -280,7 +286,7 @@ function fragrancePage(p, data, generatedDate){
     schema
   })}
 ${siteHeader()}
-<main id="main" class="page">
+<main id="main" class="page lf-detail-page">
   ${breadcrumbs([
     {label:'Scent OS',url:'/'},
     {label:'Nước hoa',url:'/fragrance/'},
@@ -295,22 +301,23 @@ ${siteHeader()}
         ${chips([p.concentration,p.year,p.family || p.originalFamily,p.season,p.dayNight])}
         <p class="lead">${esc(p.mood || description)}</p>
         <div class="hero-actions">
-          <a class="primary" href="/#today">Mở gợi ý theo thời tiết</a>
-          <a href="/">Mở Scent OS</a>
+          <a class="primary" href="/fragrance/">← Trở lại bộ sưu tập</a>
+          <a href="/#today">Chọn theo thời tiết</a>
         </div>
       </div>
     </section>
 
+    <nav class="lf-detail-jumps" aria-label="Mục lục hồ sơ"><a href="#lf-overview">Tổng quan</a><a href="#lf-notes">Tầng hương</a><a href="#lf-performance">Độ bám & cách dùng</a><a href="#lf-layering">Layering</a><a href="#lf-related">Mùi liên quan</a></nav>
     <section class="content-grid">
       <div class="main-copy">
-        <section class="box">
+        <section class="box" id="lf-overview">
           <div class="eyebrow">Tổng quan</div>
           <h2>Ấn tượng và cách sử dụng</h2>
           <p>${esc(p.smartNote || p.mood || description)}</p>
           ${p.avoid ? `<p><b>Lưu ý:</b> ${esc(p.avoid)}</p>`:''}
         </section>
 
-        <section class="box">
+        <section class="box" id="lf-notes">
           <div class="eyebrow">Note pyramid</div>
           <h2>Cấu trúc mùi hương</h2>
           <div class="notes">
@@ -320,7 +327,7 @@ ${siteHeader()}
           </div>
         </section>
 
-        <section class="box">
+        <section class="box" id="lf-performance">
           <div class="eyebrow">Practical profile</div>
           <h2>Độ bám, độ tỏa và hoàn cảnh</h2>
           ${detailRows([
@@ -340,7 +347,7 @@ ${siteHeader()}
           ])}
         </section>
 
-        <section class="box">
+        <section class="box" id="lf-layering">
           <div class="eyebrow">Layering</div>
           <h2>Vai trò khi phối mùi</h2>
           ${detailRows([
@@ -370,7 +377,7 @@ ${siteHeader()}
       </aside>
     </section>
 
-    ${related.length ? `<section class="related">
+    ${related.length ? `<section class="related" id="lf-related">
       <div class="section-head"><div><div class="eyebrow">Khám phá thêm</div><h2>Mùi hương liên quan</h2></div><a href="/fragrance/">Xem toàn bộ</a></div>
       <div class="cards">${related.map(card).join('')}</div>
     </section>`:''}
@@ -380,50 +387,95 @@ ${siteFooter()}`;
 }
 function fragranceIndex(data, generatedDate){
   const canonical = `${BASE_URL}/fragrance/`;
-  const description = `Danh mục ${data.length} mùi hương trong Hihie's Scent OS, gồm thông tin nhóm hương, độ bám, độ tỏa, perfumer và cách sử dụng.`;
+  const description = `Khám phá ${data.length} mùi hương trong Hihie's Scent OS. Tìm kiếm, lọc theo thương hiệu, nhóm hương, mùa, thời điểm, so sánh và xem hồ sơ chi tiết.`;
   const schema = {
     '@context':'https://schema.org',
     '@type':'CollectionPage',
     url:canonical,
-    name:'Danh mục nước hoa | Hihie’s Scent OS',
+    name:'Bộ sưu tập nước hoa | Hihie’s Scent OS',
     description,
     inLanguage:'vi-VN',
     dateModified:generatedDate,
     mainEntity:{
       '@type':'ItemList',
       numberOfItems:data.length,
-      itemListElement:data.slice(0,100).map((p,i)=>({
-        '@type':'ListItem',
-        position:i+1,
-        url:`${BASE_URL}/fragrance/${p.id}.html`,
-        name:p.fullName
+      itemListElement:data.map((p,i)=>({
+        '@type':'ListItem',position:i+1,url:`${BASE_URL}/fragrance/${p.id}.html`,name:p.fullName
       }))
     }
   };
+  const brands=unique(data.map(p=>p.brand)).sort((a,b)=>a.localeCompare(b,'vi'));
+  const families=unique(data.map(p=>p.family)).sort((a,b)=>a.localeCompare(b,'vi'));
+  const options=arr=>arr.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+  const cardWithData=p=>`<div class="catalog-item"
+     data-id="${esc(p.id)}" data-fullname="${esc(p.fullName)}" data-search-text="${esc([p.fullName,p.perfumer,p.family,p.originalFamily,p.mood,p.subFamily,p.year,(p.top||[]).join(' '),(p.heart||[]).join(' '),(p.base||[]).join(' ')].join(' ').toLowerCase())}"
+     data-brand="${esc(p.brand)}" data-family="${esc(p.family)}" data-season="${esc(p.season)}" data-office="${esc(p.officeSafe)}" data-daypart="${esc(p.dayNight)}"
+     data-fresh="${Number(p.freshScore)||0}" data-warm="${Number(p.warmScore)||0}" data-longevity="${Number(p.longevityScore)||0}" data-year="${Number(p.year)||0}" data-ordinal="${Number(p.stt)||0}">
+     ${card(p,true)}
+   </div>`;
   return `${head({
-    title:'Danh mục nước hoa | Hihie’s Scent OS',
-    description,
-    canonical,
-    image:`${BASE_URL}/Banner.png`,
-    schema
+    title:'Bộ sưu tập nước hoa | Hihie’s Scent OS',description,canonical,
+    image:`${BASE_URL}/Banner.png`,schema
   })}
 ${siteHeader()}
-<main id="main" class="page">
-  ${breadcrumbs([{label:'Scent OS',url:'/'},{label:'Danh mục nước hoa'}])}
-  <section class="listing-hero">
-    <div class="eyebrow">STATIC FRAGRANCE LIBRARY</div>
-    <h1>${data.length} mùi hương<br>trong bộ sưu tập</h1>
-    <p>${esc(description)}</p>
-    <label class="search-label" for="seoSearch">Tìm theo tên, thương hiệu, perfumer hoặc nhóm hương</label>
-    <input id="seoSearch" class="seo-search" type="search" placeholder="Ví dụ: Zoologist, iris, Jacques Huclier..." data-card-search>
+<main id="main" class="page lf-catalog-page" data-scent-catalog>
+  ${breadcrumbs([{label:'Scent OS',url:'/'},{label:'Bộ sưu tập nước hoa'}])}
+  <section class="listing-hero lf-catalog-hero">
+    <div class="eyebrow">THE FRAGRANCE LIBRARY · PERSONAL ARCHIVE</div>
+    <h1>${data.length} chai nước hoa.<br>Một thế giới mùi hương.</h1>
+    <p>Khám phá bộ sưu tập nước hoa cá nhân. Lọc theo thương hiệu, DNA, mùa, mood; mở hồ sơ đầy đủ hoặc so sánh những chai bạn đang cân nhắc.</p>
+    <div class="lf-catalog-kpis"><span>✦ ${data.length} chai trong thư viện</span><span>◈ ${brands.length} thương hiệu</span><span>♢ Thông tin chi tiết từng chai</span></div>
   </section>
-  <div class="listing-count" data-result-count>${data.length} kết quả</div>
-  <section class="cards listing-cards" data-card-list>
-    ${data.map(p=>`<div data-search-text="${esc([p.fullName,p.perfumer,p.family,p.originalFamily,p.year].join(' ').toLowerCase())}">${card(p)}</div>`).join('')}
+  <section class="lf-catalog-toolbar" aria-label="Tìm kiếm và bộ lọc">
+    <div class="lf-toolbar-top">
+      <div class="lf-toolbar-field lf-toolbar-field--search">
+        <label for="seoSearch">Tìm kiếm mùi hương</label>
+        <input id="seoSearch" type="search" placeholder="Tên chai, note hương, perfumer, brand..." autocomplete="off" data-card-search>
+      </div>
+      <div class="lf-toolbar-field">
+        <label for="lfBrand">Thương hiệu</label>
+        <select id="lfBrand" data-brand-filter><option value="">Tất cả thương hiệu</option>${options(brands)}</select>
+      </div>
+      <div class="lf-toolbar-field">
+        <label for="lfFamily">Nhóm hương</label>
+        <select id="lfFamily" data-family-filter><option value="">Tất cả nhóm hương</option>${options(families)}</select>
+      </div>
+      <div class="lf-toolbar-field">
+        <label for="lfSeason">Mùa sử dụng</label>
+        <select id="lfSeason" data-season-filter><option value="">Bất kỳ mùa nào</option><option value="Xuân">Xuân</option><option value="Hè">Hè</option><option value="Thu">Thu</option><option value="Đông">Đông</option></select>
+      </div>
+      <div class="lf-toolbar-field">
+        <label for="lfSort">Sắp xếp</label>
+        <select id="lfSort" data-sort-filter><option value="original">Theo vị trí bộ sưu tập</option><option value="newest">Mới thêm gần đây</option><option value="name">Tên A–Z</option><option value="brand">Thương hiệu A–Z</option><option value="year">Năm ra mắt mới nhất</option><option value="longevity">Độ bám mạnh nhất</option></select>
+      </div>
+    </div>
+    <div class="lf-toolbar-chips" role="group" aria-label="Khám phá nhanh">
+      <button type="button" class="lf-filter-chip" data-preset-filter="office" aria-pressed="false">Văn phòng</button>
+      <button type="button" class="lf-filter-chip" data-preset-filter="fresh" aria-pressed="false">Fresh / Clean</button>
+      <button type="button" class="lf-filter-chip" data-preset-filter="dark" aria-pressed="false">Artistic Dark</button>
+      <button type="button" class="lf-filter-chip" data-preset-filter="summer" aria-pressed="false">Mùa hè</button>
+      <button type="button" class="lf-filter-chip" data-preset-filter="night" aria-pressed="false">Buổi tối</button>
+    </div>
+    <div class="lf-toolbar-foot">
+      <span class="lf-catalog-meta" data-result-count role="status" aria-live="polite">${data.length} kết quả</span>
+      <button class="lf-clear" type="button" data-catalog-clear>Xóa bộ lọc</button>
+      <div class="lf-view-toggle" role="group" aria-label="Chế độ xem">
+        <button type="button" data-catalog-view="grid" aria-pressed="true">▦ Grid</button>
+        <button type="button" data-catalog-view="list" aria-pressed="false">☷ List</button>
+      </div>
+    </div>
   </section>
+  <section class="cards listing-cards lf-listing-results" data-card-list aria-label="Danh sách nước hoa">
+    ${data.map(cardWithData).join('')}
+  </section>
+  <div class="lf-empty" data-catalog-empty hidden>Không tìm thấy chai phù hợp. Hãy thử bỏ bớt bộ lọc.</div>
+  <div class="lf-show-more"><button class="lf-btn" type="button" data-catalog-more hidden>Xem thêm 24 chai ↓</button></div>
+  <div class="lf-compare-bar" data-compare-bar hidden><span data-compare-count>Đã chọn 0/3 chai</span><button data-compare-clear type="button" class="lf-compare-reset">Bỏ chọn</button><button data-compare-run type="button" disabled>So sánh ngay</button></div>
+  <div class="lf-compare-modal" data-compare-modal hidden role="presentation"><section class="lf-compare-dialog" role="dialog" aria-modal="true" aria-labelledby="lf-compare-title"><h2>Đang mở bảng so sánh...</h2></section></div>
 </main>
 ${siteFooter()}`;
 }
+
 function perfumerPage(name, items, generatedDate){
   const slug = slugify(name);
   const canonical = `${BASE_URL}/perfumer/${slug}.html`;
@@ -549,7 +601,7 @@ function clientScript(){
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/service-worker.js',{scope:'/',updateViaCache:'none'}).catch(()=>{}))}
 async function copyText(text){try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return true}}catch(e){}const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}t.remove();return ok}
 document.addEventListener('click',async e=>{const b=e.target.closest('[data-copy-message]');if(b){const msg=decodeURIComponent(b.dataset.copyMessage||'');const ok=await copyText(msg);const status=b.closest('.cta')?.querySelector('.copy-status');if(status)status.textContent=ok?'Đã sao chép lời nhắn. Hãy mở Messenger hoặc Zalo và dán để gửi.':'Không thể tự sao chép. Hãy chọn lời nhắn phía trên để sao chép.';if(typeof gtag==='function')gtag('event','seo_inquiry_message_copied',{perfume_name:b.dataset.perfume||'',copy_status:ok?'success':'failed'})}const a=e.target.closest('[data-contact]');if(a&&typeof gtag==='function')gtag('event','seo_contact_clicked',{contact_channel:a.dataset.contact,perfume_name:a.dataset.perfume||'',page_location:location.href})});
-const input=$('[data-card-search]');const list=$('[data-card-list]');const count=$('[data-result-count]');if(input&&list){const items=[...list.children];input.addEventListener('input',()=>{const q=input.value.trim().toLowerCase();let visible=0;items.forEach(item=>{const show=!q||(item.dataset.searchText||'').includes(q);item.hidden=!show;if(show)visible++});if(count)count.textContent=visible+' kết quả'})}})();`;
+const input=$('[data-card-search]');const list=$('[data-card-list]');const count=$('[data-result-count]');if(input&&list&&!document.querySelector('[data-scent-catalog]')){const items=[...list.children];input.addEventListener('input',()=>{const q=input.value.trim().toLowerCase();let visible=0;items.forEach(item=>{const show=!q||(item.dataset.searchText||'').includes(q);item.hidden=!show;if(show)visible++});if(count)count.textContent=visible+' kết quả'})}})();`;
 }
 function sitemap(urls, lastmod){
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(item=>`  <url>\n    <loc>${xmlEsc(item.loc)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${item.changefreq || 'weekly'}</changefreq>\n    <priority>${item.priority || '0.7'}</priority>\n  </url>`).join('\n')}\n</urlset>\n`;

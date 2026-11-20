@@ -45,7 +45,20 @@
       "name": "Hôm nay dùng gì?",
       "short_name": "Daily Pick",
       "description": "Mở gợi ý nước hoa theo thời tiết.",
-      "url": "/#today?source=pwa-shortcut",
+      "url": "/?source=pwa-shortcut#today",
+      "icons": [
+        {
+          "src": "/icons/pwa-icon-96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Bộ sưu tập nước hoa",
+      "short_name": "Library",
+      "description": "Khám phá và so sánh toàn bộ bộ sưu tập.",
+      "url": "/fragrance/?source=pwa-shortcut",
       "icons": [
         {
           "src": "/icons/pwa-icon-96.png",
@@ -71,7 +84,7 @@
       "name": "Vault Search",
       "short_name": "Vault",
       "description": "Tìm trong bộ sưu tập nước hoa.",
-      "url": "/#library?source=pwa-shortcut",
+      "url": "/?source=pwa-shortcut#library",
       "icons": [
         {
           "src": "/icons/pwa-icon-96.png",

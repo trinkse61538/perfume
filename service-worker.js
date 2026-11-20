@@ -1,5 +1,5 @@
 /* Hihie's Scent OS — PWA Service Worker V27R5 */
-const VERSION = 'v27r5';
+const VERSION = 'v28-library-first';
 const PRECACHE = `scent-os-precache-${VERSION}`;
 const PAGE_CACHE = `scent-os-pages-${VERSION}`;
 const DATA_CACHE = `scent-os-data-${VERSION}`;
@@ -17,6 +17,9 @@ const CORE_ASSETS = [
   '/icons/pwa-maskable-512.png',
   '/icons/apple-touch-icon-180.png',
   '/data/fragrances.json',
+  '/upgrade-assets/library-first.css',
+  '/upgrade-assets/home.js',
+  '/upgrade-assets/catalog.js',
   '/fragrance/',
   '/perfumer/',
   '/seo-assets/seo-pages.css',

@@ -102,6 +102,11 @@ async function main(){
   if(!data.length) throw new Error('No valid fragrance rows found in sheet');
 
   const existing = readExisting();
+  // Do not silently erase curated additions when the public Google Sheet lags behind.
+  if(existing && Array.isArray(existing.data) && existing.data.length > data.length){
+    console.warn(`[sync-fragrances] Sheet has ${data.length} fragrances, committed snapshot has ${existing.data.length}. Refusing data regression; update the source Sheet before next sync.`);
+    return;
+  }
   if(existing && stableData(existing.data) === stableData(data)){
     console.log(`[sync-fragrances] No data changes across ${data.length} fragrances.`);
     return;

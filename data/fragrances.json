@@ -1,9 +1,7 @@
 {
-  "source": "github_action_sync",
-  "sheetId": "1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY",
-  "gid": "0",
-  "generatedAt": "2026-11-06T06:45:51.040Z",
-  "count": 114,
+  "source": "curated_workbook_116",
+  "generatedAt": "2026-11-20T09:19:16.739Z",
+  "count": 116,
   "data": [
     {
       "stt": 1,
@@ -6102,6 +6100,106 @@
       "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/a007756636b9e687de45e50a83ab369f6820ce78/perfume_image/Franck%20Boclet%20-%20Patchouli%20EDP.avif",
       "fullName": "Franck Boclet Patchouli",
       "id": "franck-boclet-patchouli"
+    },
+    {
+      "stt": 115,
+      "brand": "Francesca Bianchi",
+      "name": "Voluptuous Oud",
+      "originalFamily": "Gỗ phương Đông / Oud da thuộc gourmand",
+      "concentration": "Extrait de Parfum",
+      "top": [
+        "Bergamot",
+        "green mandarin"
+      ],
+      "heart": [
+        "Heliotropin",
+        "plum"
+      ],
+      "base": [
+        "Cambodian oud",
+        "leather",
+        "vetiver",
+        "tolu balsam",
+        "caramel"
+      ],
+      "perfumer": "Francesca Bianchi",
+      "year": "2024",
+      "season": "Xuân mát/Thu/Đông",
+      "dayNight": "Đêm",
+      "longevity": "8–12h+ (Rất tốt)",
+      "sillage": "Rõ",
+      "mood": "Oud Campuchia gỗ–da thuộc hơi animalic, khói nhẹ được phủ mận chín sánh, heliotrope phấn hạnh nhân và caramel kem. Sang, dày, gợi cảm, có nét gourmand nhưng vẫn tối và sâu; không phải oud hoa hồng truyền thống.",
+      "family": "Oud / Mận caramel da thuộc",
+      "subFamily": "Bergamot - green mandarin - plum - heliotropin - Cambodian oud - leather - vetiver - tolu balsam - caramel",
+      "presence": "Nổi bật",
+      "sweetness": "Cao",
+      "freshScore": 1,
+      "warmScore": 5,
+      "longevityScore": 4,
+      "sillageScore": 3,
+      "officeSafe": "Không khuyến nghị",
+      "clientSafe": "Không hợp",
+      "hotSafe": "Không hợp",
+      "occasions": "Hẹn hò, ăn tối, tiệc/sự kiện nghệ thuật và không gian thoáng vào tối trời mát/lạnh; tránh phòng kín đông người",
+      "sprays": "2–3 xịt",
+      "layerRole": "Base / Oud–gourmand anchor",
+      "layerWith": "Bergamot, neroli khô, vetiver sạch, citrus thanh hoặc musk rất nhẹ",
+      "avoid": "Oud/animalic, leather, caramel–vanilla gourmand, amber–resin hoặc patchouli dày khác; dễ quá ngọt và bí",
+      "smartNote": "Voluptuous Oud: mận chín–caramel quyện oud da thuộc mượt, vừa gourmand vừa animalic. Extrait đậm và tỏa rõ; ưu tiên tối trời mát, khởi đầu 2 xịt. Không nhầm Voluptuous Oud Sublime Oil (2025) với bản Extrait 2024.",
+      "confidence": "Cao",
+      "sourceMethod": "Usage Audit v2 20/11/2026: nồng độ, pyramid và diễn giải từ chính hãng Francesca Bianchi; năm, perfumer và hiệu năng đối chiếu Parfumo (longevity 8.0/10, sillage 7.6/10; cảm nhận thực tế tùy da). https://francescabianchiperfumes.com/product/voluptuous-oud/ | https://www.parfumo.de/Parfums/Francesca_Bianchi/voluptuous-oud-extrait-de-parfum",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/d0849a8fad52469cb453b19a4960dc40efc697ed/perfume_image/Voluptuous%20Oud.avif",
+      "fullName": "Francesca Bianchi Voluptuous Oud",
+      "id": "francesca-bianchi-voluptuous-oud"
+    },
+    {
+      "stt": 116,
+      "brand": "Dolce&Gabbana",
+      "name": "Light Blue Forever pour Homme",
+      "originalFamily": "Citrus aromatic / Gỗ aquatic",
+      "concentration": "EDP",
+      "top": [
+        "Grapefruit zest",
+        "Italian bergamot"
+      ],
+      "heart": [
+        "Ozonic notes",
+        "violet leaf"
+      ],
+      "base": [
+        "Java vetiver oil",
+        "white musk",
+        "patchouli"
+      ],
+      "perfumer": "Shyamala Maisondieu",
+      "year": "2021",
+      "season": "Xuân/Hè/Thu",
+      "dayNight": "Ngày/Cả hai",
+      "longevity": "6–8h (Tốt)",
+      "sillage": "Rõ",
+      "mood": "Mở đầu bưởi chùm tươi như vừa bóc vỏ: chua mọng, đắng nhẹ và tinh dầu sắc nét, bergamot sáng. Sau đó là hơi ozone mát, lá violet xanh và nền vetiver–musk–patchouli khô sạch; cảm giác Địa Trung Hải, rất sảng khoái, không ngọt kiểu kẹo.",
+      "family": "Citrus / Bưởi chùm xanh",
+      "subFamily": "Grapefruit zest - Italian bergamot - ozonic notes - violet leaf - Java vetiver - white musk - patchouli",
+      "presence": "Nổi bật",
+      "sweetness": "Thấp-vừa",
+      "freshScore": 5,
+      "warmScore": 1,
+      "longevityScore": 3,
+      "sillageScore": 3,
+      "officeSafe": "Rất hợp",
+      "clientSafe": "Hợp",
+      "hotSafe": "Rất hợp",
+      "occasions": "Văn phòng, đi làm, đi dạo, café, gặp gỡ ban ngày, du lịch biển và thời tiết nắng nóng; giảm số xịt nếu ngồi sát người khác",
+      "sprays": "2–3 xịt",
+      "layerRole": "Lift / Citrus zest",
+      "layerWith": "Vetiver sạch, trà xanh, musk nhẹ, neroli hoặc gỗ khô thanh",
+      "avoid": "Oud, amber–resin, vanilla/gourmand ngọt dày, leather/animalic đậm hoặc nhiều tầng citrus chua gắt",
+      "smartNote": "Light Blue Forever pour Homme (EDP 2021): điểm sáng là grapefruit zest rất thật, chua–đắng–mọng và nổi bật ngay lúc mở đầu; về sau mỏng, sạch, hơi xanh–gỗ. Hợp nắng nóng, văn phòng và ngày thường; không nhầm bản Forever nữ hay Italian Love.",
+      "confidence": "Cao",
+      "sourceMethod": "Usage Audit v2 20/11/2026: pyramid, EDP, năm 2021 và perfumer Shyamala Maisondieu từ thông tin ra mắt năm 2021; hiệu năng đối chiếu Parfumo (longevity 7.2/10, sillage 7.0/10). Parfumo còn ghi thêm Roxanne Kirkpatrick và Quentin Bisch trong mục credits; người được nêu trong tin ra mắt là Shyamala. Bản Forever pour Homme là flanker giới hạn, Parfumo ghi nhận dường như đã ngừng sản xuất. https://www.fragrantica.com/news/Dolce-Gabbana-Light-Blue-Forever-14885.html | https://www.parfumo.com/Perfumes/Dolce_Gabbana/light-blue-pour-homme-forever",
+      "imageUrl": "https://raw.githubusercontent.com/trinkse61538/perfume/d0849a8fad52469cb453b19a4960dc40efc697ed/perfume_image/Light%20Blue%20Forever.avif",
+      "fullName": "Dolce&Gabbana Light Blue Forever pour Homme",
+      "id": "dolce-gabbana-light-blue-forever-pour-homme"
     }
   ]
 }
