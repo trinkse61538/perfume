@@ -2,7 +2,7 @@
   "source": "github_action_sync",
   "sheetId": "1bXgcQULRQu5BgXtabt7dwBcV9SmWaeBNH0sQIswPcoY",
   "gid": "0",
-  "generatedAt": "2026-11-20T12:53:16.043Z",
+  "generatedAt": "2026-11-26T10:53:30.680Z",
   "count": 116,
   "data": [
     {
@@ -4990,7 +4990,7 @@
     },
     {
       "stt": 95,
-      "brand": "Filippo Sorcinelli",
+      "brand": "Boadicea",
       "name": "Explorer",
       "originalFamily": "Gỗ khám phá",
       "concentration": "EDP",
@@ -5035,8 +5035,8 @@
       "confidence": "Cao",
       "sourceMethod": "Usage Audit v2 27/07/2026: notes/accords đúng phiên bản + đồng thuận hiệu năng công khai; chuẩn hóa theo Scoring Rules.",
       "imageUrl": "https://raw.githubusercontent.com/trinkse61538/CV/main/perfume-image/Explorer%20Boadicea%20the%20Victorious.avif",
-      "fullName": "Filippo Sorcinelli Explorer",
-      "id": "filippo-sorcinelli-explorer"
+      "fullName": "Boadicea Explorer",
+      "id": "boadicea-explorer"
     },
     {
       "stt": 96,
@@ -5091,6 +5091,110 @@
     },
     {
       "stt": 97,
+      "brand": "Filippo Sorcinelli",
+      "name": "ennui-noir",
+      "originalFamily": "Gỗ thơm / Vanilla-patchouli",
+      "concentration": "Extrait de Parfum",
+      "top": [
+        "Lavender",
+        "myrtle"
+      ],
+      "heart": [
+        "Heliotrope",
+        "cedarwood"
+      ],
+      "base": [
+        "Patchouli",
+        "vetiver",
+        "vanilla"
+      ],
+      "perfumer": "Filippo Sorcinelli",
+      "year": "2016",
+      "season": "Xuân mát/Thu/Đông",
+      "dayNight": "Đêm/Cả hai",
+      "longevity": "10–12h+ (Rất tốt)",
+      "sillage": "Rõ",
+      "mood": "Tối, mềm, phấn và trầm tư; có độ hiện diện rõ.",
+      "family": "Vanilla / Patchouli gỗ thơm",
+      "subFamily": "Lavender - myrtle - heliotrope - cedar - patchouli - vetiver - vanilla",
+      "presence": "Nổi bật",
+      "sweetness": "Vừa",
+      "freshScore": 2,
+      "warmScore": 4,
+      "longevityScore": 4,
+      "sillageScore": 3,
+      "officeSafe": "Cân nhắc — 1–2 xịt",
+      "clientSafe": "Cân nhắc",
+      "hotSafe": "Không hợp",
+      "occasions": "Hẹn hò, ăn tối, café tối, sự kiện sáng tạo và thời tiết mát/lạnh",
+      "sprays": "2–3 xịt",
+      "layerRole": "Base / Anchor",
+      "layerWith": "Lavender sáng, iris, musk sạch hoặc citrus khô",
+      "avoid": "Gourmand ngọt dày, oud/da nặng hoặc patchouli khác",
+      "smartNote": "ennui-noir: hợp không gian yên tĩnh và thời tiết mát; giữ 1–2 xịt trong phòng kín.",
+      "confidence": "Cao",
+      "sourceMethod": "Usage Audit v2 09/08/2026: nồng độ/notes từ trang hãng; năm và hiệu năng đối chiếu Fragrantica/Parfumo. Hiệu năng có thể lệch theo da và batch.",
+      "imageUrl": "https://github.com/trinkse61538/perfume/raw/a9b24043488ef61bcdbfe73d8c2b860c62be4837/perfume_image/ennui-noir.avif",
+      "fullName": "Filippo Sorcinelli ennui-noir",
+      "id": "filippo-sorcinelli-ennui-noir"
+    },
+    {
+      "stt": 98,
+      "brand": "Filippo Sorcinelli",
+      "name": "Opus 1144",
+      "originalFamily": "Hổ phách gia vị / Phấn vanilla",
+      "concentration": "Extrait de Parfum",
+      "top": [
+        "Lemon",
+        "mandarin",
+        "jasmine",
+        "elemi"
+      ],
+      "heart": [
+        "Benzoin",
+        "cashmerwood",
+        "orchid",
+        "iris"
+      ],
+      "base": [
+        "White musk",
+        "vanilla",
+        "sandalwood",
+        "ambergris",
+        "leather"
+      ],
+      "perfumer": "Filippo Sorcinelli",
+      "year": "2015",
+      "season": "Xuân mát/Thu/Đông",
+      "dayNight": "Đêm/Cả hai",
+      "longevity": "10–12h+ (Rất tốt)",
+      "sillage": "Mạnh",
+      "mood": "Hổ phách, phấn mịn, vanilla và nhựa thơm; hiện diện rất mạnh.",
+      "family": "Hổ phách / Vanilla phấn",
+      "subFamily": "Citrus - elemi - iris - orchid - benzoin - vanilla - sandalwood - leather - musk",
+      "presence": "Rất nổi bật",
+      "sweetness": "Vừa-cao",
+      "freshScore": 2,
+      "warmScore": 4,
+      "longevityScore": 4,
+      "sillageScore": 4,
+      "officeSafe": "Cân nhắc — 1–2 xịt",
+      "clientSafe": "Cân nhắc",
+      "hotSafe": "Không hợp",
+      "occasions": "Hẹn hò, ăn tối, sự kiện trang trọng/sáng tạo và thời tiết mát/lạnh",
+      "sprays": "1–2 xịt",
+      "layerRole": "Base / Anchor",
+      "layerWith": "Citrus khô, iris, incense nhẹ hoặc musk sạch",
+      "avoid": "Gourmand ngọt, amber/vanilla hoặc leather dày khác",
+      "smartNote": "Opus 1144: chọn khi cần vẻ trang trọng, phấn và ấm; bắt đầu 1 xịt trong phòng kín.",
+      "confidence": "Cao",
+      "sourceMethod": "Usage Audit v2 09/08/2026: nồng độ/notes từ trang hãng; năm và hiệu năng đối chiếu Fragrantica/Parfumo. Hiệu năng có thể lệch theo da và batch.",
+      "imageUrl": "https://github.com/trinkse61538/perfume/raw/a9b24043488ef61bcdbfe73d8c2b860c62be4837/perfume_image/Opus%201144.avif",
+      "fullName": "Filippo Sorcinelli Opus 1144",
+      "id": "filippo-sorcinelli-opus-1144"
+    },
+    {
+      "stt": 99,
       "brand": "Franck Boclet",
       "name": "Absinthe",
       "originalFamily": "Thảo mộc xanh",
@@ -5141,7 +5245,7 @@
       "id": "franck-boclet-absinthe"
     },
     {
-      "stt": 98,
+      "stt": 100,
       "brand": "Franck Boclet",
       "name": "Tobacco",
       "originalFamily": "Thuốc lá ấm",
@@ -5193,7 +5297,7 @@
       "id": "franck-boclet-tobacco"
     },
     {
-      "stt": 99,
+      "stt": 101,
       "brand": "Franck Boclet",
       "name": "Patchouli",
       "originalFamily": "Gỗ phương Đông / Patchouli hổ phách",
@@ -5243,7 +5347,7 @@
       "id": "franck-boclet-patchouli"
     },
     {
-      "stt": 100,
+      "stt": 102,
       "brand": "Fiele Fragrances",
       "name": "Santalum",
       "originalFamily": "Gỗ đàn hương zen",
@@ -5298,7 +5402,7 @@
       "id": "fiele-fragrances-santalum"
     },
     {
-      "stt": 101,
+      "stt": 103,
       "brand": "Guerlain",
       "name": "Mitsouko Extract",
       "originalFamily": "Chypre huyền thoại",
@@ -5353,7 +5457,7 @@
       "id": "guerlain-mitsouko-extract"
     },
     {
-      "stt": 102,
+      "stt": 104,
       "brand": "Rochas",
       "name": "Byzance",
       "originalFamily": "Phương Đông cổ điển",
@@ -5417,7 +5521,7 @@
       "id": "rochas-byzance"
     },
     {
-      "stt": 103,
+      "stt": 105,
       "brand": "Grès",
       "name": "Cabochard",
       "originalFamily": "Chypre da xanh",
@@ -5480,7 +5584,7 @@
       "id": "gres-cabochard"
     },
     {
-      "stt": 104,
+      "stt": 106,
       "brand": "Jean Desprez",
       "name": "Bal à Versailles",
       "originalFamily": "Hoa nhài quý tộc",
@@ -5548,7 +5652,7 @@
       "id": "jean-desprez-bal-a-versailles"
     },
     {
-      "stt": 105,
+      "stt": 107,
       "brand": "MFK",
       "name": "Masculin Pluriel",
       "originalFamily": "Oải hương hiện đại",
@@ -5596,7 +5700,7 @@
       "id": "mfk-masculin-pluriel"
     },
     {
-      "stt": 106,
+      "stt": 108,
       "brand": "To Summer",
       "name": "Triple Tea",
       "originalFamily": "Trà ba tầng",
@@ -5651,7 +5755,7 @@
       "id": "to-summer-triple-tea"
     },
     {
-      "stt": 107,
+      "stt": 109,
       "brand": "To Summer",
       "name": "Osmanthus",
       "originalFamily": "Mai vàng ấm",
@@ -5701,7 +5805,7 @@
       "id": "to-summer-osmanthus"
     },
     {
-      "stt": 108,
+      "stt": 110,
       "brand": "Calaj",
       "name": "Black Beard",
       "originalFamily": "Gia vị xanh / Chypre da thuốc lá",
@@ -5759,7 +5863,7 @@
       "id": "calaj-black-beard"
     },
     {
-      "stt": 109,
+      "stt": 111,
       "brand": "Calaj",
       "name": "The Last PH 85",
       "originalFamily": "Da thuộc / Trái cây hổ phách",
@@ -5815,7 +5919,7 @@
       "id": "calaj-the-last-ph-85"
     },
     {
-      "stt": 110,
+      "stt": 112,
       "brand": "Korloff",
       "name": "Addiction Pétale",
       "originalFamily": "Hoa trắng / Hoa hồng xạ hương",
@@ -5868,7 +5972,7 @@
       "id": "korloff-addiction-petale"
     },
     {
-      "stt": 111,
+      "stt": 113,
       "brand": "Bogue",
       "name": "MEM",
       "originalFamily": "Fougère lavender / Animalic",
@@ -5934,7 +6038,7 @@
       "id": "bogue-mem"
     },
     {
-      "stt": 112,
+      "stt": 114,
       "brand": "Bogue",
       "name": "MAAI",
       "originalFamily": "Chypre hoa trắng / Animalic",
@@ -5993,110 +6097,6 @@
       "imageUrl": "https://github.com/trinkse61538/perfume/raw/a9b24043488ef61bcdbfe73d8c2b860c62be4837/perfume_image/Maai.avif",
       "fullName": "Bogue MAAI",
       "id": "bogue-maai"
-    },
-    {
-      "stt": 113,
-      "brand": "Filippo Sorcinelli",
-      "name": "ennui-noir",
-      "originalFamily": "Gỗ thơm / Vanilla-patchouli",
-      "concentration": "Extrait de Parfum",
-      "top": [
-        "Lavender",
-        "myrtle"
-      ],
-      "heart": [
-        "Heliotrope",
-        "cedarwood"
-      ],
-      "base": [
-        "Patchouli",
-        "vetiver",
-        "vanilla"
-      ],
-      "perfumer": "Filippo Sorcinelli",
-      "year": "2016",
-      "season": "Xuân mát/Thu/Đông",
-      "dayNight": "Đêm/Cả hai",
-      "longevity": "10–12h+ (Rất tốt)",
-      "sillage": "Rõ",
-      "mood": "Tối, mềm, phấn và trầm tư; có độ hiện diện rõ.",
-      "family": "Vanilla / Patchouli gỗ thơm",
-      "subFamily": "Lavender - myrtle - heliotrope - cedar - patchouli - vetiver - vanilla",
-      "presence": "Nổi bật",
-      "sweetness": "Vừa",
-      "freshScore": 2,
-      "warmScore": 4,
-      "longevityScore": 4,
-      "sillageScore": 3,
-      "officeSafe": "Cân nhắc — 1–2 xịt",
-      "clientSafe": "Cân nhắc",
-      "hotSafe": "Không hợp",
-      "occasions": "Hẹn hò, ăn tối, café tối, sự kiện sáng tạo và thời tiết mát/lạnh",
-      "sprays": "2–3 xịt",
-      "layerRole": "Base / Anchor",
-      "layerWith": "Lavender sáng, iris, musk sạch hoặc citrus khô",
-      "avoid": "Gourmand ngọt dày, oud/da nặng hoặc patchouli khác",
-      "smartNote": "ennui-noir: hợp không gian yên tĩnh và thời tiết mát; giữ 1–2 xịt trong phòng kín.",
-      "confidence": "Cao",
-      "sourceMethod": "Usage Audit v2 09/08/2026: nồng độ/notes từ trang hãng; năm và hiệu năng đối chiếu Fragrantica/Parfumo. Hiệu năng có thể lệch theo da và batch.",
-      "imageUrl": "https://github.com/trinkse61538/perfume/raw/a9b24043488ef61bcdbfe73d8c2b860c62be4837/perfume_image/ennui-noir.avif",
-      "fullName": "Filippo Sorcinelli ennui-noir",
-      "id": "filippo-sorcinelli-ennui-noir"
-    },
-    {
-      "stt": 114,
-      "brand": "Filippo Sorcinelli",
-      "name": "Opus 1144",
-      "originalFamily": "Hổ phách gia vị / Phấn vanilla",
-      "concentration": "Extrait de Parfum",
-      "top": [
-        "Lemon",
-        "mandarin",
-        "jasmine",
-        "elemi"
-      ],
-      "heart": [
-        "Benzoin",
-        "cashmerwood",
-        "orchid",
-        "iris"
-      ],
-      "base": [
-        "White musk",
-        "vanilla",
-        "sandalwood",
-        "ambergris",
-        "leather"
-      ],
-      "perfumer": "Filippo Sorcinelli",
-      "year": "2015",
-      "season": "Xuân mát/Thu/Đông",
-      "dayNight": "Đêm/Cả hai",
-      "longevity": "10–12h+ (Rất tốt)",
-      "sillage": "Mạnh",
-      "mood": "Hổ phách, phấn mịn, vanilla và nhựa thơm; hiện diện rất mạnh.",
-      "family": "Hổ phách / Vanilla phấn",
-      "subFamily": "Citrus - elemi - iris - orchid - benzoin - vanilla - sandalwood - leather - musk",
-      "presence": "Rất nổi bật",
-      "sweetness": "Vừa-cao",
-      "freshScore": 2,
-      "warmScore": 4,
-      "longevityScore": 4,
-      "sillageScore": 4,
-      "officeSafe": "Cân nhắc — 1–2 xịt",
-      "clientSafe": "Cân nhắc",
-      "hotSafe": "Không hợp",
-      "occasions": "Hẹn hò, ăn tối, sự kiện trang trọng/sáng tạo và thời tiết mát/lạnh",
-      "sprays": "1–2 xịt",
-      "layerRole": "Base / Anchor",
-      "layerWith": "Citrus khô, iris, incense nhẹ hoặc musk sạch",
-      "avoid": "Gourmand ngọt, amber/vanilla hoặc leather dày khác",
-      "smartNote": "Opus 1144: chọn khi cần vẻ trang trọng, phấn và ấm; bắt đầu 1 xịt trong phòng kín.",
-      "confidence": "Cao",
-      "sourceMethod": "Usage Audit v2 09/08/2026: nồng độ/notes từ trang hãng; năm và hiệu năng đối chiếu Fragrantica/Parfumo. Hiệu năng có thể lệch theo da và batch.",
-      "imageUrl": "https://github.com/trinkse61538/perfume/raw/a9b24043488ef61bcdbfe73d8c2b860c62be4837/perfume_image/Opus%201144.avif",
-      "fullName": "Filippo Sorcinelli Opus 1144",
-      "id": "filippo-sorcinelli-opus-1144"
     },
     {
       "stt": 115,
